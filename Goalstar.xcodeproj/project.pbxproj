@@ -1,0 +1,656 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		07EEED07AB483A36B2DFAF56 /* Icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E628908AFC1251FB4420949 /* Icons.swift */; };
+		157FC62CC2F37586251B52C9 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C824F97923ECCAD1A820A63 /* AppStore.swift */; };
+		17E777775DFF86C475A58E93 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F4398FBC50F7CF788A7EAA /* Theme.swift */; };
+		1A51FEED900BFAA98B88BB3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CE23F2E48EF219CF95DB7158 /* Assets.xcassets */; };
+		1F24227948499D5613A0DEA5 /* FocusLiveActivityIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A9DF7BDD5D411B04BF3640 /* FocusLiveActivityIntents.swift */; };
+		22D3190CFF058BD96FD6EF97 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9DD9BF1E91965949BA656D /* AppConstants.swift */; };
+		23159934E54146F41F14632F /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DBD8075A5730C607C7294C0 /* SplashView.swift */; };
+		39A7AEE6080E707B530B5D2F /* FocusEndNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F496086D47EA183F2261F4 /* FocusEndNotifier.swift */; };
+		3B18A840CA9AE2AAEECFF44B /* FocusLiveActivityIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31A9DF7BDD5D411B04BF3640 /* FocusLiveActivityIntents.swift */; };
+		455729633D8FC3A4C107E273 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AE395B7228B197CE63DC16 /* TodayView.swift */; };
+		4977AABFBD4BD2042792F4ED /* SkeletonRefresh.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A9154E25863124D1805489 /* SkeletonRefresh.swift */; };
+		4AB897E43F2C1C5BADA7F8A1 /* CreateMilestoneSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7072F9755A5CD48229FEA330 /* CreateMilestoneSheet.swift */; };
+		4FF7CA3FC146A608B5A26111 /* GoalstarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34ECCD392365749D2C34F841 /* GoalstarApp.swift */; };
+		51978C67B58BBB4E4180FB3E /* DataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B51571B695838975E9D2A05 /* DataView.swift */; };
+		51E6CE8E156774DD0C5DC697 /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6ED238469C89CFE88A2A5E /* Cards.swift */; };
+		5293EBD3264B0924C7FC816F /* FocusActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */; };
+		560A70485E06B8316CE68D40 /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */; };
+		60DCD78F2EA148DA1DD5D35D /* GoalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F6258467CB4C777CE36719 /* GoalDetailView.swift */; };
+		62533AF86CC29DC05DCF1D45 /* GSIconName.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CF6612E5237FB8B273C031 /* GSIconName.swift */; };
+		630332E32D4BA671F7F1C641 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9DD9BF1E91965949BA656D /* AppConstants.swift */; };
+		64220079D7D22E75EACEEBE4 /* ProPaywallSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C1CE5AA9DE0193202F121BC /* ProPaywallSheet.swift */; };
+		6C8108D8DA240ACE0060E0F6 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B1E4F8447025A8026CECBD /* Models.swift */; };
+		70A0E2B96DD6B99FD124A8A8 /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8CA40818FEA37E10B0281D /* Formatters.swift */; };
+		7643B0E730FF5C9E6CFCF67D /* FocusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19452AE764713511F5A8441 /* FocusView.swift */; };
+		76B71697E20FF866237A4749 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCF89C83F72DFA769AB8FD8F /* Persistence.swift */; };
+		7961FC84D24F4C709E40AF90 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 06E21EF8EFA2FB221ADE475C /* Assets.xcassets */; };
+		7F519154F943297DB28D9F27 /* GoalstarWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D95D45B2FBFA154D0910D041 /* GoalstarWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9455C23181BD10744C491F8F /* CreateSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1CCC357CA9C27060994CE6 /* CreateSheet.swift */; };
+		9B3AC63E87727D1B35DB7BB8 /* WidgetDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDE0A2BD7D3A91D4C545C2C /* WidgetDataProvider.swift */; };
+		A3757B0C7F6ADCFAA6D32D42 /* FocusEndNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F496086D47EA183F2261F4 /* FocusEndNotifier.swift */; };
+		B8F425024D013262755BBB56 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A5E07DC8EB411A4E9959A3EF /* PrivacyInfo.xcprivacy */; };
+		BA02B88E42CAE5BF5A52B520 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517FE91D9E5695F9DF81E3DA /* GoalsView.swift */; };
+		BEFA1BF7B7E46A797ACF00F8 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1B707F12D65616B6F0351C /* NotificationScheduler.swift */; };
+		C3A4443B357DC6C0E09BDE93 /* TaskDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2780606B471FA17677F9FFC7 /* TaskDetailSheet.swift */; };
+		C3FCCD08508B7EAB544F1A92 /* SharedPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713CAA1CF74A7CC1CF7030B0 /* SharedPersistence.swift */; };
+		C67D4F3892A7BA5FFCDA4215 /* SharedPersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713CAA1CF74A7CC1CF7030B0 /* SharedPersistence.swift */; };
+		CA42C1F63A467DC110B10AAE /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B78EE150B9D7DD016357649 /* ProfileView.swift */; };
+		CB6E12CFC7415EE7DC97A560 /* GSIconName.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CF6612E5237FB8B273C031 /* GSIconName.swift */; };
+		CCD6E26F3206238716B1D73F /* ProEntitlement.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9DC1CAE68200E42AA1B5601 /* ProEntitlement.swift */; };
+		CDD4B14BA8880ECF13A80034 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5F4398FBC50F7CF788A7EAA /* Theme.swift */; };
+		D7604CF4B70B7E891F504236 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8B1E4F8447025A8026CECBD /* Models.swift */; };
+		E6AA3A215B19E4C7C027BFC1 /* ToggleTaskIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB5DD7C80E5B7B24FC53629 /* ToggleTaskIntent.swift */; };
+		E7CBD075047248309A87BE4D /* Formatters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2A8CA40818FEA37E10B0281D /* Formatters.swift */; };
+		EE15A715A065D52FE197C2F3 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 9CE7A89E6C242192458879DD /* AppIcon.icon */; };
+		F263BEFD90284B50FC89D04E /* TodayTasksWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2A7042CD9FA3E6DD9521A72 /* TodayTasksWidget.swift */; };
+		F7B10084552D6C7584F351DE /* GoalstarWidgetsBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F7651B4FAE9151D522DD7E /* GoalstarWidgetsBundle.swift */; };
+		F9689DED32F4ED954400BD83 /* FocusActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */; };
+		FC15D725AA1C025F097722A7 /* FocusLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D15D895817753FFA1E8977 /* FocusLiveActivity.swift */; };
+		FF43F9B9B29F37B7282786E4 /* LockScreenSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A65B8A39348C6F97550E13 /* LockScreenSettingsView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C03DF54947A6DAE03FCA4704 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 31521373C8BCD9DBB25447BB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E9CD777FDAFECE394C6B8F75;
+			remoteInfo = GoalstarWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2BF1DCC5D7F6DB20F9C92312 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				7F519154F943297DB28D9F27 /* GoalstarWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
+		06E21EF8EFA2FB221ADE475C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusActivityAttributes.swift; sourceTree = "<group>"; };
+		1EB5DD7C80E5B7B24FC53629 /* ToggleTaskIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTaskIntent.swift; sourceTree = "<group>"; };
+		2780606B471FA17677F9FFC7 /* TaskDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskDetailSheet.swift; sourceTree = "<group>"; };
+		2A8CA40818FEA37E10B0281D /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Formatters.swift; sourceTree = "<group>"; };
+		31A9DF7BDD5D411B04BF3640 /* FocusLiveActivityIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusLiveActivityIntents.swift; sourceTree = "<group>"; };
+		31F496086D47EA183F2261F4 /* FocusEndNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusEndNotifier.swift; sourceTree = "<group>"; };
+		34ECCD392365749D2C34F841 /* GoalstarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalstarApp.swift; sourceTree = "<group>"; };
+		42A9154E25863124D1805489 /* SkeletonRefresh.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonRefresh.swift; sourceTree = "<group>"; };
+		4C1CE5AA9DE0193202F121BC /* ProPaywallSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProPaywallSheet.swift; sourceTree = "<group>"; };
+		517FE91D9E5695F9DF81E3DA /* GoalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsView.swift; sourceTree = "<group>"; };
+		5B6ED238469C89CFE88A2A5E /* Cards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cards.swift; sourceTree = "<group>"; };
+		5E628908AFC1251FB4420949 /* Icons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Icons.swift; sourceTree = "<group>"; };
+		6B51571B695838975E9D2A05 /* DataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataView.swift; sourceTree = "<group>"; };
+		6CDE0A2BD7D3A91D4C545C2C /* WidgetDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetDataProvider.swift; sourceTree = "<group>"; };
+		6DBD8075A5730C607C7294C0 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		7072F9755A5CD48229FEA330 /* CreateMilestoneSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMilestoneSheet.swift; sourceTree = "<group>"; };
+		70A65B8A39348C6F97550E13 /* LockScreenSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenSettingsView.swift; sourceTree = "<group>"; };
+		713CAA1CF74A7CC1CF7030B0 /* SharedPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPersistence.swift; sourceTree = "<group>"; };
+		7384CBA2D3E4F00BE796E604 /* Goalstar.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Goalstar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		741C6372F02BD4C952C50F25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		7F9DD9BF1E91965949BA656D /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		9B78EE150B9D7DD016357649 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		9C824F97923ECCAD1A820A63 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		9CE7A89E6C242192458879DD /* AppIcon.icon */ = {isa = PBXFileReference; path = AppIcon.icon; sourceTree = "<group>"; };
+		A19452AE764713511F5A8441 /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusView.swift; sourceTree = "<group>"; };
+		A2D15D895817753FFA1E8977 /* FocusLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusLiveActivity.swift; sourceTree = "<group>"; };
+		A5E07DC8EB411A4E9959A3EF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A8B1E4F8447025A8026CECBD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		B2F6258467CB4C777CE36719 /* GoalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailView.swift; sourceTree = "<group>"; };
+		B4F7651B4FAE9151D522DD7E /* GoalstarWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalstarWidgetsBundle.swift; sourceTree = "<group>"; };
+		B77C891522CC4AA3F766073B /* Goalstar.Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Goalstar.Debug.entitlements; sourceTree = "<group>"; };
+		B9DC1CAE68200E42AA1B5601 /* ProEntitlement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProEntitlement.swift; sourceTree = "<group>"; };
+		BC1CCC357CA9C27060994CE6 /* CreateSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSheet.swift; sourceTree = "<group>"; };
+		C0CF6612E5237FB8B273C031 /* GSIconName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSIconName.swift; sourceTree = "<group>"; };
+		CCF89C83F72DFA769AB8FD8F /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		CE23F2E48EF219CF95DB7158 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D5F4398FBC50F7CF788A7EAA /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		D6AE395B7228B197CE63DC16 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+		D95D45B2FBFA154D0910D041 /* GoalstarWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = GoalstarWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E2A7042CD9FA3E6DD9521A72 /* TodayTasksWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayTasksWidget.swift; sourceTree = "<group>"; };
+		F033A6AB1BBD4C43A6B3E0CD /* GoalstarWidgets.Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoalstarWidgets.Debug.entitlements; sourceTree = "<group>"; };
+		F7E37DD17BAB9DF9CF55BAC6 /* Goalstar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Goalstar.entitlements; sourceTree = "<group>"; };
+		FF1B707F12D65616B6F0351C /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		03E5C5D49B6ABA80E5508853 /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				CCF89C83F72DFA769AB8FD8F /* Persistence.swift */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		04030F3D847B018CA7542852 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				7384CBA2D3E4F00BE796E604 /* Goalstar.app */,
+				D95D45B2FBFA154D0910D041 /* GoalstarWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		30BD09D795D1293C1DCDCC98 = {
+			isa = PBXGroup;
+			children = (
+				747710FC25967EF8BEEC4F78 /* Goalstar */,
+				E3567175A95822B04EF95235 /* GoalstarWidgets */,
+				8407C5C236485190EBDF413D /* Shared */,
+				04030F3D847B018CA7542852 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		542FEA40B2525F14D451727D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				5B6ED238469C89CFE88A2A5E /* Cards.swift */,
+				7072F9755A5CD48229FEA330 /* CreateMilestoneSheet.swift */,
+				BC1CCC357CA9C27060994CE6 /* CreateSheet.swift */,
+				5E628908AFC1251FB4420949 /* Icons.swift */,
+				42A9154E25863124D1805489 /* SkeletonRefresh.swift */,
+				2780606B471FA17677F9FFC7 /* TaskDetailSheet.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		747710FC25967EF8BEEC4F78 /* Goalstar */ = {
+			isa = PBXGroup;
+			children = (
+				9CE7A89E6C242192458879DD /* AppIcon.icon */,
+				CE23F2E48EF219CF95DB7158 /* Assets.xcassets */,
+				B77C891522CC4AA3F766073B /* Goalstar.Debug.entitlements */,
+				F7E37DD17BAB9DF9CF55BAC6 /* Goalstar.entitlements */,
+				741C6372F02BD4C952C50F25 /* Info.plist */,
+				A5E07DC8EB411A4E9959A3EF /* PrivacyInfo.xcprivacy */,
+				AFCCE21C7DFF94062074DCF1 /* App */,
+				542FEA40B2525F14D451727D /* Components */,
+				FC8279D1F53558B5D58BE6C7 /* Domain */,
+				03E5C5D49B6ABA80E5508853 /* Persistence */,
+				EFE0CC8EE9ACB6A67866F019 /* Services */,
+				E1169DE3C0FD48109C6660E4 /* Views */,
+			);
+			path = Goalstar;
+			sourceTree = "<group>";
+		};
+		8407C5C236485190EBDF413D /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				7F9DD9BF1E91965949BA656D /* AppConstants.swift */,
+				0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */,
+				31F496086D47EA183F2261F4 /* FocusEndNotifier.swift */,
+				2A8CA40818FEA37E10B0281D /* Formatters.swift */,
+				C0CF6612E5237FB8B273C031 /* GSIconName.swift */,
+				A8B1E4F8447025A8026CECBD /* Models.swift */,
+				713CAA1CF74A7CC1CF7030B0 /* SharedPersistence.swift */,
+				D5F4398FBC50F7CF788A7EAA /* Theme.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		AFCCE21C7DFF94062074DCF1 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				34ECCD392365749D2C34F841 /* GoalstarApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		E1169DE3C0FD48109C6660E4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6B51571B695838975E9D2A05 /* DataView.swift */,
+				A19452AE764713511F5A8441 /* FocusView.swift */,
+				B2F6258467CB4C777CE36719 /* GoalDetailView.swift */,
+				517FE91D9E5695F9DF81E3DA /* GoalsView.swift */,
+				70A65B8A39348C6F97550E13 /* LockScreenSettingsView.swift */,
+				9B78EE150B9D7DD016357649 /* ProfileView.swift */,
+				4C1CE5AA9DE0193202F121BC /* ProPaywallSheet.swift */,
+				6DBD8075A5730C607C7294C0 /* SplashView.swift */,
+				D6AE395B7228B197CE63DC16 /* TodayView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E3567175A95822B04EF95235 /* GoalstarWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				06E21EF8EFA2FB221ADE475C /* Assets.xcassets */,
+				A2D15D895817753FFA1E8977 /* FocusLiveActivity.swift */,
+				31A9DF7BDD5D411B04BF3640 /* FocusLiveActivityIntents.swift */,
+				F033A6AB1BBD4C43A6B3E0CD /* GoalstarWidgets.Debug.entitlements */,
+				B4F7651B4FAE9151D522DD7E /* GoalstarWidgetsBundle.swift */,
+				E2A7042CD9FA3E6DD9521A72 /* TodayTasksWidget.swift */,
+				1EB5DD7C80E5B7B24FC53629 /* ToggleTaskIntent.swift */,
+				6CDE0A2BD7D3A91D4C545C2C /* WidgetDataProvider.swift */,
+			);
+			path = GoalstarWidgets;
+			sourceTree = "<group>";
+		};
+		EFE0CC8EE9ACB6A67866F019 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */,
+				FF1B707F12D65616B6F0351C /* NotificationScheduler.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FC8279D1F53558B5D58BE6C7 /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				9C824F97923ECCAD1A820A63 /* AppStore.swift */,
+				B9DC1CAE68200E42AA1B5601 /* ProEntitlement.swift */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6E46B9E94668CB748758A872 /* Goalstar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9F7376780BAAFA3165EF5C1D /* Build configuration list for PBXNativeTarget "Goalstar" */;
+			buildPhases = (
+				A609F27DC4D481EA04C03B77 /* Sources */,
+				361902A29245559B491178BE /* Resources */,
+				2BF1DCC5D7F6DB20F9C92312 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				DBB544D5D5BDD19B93017D4D /* PBXTargetDependency */,
+			);
+			name = Goalstar;
+			packageProductDependencies = (
+			);
+			productName = Goalstar;
+			productReference = 7384CBA2D3E4F00BE796E604 /* Goalstar.app */;
+			productType = "com.apple.product-type.application";
+		};
+		E9CD777FDAFECE394C6B8F75 /* GoalstarWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A01334434AC28F9D4BBF5999 /* Build configuration list for PBXNativeTarget "GoalstarWidgets" */;
+			buildPhases = (
+				FEFAA36E11053A1E1C108337 /* Sources */,
+				73616DF242A38FE3A0DE95F8 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GoalstarWidgets;
+			packageProductDependencies = (
+			);
+			productName = GoalstarWidgets;
+			productReference = D95D45B2FBFA154D0910D041 /* GoalstarWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		31521373C8BCD9DBB25447BB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					6E46B9E94668CB748758A872 = {
+						DevelopmentTeam = A47KHX4UCC;
+						ProvisioningStyle = Automatic;
+					};
+					E9CD777FDAFECE394C6B8F75 = {
+						DevelopmentTeam = A47KHX4UCC;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2C0D5B43A1EE48A2DF00BC96 /* Build configuration list for PBXProject "Goalstar" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = "zh-Hans";
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = 30BD09D795D1293C1DCDCC98;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6E46B9E94668CB748758A872 /* Goalstar */,
+				E9CD777FDAFECE394C6B8F75 /* GoalstarWidgets */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		361902A29245559B491178BE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EE15A715A065D52FE197C2F3 /* AppIcon.icon in Resources */,
+				1A51FEED900BFAA98B88BB3F /* Assets.xcassets in Resources */,
+				B8F425024D013262755BBB56 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		73616DF242A38FE3A0DE95F8 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7961FC84D24F4C709E40AF90 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A609F27DC4D481EA04C03B77 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				22D3190CFF058BD96FD6EF97 /* AppConstants.swift in Sources */,
+				157FC62CC2F37586251B52C9 /* AppStore.swift in Sources */,
+				51E6CE8E156774DD0C5DC697 /* Cards.swift in Sources */,
+				4AB897E43F2C1C5BADA7F8A1 /* CreateMilestoneSheet.swift in Sources */,
+				9455C23181BD10744C491F8F /* CreateSheet.swift in Sources */,
+				51978C67B58BBB4E4180FB3E /* DataView.swift in Sources */,
+				5293EBD3264B0924C7FC816F /* FocusActivityAttributes.swift in Sources */,
+				39A7AEE6080E707B530B5D2F /* FocusEndNotifier.swift in Sources */,
+				3B18A840CA9AE2AAEECFF44B /* FocusLiveActivityIntents.swift in Sources */,
+				7643B0E730FF5C9E6CFCF67D /* FocusView.swift in Sources */,
+				70A0E2B96DD6B99FD124A8A8 /* Formatters.swift in Sources */,
+				62533AF86CC29DC05DCF1D45 /* GSIconName.swift in Sources */,
+				60DCD78F2EA148DA1DD5D35D /* GoalDetailView.swift in Sources */,
+				BA02B88E42CAE5BF5A52B520 /* GoalsView.swift in Sources */,
+				4FF7CA3FC146A608B5A26111 /* GoalstarApp.swift in Sources */,
+				07EEED07AB483A36B2DFAF56 /* Icons.swift in Sources */,
+				560A70485E06B8316CE68D40 /* LiveActivityManager.swift in Sources */,
+				FF43F9B9B29F37B7282786E4 /* LockScreenSettingsView.swift in Sources */,
+				6C8108D8DA240ACE0060E0F6 /* Models.swift in Sources */,
+				BEFA1BF7B7E46A797ACF00F8 /* NotificationScheduler.swift in Sources */,
+				76B71697E20FF866237A4749 /* Persistence.swift in Sources */,
+				CCD6E26F3206238716B1D73F /* ProEntitlement.swift in Sources */,
+				64220079D7D22E75EACEEBE4 /* ProPaywallSheet.swift in Sources */,
+				CA42C1F63A467DC110B10AAE /* ProfileView.swift in Sources */,
+				C67D4F3892A7BA5FFCDA4215 /* SharedPersistence.swift in Sources */,
+				4977AABFBD4BD2042792F4ED /* SkeletonRefresh.swift in Sources */,
+				23159934E54146F41F14632F /* SplashView.swift in Sources */,
+				C3A4443B357DC6C0E09BDE93 /* TaskDetailSheet.swift in Sources */,
+				17E777775DFF86C475A58E93 /* Theme.swift in Sources */,
+				455729633D8FC3A4C107E273 /* TodayView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FEFAA36E11053A1E1C108337 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				630332E32D4BA671F7F1C641 /* AppConstants.swift in Sources */,
+				F9689DED32F4ED954400BD83 /* FocusActivityAttributes.swift in Sources */,
+				A3757B0C7F6ADCFAA6D32D42 /* FocusEndNotifier.swift in Sources */,
+				FC15D725AA1C025F097722A7 /* FocusLiveActivity.swift in Sources */,
+				1F24227948499D5613A0DEA5 /* FocusLiveActivityIntents.swift in Sources */,
+				E7CBD075047248309A87BE4D /* Formatters.swift in Sources */,
+				CB6E12CFC7415EE7DC97A560 /* GSIconName.swift in Sources */,
+				F7B10084552D6C7584F351DE /* GoalstarWidgetsBundle.swift in Sources */,
+				D7604CF4B70B7E891F504236 /* Models.swift in Sources */,
+				C3FCCD08508B7EAB544F1A92 /* SharedPersistence.swift in Sources */,
+				CDD4B14BA8880ECF13A80034 /* Theme.swift in Sources */,
+				F263BEFD90284B50FC89D04E /* TodayTasksWidget.swift in Sources */,
+				E6AA3A215B19E4C7C027BFC1 /* ToggleTaskIntent.swift in Sources */,
+				9B3AC63E87727D1B35DB7BB8 /* WidgetDataProvider.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		DBB544D5D5BDD19B93017D4D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E9CD777FDAFECE394C6B8F75 /* GoalstarWidgets */;
+			targetProxy = C03DF54947A6DAE03FCA4704 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		2A2CCC1D3380BCDE8588255C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = A47KHX4UCC;
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		2DA04A98878466AB6E1BF978 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = GoalstarWidgets/GoalstarWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				INFOPLIST_FILE = GoalstarWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native.widgets;
+				PRODUCT_NAME = GoalstarWidgets;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		30A3D92C5879BF7A39976CF0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = GoalstarWidgets/GoalstarWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				INFOPLIST_FILE = GoalstarWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native.widgets;
+				PRODUCT_NAME = GoalstarWidgets;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		39C3D918A19F635A4AEEAF79 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Goalstar/Goalstar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Goalstar/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native;
+				PRODUCT_NAME = Goalstar;
+			};
+			name = Debug;
+		};
+		58B497E85C9C8A7E3A324DBC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = Goalstar/Goalstar.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = Goalstar/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native;
+				PRODUCT_NAME = Goalstar;
+			};
+			name = Release;
+		};
+		8E050CB4C88283D9C3CA36C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = A47KHX4UCC;
+				ENABLE_MODULE_VERIFIER = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2C0D5B43A1EE48A2DF00BC96 /* Build configuration list for PBXProject "Goalstar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8E050CB4C88283D9C3CA36C1 /* Debug */,
+				2A2CCC1D3380BCDE8588255C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9F7376780BAAFA3165EF5C1D /* Build configuration list for PBXNativeTarget "Goalstar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				39C3D918A19F635A4AEEAF79 /* Debug */,
+				58B497E85C9C8A7E3A324DBC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A01334434AC28F9D4BBF5999 /* Build configuration list for PBXNativeTarget "GoalstarWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				30A3D92C5879BF7A39976CF0 /* Debug */,
+				2DA04A98878466AB6E1BF978 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 31521373C8BCD9DBB25447BB /* Project object */;
+}

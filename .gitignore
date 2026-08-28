@@ -1,0 +1,12 @@
+# Xcode / build (any derivedDataPath under repo root)
+/build*/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+tools/xcodegen
+
+# OS
+.DS_Store
+
+# Screenshots (optional local)
+# screenshots/

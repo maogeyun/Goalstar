@@ -1,0 +1,164 @@
+name: Goalstar
+options:
+  bundleIdPrefix: com.goalstar
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: zh-Hans
+  xcodeVersion: "16.0"
+attributes:
+  LastUpgradeCheck: "2660"
+  LastSwiftUpdateCheck: "2660"
+settings:
+  base:
+    DEVELOPMENT_TEAM: A47KHX4UCC
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+    IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+    ALWAYS_SEARCH_USER_PATHS: NO
+    CLANG_ENABLE_OBJC_WEAK: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    DEAD_CODE_STRIPPING: YES
+    STRING_CATALOG_GENERATE_SYMBOLS: YES
+    CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER: YES
+    ENABLE_MODULE_VERIFIER: YES
+    CLANG_ANALYZER_NONNULL: YES
+    CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION: YES_AGGRESSIVE
+    CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+    CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING: YES
+    CLANG_WARN_BOOL_CONVERSION: YES
+    CLANG_WARN_COMMA: YES
+    CLANG_WARN_CONSTANT_CONVERSION: YES
+    CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS: YES
+    CLANG_WARN_DIRECT_OBJC_ISA_USAGE: YES_ERROR
+    CLANG_WARN_DOCUMENTATION_COMMENTS: YES
+    CLANG_WARN_EMPTY_BODY: YES
+    CLANG_WARN_ENUM_CONVERSION: YES
+    CLANG_WARN_INFINITE_RECURSION: YES
+    CLANG_WARN_INT_CONVERSION: YES
+    CLANG_WARN_NON_LITERAL_NULL_CONVERSION: YES
+    CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF: YES
+    CLANG_WARN_OBJC_LITERAL_CONVERSION: YES
+    CLANG_WARN_OBJC_ROOT_CLASS: YES_ERROR
+    CLANG_WARN_RANGE_LOOP_ANALYSIS: YES
+    CLANG_WARN_STRICT_PROTOTYPES: YES
+    CLANG_WARN_SUSPICIOUS_MOVE: YES
+    CLANG_WARN_UNGUARDED_AVAILABILITY: YES_AGGRESSIVE
+    CLANG_WARN_UNREACHABLE_CODE: YES
+    CLANG_WARN__DUPLICATE_METHOD_MATCH: YES
+    ENABLE_STRICT_OBJC_MSGSEND: YES
+    GCC_NO_COMMON_BLOCKS: YES
+    GCC_WARN_64_TO_32_BIT_CONVERSION: YES
+    GCC_WARN_ABOUT_RETURN_TYPE: YES_ERROR
+    GCC_WARN_UNDECLARED_SELECTOR: YES
+    GCC_WARN_UNINITIALIZED_AUTOS: YES_AGGRESSIVE
+    GCC_WARN_UNUSED_FUNCTION: YES
+    GCC_WARN_UNUSED_VARIABLE: YES
+    MTL_FAST_MATH: YES
+    COPY_PHASE_STRIP: NO
+targets:
+  Goalstar:
+    type: application
+    platform: iOS
+    sources:
+      - path: Goalstar
+        excludes:
+          - "Resources/**"
+          - "AppIcon.icon"
+      - path: Shared
+      # LiveActivityIntent 必须在主 App 进程编译，否则锁屏按钮不可点
+      - path: GoalstarWidgets/FocusLiveActivityIntents.swift
+      - path: Goalstar/Assets.xcassets
+      - path: Goalstar/AppIcon.icon
+        buildPhase: resources
+      - path: Goalstar/PrivacyInfo.xcprivacy
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.goalstar.native
+        PRODUCT_NAME: Goalstar
+        INFOPLIST_KEY_CFBundleDisplayName: Goalstar
+        INFOPLIST_KEY_UILaunchScreen_Generation: NO
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_NSSupportsLiveActivities: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CODE_SIGN_STYLE: Automatic
+        CURRENT_PROJECT_VERSION: 2
+        MARKETING_VERSION: "2.0"
+        ENABLE_PREVIEWS: YES
+      configs:
+        Debug:
+          CODE_SIGN_ENTITLEMENTS: Goalstar/Goalstar.Debug.entitlements
+        Release:
+          CODE_SIGN_ENTITLEMENTS: Goalstar/Goalstar.entitlements
+    info:
+      path: Goalstar/Info.plist
+      properties:
+        UILaunchScreen:
+          UIColorName: LaunchScreenBackground
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        CFBundleDisplayName: Goalstar
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        NSSupportsLiveActivities: true
+        NSUserNotificationsUsageDescription: Goalstar 需要发送本地提醒，帮助你按时完成今日任务与习惯打卡。
+        ITSAppUsesNonExemptEncryption: false
+    dependencies:
+      - target: GoalstarWidgets
+        embed: true
+    entitlements:
+      path: Goalstar/Goalstar.entitlements
+      properties: {}
+
+  GoalstarWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: GoalstarWidgets
+        excludes:
+          - Info.plist
+          - GoalstarWidgets.entitlements
+      - path: Shared
+      - path: GoalstarWidgets/Assets.xcassets
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.goalstar.native.widgets
+        PRODUCT_NAME: GoalstarWidgets
+        CODE_SIGN_STYLE: Automatic
+        CURRENT_PROJECT_VERSION: 2
+        MARKETING_VERSION: "2.0"
+        SKIP_INSTALL: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"
+        INFOPLIST_KEY_CFBundleDisplayName: Goalstar
+        INFOPLIST_KEY_NSSupportsLiveActivities: YES
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        TARGETED_DEVICE_FAMILY: "1"
+      configs:
+        Debug:
+          CODE_SIGN_ENTITLEMENTS: GoalstarWidgets/GoalstarWidgets.Debug.entitlements
+        Release:
+          CODE_SIGN_ENTITLEMENTS: GoalstarWidgets/GoalstarWidgets.entitlements
+    info:
+      path: GoalstarWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Goalstar
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        NSSupportsLiveActivities: true
+    entitlements:
+      path: GoalstarWidgets/GoalstarWidgets.entitlements
+      properties: {}
+
+schemes:
+  Goalstar:
+    build:
+      targets:
+        Goalstar: all
+        GoalstarWidgets: all
+    run:
+      config: Debug

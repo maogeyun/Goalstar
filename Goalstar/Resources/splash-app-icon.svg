@@ -1,0 +1,82 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="app-icon">
+<g clip-path="url(#clip0_0_4)">
+<rect width="120" height="120" rx="27.75" fill="url(#paint0_linear_0_4)"/>
+<g id="outer-arch">
+<circle cx="60" cy="62.1094" r="46.875" fill="black" fill-opacity="0.01"/>
+<circle cx="60" cy="62.1094" r="42.9375" stroke="url(#paint1_linear_0_4)" stroke-opacity="0.8" stroke-width="7.875"/>
+</g>
+<g id="middle-arch">
+<circle cx="60" cy="62.1094" r="37.5" fill="black" fill-opacity="0.01"/>
+<circle cx="60" cy="62.1094" r="33.5625" stroke="url(#paint2_linear_0_4)" stroke-opacity="0.8" stroke-width="7.875"/>
+</g>
+<g id="inner-arch">
+<circle cx="60" cy="62.1094" r="28.125" fill="black" fill-opacity="0.01"/>
+<circle cx="60" cy="62.1094" r="24.1875" stroke="url(#paint3_linear_0_4)" stroke-opacity="0.8" stroke-width="7.875"/>
+</g>
+<g id="sun" filter="url(#filter3_d_0_4)">
+<circle cx="60" cy="62.1094" r="15" fill="white" fill-opacity="0.4" shape-rendering="crispEdges"/>
+</g>
+<ellipse id="hill-back" cx="60" cy="127.148" rx="93.75" ry="46.875" fill="url(#paint4_linear_0_4)" fill-opacity="0.6"/>
+<ellipse id="hill-middle" cx="60" cy="140.273" rx="103.125" ry="46.875" fill="url(#paint5_linear_0_4)" fill-opacity="0.6"/>
+<ellipse id="hill-front" cx="60" cy="154.336" rx="112.5" ry="46.875" fill="url(#paint6_linear_0_4)" fill-opacity="0.6"/>
+<rect id="glass-frost-highlight" width="120" height="120" fill="url(#paint7_linear_0_4)"/>
+<g id="glass-inner-glow">
+</g>
+</g>
+</g>
+<defs>
+<filter id="filter3_d_0_4" x="39" y="41.1094" width="42" height="42" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset/>
+<feGaussianBlur stdDeviation="3"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0.65098 0 0 0 0 0.12549 0 0 0 0 0.243137 0 0 0 1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_4"/>
+<feBlend mode="normal" in="BackgroundImageFix" in2="effect1_dropShadow_0_4" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_0_4" x1="60" y1="0" x2="120" y2="60" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0088FF"/>
+<stop offset="0.55" stop-color="#4F46E5"/>
+<stop offset="1" stop-color="#312E81"/>
+</linearGradient>
+<linearGradient id="paint1_linear_0_4" x1="60" y1="15.2344" x2="106.875" y2="62.1094" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF3B30"/>
+<stop offset="1" stop-color="#E60000"/>
+</linearGradient>
+<linearGradient id="paint2_linear_0_4" x1="60" y1="24.6094" x2="97.5" y2="62.1094" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FF6B00"/>
+<stop offset="1" stop-color="#E64A00"/>
+</linearGradient>
+<linearGradient id="paint3_linear_0_4" x1="60" y1="33.9844" x2="88.125" y2="62.1094" gradientUnits="userSpaceOnUse">
+<stop stop-color="#FFB300"/>
+<stop offset="1" stop-color="#FF8000"/>
+</linearGradient>
+<linearGradient id="paint4_linear_0_4" x1="60" y1="80.2734" x2="97.5" y2="155.273" gradientUnits="userSpaceOnUse">
+<stop stop-color="#C084FC"/>
+<stop offset="0.4" stop-color="#6366F1"/>
+<stop offset="1" stop-color="#312E81"/>
+</linearGradient>
+<linearGradient id="paint5_linear_0_4" x1="60" y1="93.3984" x2="95.3168" y2="171.095" gradientUnits="userSpaceOnUse">
+<stop stop-color="#818CF8"/>
+<stop offset="0.3" stop-color="#4F46E5"/>
+<stop offset="1" stop-color="#1E1B4B"/>
+</linearGradient>
+<linearGradient id="paint6_linear_0_4" x1="60" y1="107.461" x2="93.284" y2="187.343" gradientUnits="userSpaceOnUse">
+<stop stop-color="#4F46E5"/>
+<stop offset="0.3" stop-color="#312E81"/>
+<stop offset="1" stop-color="#0F051D"/>
+</linearGradient>
+<linearGradient id="paint7_linear_0_4" x1="0" y1="60" x2="120" y2="60" gradientUnits="userSpaceOnUse">
+<stop stop-color="white" stop-opacity="0.12"/>
+<stop offset="0.15" stop-color="white" stop-opacity="0.06"/>
+<stop offset="0.4" stop-color="white" stop-opacity="0"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="clip0_0_4">
+<rect width="120" height="120" rx="27.75" fill="white"/>
+</clipPath>
+</defs>
+</svg>

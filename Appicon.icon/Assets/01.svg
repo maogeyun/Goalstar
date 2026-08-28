@@ -1,0 +1,27 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_4007_2)">
+<ellipse cx="512" cy="1085" rx="800" ry="400" fill="url(#paint0_linear_4007_2)" fill-opacity="0.6"/>
+<ellipse cx="512" cy="1197" rx="880" ry="400" fill="url(#paint1_linear_4007_2)" fill-opacity="0.6"/>
+<ellipse cx="512" cy="1317" rx="960" ry="400" fill="url(#paint2_linear_4007_2)" fill-opacity="0.6"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_4007_2" x1="512" y1="685" x2="832" y2="1325" gradientUnits="userSpaceOnUse">
+<stop stop-color="#C084FC" style="stop-color:#C084FC;stop-color:color(display-p3 0.7529 0.5176 0.9882);stop-opacity:1;"/>
+<stop offset="0.4" stop-color="#6366F1" style="stop-color:#6366F1;stop-color:color(display-p3 0.3882 0.4000 0.9451);stop-opacity:1;"/>
+<stop offset="1" stop-color="#312E81" style="stop-color:#312E81;stop-color:color(display-p3 0.1922 0.1804 0.5059);stop-opacity:1;"/>
+</linearGradient>
+<linearGradient id="paint1_linear_4007_2" x1="512" y1="797" x2="813.37" y2="1460.01" gradientUnits="userSpaceOnUse">
+<stop stop-color="#818CF8" style="stop-color:#818CF8;stop-color:color(display-p3 0.5059 0.5490 0.9725);stop-opacity:1;"/>
+<stop offset="0.3" stop-color="#4F46E5" style="stop-color:#4F46E5;stop-color:color(display-p3 0.3098 0.2745 0.8980);stop-opacity:1;"/>
+<stop offset="1" stop-color="#1E1B4B" style="stop-color:#1E1B4B;stop-color:color(display-p3 0.1176 0.1059 0.2941);stop-opacity:1;"/>
+</linearGradient>
+<linearGradient id="paint2_linear_4007_2" x1="512" y1="917" x2="796.024" y2="1598.66" gradientUnits="userSpaceOnUse">
+<stop stop-color="#4F46E5" style="stop-color:#4F46E5;stop-color:color(display-p3 0.3098 0.2745 0.8980);stop-opacity:1;"/>
+<stop offset="0.3" stop-color="#312E81" style="stop-color:#312E81;stop-color:color(display-p3 0.1922 0.1804 0.5059);stop-opacity:1;"/>
+<stop offset="1" stop-color="#0F051D" style="stop-color:#0F051D;stop-color:color(display-p3 0.0588 0.0196 0.1137);stop-opacity:1;"/>
+</linearGradient>
+<clipPath id="clip0_4007_2">
+<rect width="1024" height="1024" fill="white" style="fill:white;fill-opacity:1;"/>
+</clipPath>
+</defs>
+</svg>
