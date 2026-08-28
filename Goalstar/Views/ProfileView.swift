@@ -8,7 +8,6 @@ struct ProfileView: View {
     @Query private var goals: [Goal]
     @Query private var tasks: [TaskItem]
     @Query private var sessions: [FocusSession]
-    @Query private var habits: [Habit]
 
     @State private var activeSheet: ProfileSheet?
     @State private var showLockSettings = false
@@ -17,10 +16,6 @@ struct ProfileView: View {
     private enum ProfileSheet: Identifiable {
         case editName, reminders, theme, storage, about, privacy
         var id: Self { self }
-    }
-
-    private var streak: Int {
-        habits.map(\.streak).max() ?? 0
     }
 
     private var totalFocus: Int {
@@ -62,7 +57,7 @@ struct ProfileView: View {
             case .storage:
                 ProfileInfoSheet(
                     title: "数据存储",
-                    message: "目标、任务、习惯与专注记录保存在本机。卸载 App 后数据不会自动恢复。"
+                    message: "目标、任务与专注记录保存在本机。卸载 App 后数据不会自动恢复。"
                 )
             case .about:
                 ProfileAboutSheet(version: appVersion) {
@@ -134,13 +129,6 @@ struct ProfileView: View {
                     Text("把每一天画进自己的星图")
                         .font(GSFont.semibold(GSFont.md))
                         .foregroundStyle(GSColor.textSecondary)
-                    Text("🔥 连续打卡 \(streak) 天")
-                        .font(GSFont.semibold(GSFont.sm))
-                        .foregroundStyle(GSColor.warning)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                        .background(GSColor.warningLight)
-                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                 }
                 Spacer()
                 GSIcon(name: .chevronRight, size: 16, color: GSColor.textSecondary)
@@ -279,9 +267,7 @@ private struct ProfileRemindersSheet: View {
 
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
     @State private var tasksEnabled = AppConstants.sharedDefaults.object(forKey: AppConstants.notifyTasksEnabledKey) as? Bool ?? true
-    @State private var habitsEnabled = AppConstants.sharedDefaults.object(forKey: AppConstants.notifyHabitsEnabledKey) as? Bool ?? true
     @State private var taskTime = defaultDate(hourKey: AppConstants.notifyTasksHourKey, minuteKey: AppConstants.notifyTasksMinuteKey, hour: 8, minute: 0)
-    @State private var habitTime = defaultDate(hourKey: AppConstants.notifyHabitsHourKey, minuteKey: AppConstants.notifyHabitsMinuteKey, hour: 21, minute: 0)
 
     var body: some View {
         NavigationStack {
@@ -311,33 +297,11 @@ private struct ProfileRemindersSheet: View {
                         .gsCard(radius: GSRadius.panel, padding: 16)
                     }
 
-                    Toggle(isOn: $habitsEnabled) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("习惯提醒（数据页查看记录）")
-                                .font(GSFont.semibold(GSFont.xl))
-                            Text("每日本地通知；可在今日页完成习惯打卡，记录见数据页热力图")
-                                .font(GSFont.semibold(GSFont.md))
-                                .foregroundStyle(GSColor.textSecondary)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-                    .tint(GSColor.brand)
-                    .gsCard(radius: GSRadius.panel, padding: 16)
-
-                    if habitsEnabled {
-                        DatePickerFormRow(
-                            title: "提醒时间",
-                            selection: $habitTime,
-                            components: .hourAndMinute
-                        )
-                        .gsCard(radius: GSRadius.panel, padding: 16)
-                    }
-
                     VStack(alignment: .leading, spacing: 8) {
                         Text("本地通知")
                             .font(GSFont.semibold(GSFont.xl))
                             .foregroundStyle(GSColor.textPrimary)
-                        Text("任务与习惯提醒在此设置。锁屏小组件请到「我的 → 锁屏待办」。")
+                        Text("任务提醒在此设置。锁屏小组件请到「我的 → 锁屏待办」。")
                             .font(GSFont.semibold(GSFont.md))
                             .foregroundStyle(GSColor.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -408,7 +372,7 @@ private struct ProfileRemindersSheet: View {
         switch authStatus {
         case .authorized, .provisional, .ephemeral: return "将按你设定的时间发送本地提醒"
         case .denied: return "请在系统设置中允许 Goalstar 发送通知"
-        default: return "开启后可接收任务与习惯的每日提醒"
+        default: return "开启后可接收任务的每日提醒"
         }
     }
 
@@ -416,11 +380,8 @@ private struct ProfileRemindersSheet: View {
         let cal = Calendar.current
         let defaults = AppConstants.sharedDefaults
         defaults.set(tasksEnabled, forKey: AppConstants.notifyTasksEnabledKey)
-        defaults.set(habitsEnabled, forKey: AppConstants.notifyHabitsEnabledKey)
         defaults.set(cal.component(.hour, from: taskTime), forKey: AppConstants.notifyTasksHourKey)
         defaults.set(cal.component(.minute, from: taskTime), forKey: AppConstants.notifyTasksMinuteKey)
-        defaults.set(cal.component(.hour, from: habitTime), forKey: AppConstants.notifyHabitsHourKey)
-        defaults.set(cal.component(.minute, from: habitTime), forKey: AppConstants.notifyHabitsMinuteKey)
         store.refreshReminderBodies(context: context)
     }
 
@@ -482,7 +443,7 @@ private struct ProfileAboutSheet: View {
                         .font(GSFont.semibold(GSFont.md))
                         .foregroundStyle(GSColor.textSecondary)
                 }
-                Text("把每一天画进自己的星图。Goalstar 帮助你管理目标、今日三件事、习惯打卡与专注时刻。")
+                Text("把每一天画进自己的星图。Goalstar 帮助你管理目标、今日三件事与专注时刻。")
                     .font(GSFont.semibold(GSFont.lg))
                     .foregroundStyle(GSColor.textSecondary)
                     .multilineTextAlignment(.center)
@@ -526,9 +487,9 @@ private struct ProfilePrivacySheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
-                    privacySection("数据存储", "目标、任务、习惯、专注记录与昵称保存在设备本地。我们不运营自有服务器存储你的内容。")
+                    privacySection("数据存储", "目标、任务、专注记录与昵称保存在设备本地。我们不运营自有服务器存储你的内容。")
                     privacySection("网络与追踪", "本 App 不收集个人身份信息用于广告，不使用第三方追踪 SDK。")
-                    privacySection("通知", "本地通知仅在设备上调度，用于任务与习惯提醒，不会上传到我们的服务器。")
+                    privacySection("通知", "本地通知仅在设备上调度，用于任务提醒，不会上传到我们的服务器。")
                     privacySection("UserDefaults / App Group", "用于保存提醒开关、锁屏引导偏好等本地设置，并与 Widget 共享（可用时）。")
                     privacySection("联系方式", "如有隐私相关问题，请通过 App Store 产品页开发者联系方式与我们沟通。")
                     Text("最后更新：2026 年 8 月 27 日")

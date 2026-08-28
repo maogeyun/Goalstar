@@ -7,10 +7,8 @@ struct DataView: View {
 
     @Query private var goals: [Goal]
     @Query private var tasks: [TaskItem]
-    @Query private var habits: [Habit]
     @Query(sort: \FocusSession.startedAt, order: .reverse)
     private var sessions: [FocusSession]
-    @Query private var checkIns: [HabitCheckIn]
 
     @State private var detailGoalID: UUID?
     @State private var isRefreshing = false
@@ -33,7 +31,6 @@ struct DataView: View {
 
     private var focusMinutes: Int { rangeSessions.reduce(0) { $0 + $1.minutes } }
     private var completedTasksCount: Int { Metrics.completedTasks(in: tasks, period: store.dataPeriod) }
-    private var checkInDays: Int { Metrics.habitStreakMax(in: habits) }
     private var completionRate: Int { Metrics.completionRate(in: tasks, period: store.dataPeriod) }
     private var isEmptyPeriod: Bool { focusMinutes == 0 && completedTasksCount == 0 }
 
@@ -53,8 +50,7 @@ struct DataView: View {
     private var reviewAdvice: String {
         Metrics.weeklyReviewAdvice(
             completionRate: completionRate,
-            focusMinutes: focusMinutes,
-            streak: checkInDays
+            focusMinutes: focusMinutes
         )
     }
 
@@ -94,7 +90,6 @@ struct DataView: View {
                                 peakHourCard(hour)
                             }
                             trendCard
-                            heatmapCard
                         }
                         if !isEmptyPeriod {
                             rankingSection
@@ -167,15 +162,10 @@ struct DataView: View {
     }
 
     private var metricsGrid: some View {
-        VStack(spacing: 10) {
-            HStack(spacing: 10) {
-                bigMetric(icon: .clock, value: GSFormat.minutesLabel(focusMinutes), label: "专注总时长", tint: GSColor.brand)
-                bigMetric(icon: .check, value: "\(completedTasksCount) 个", label: "完成任务", tint: GSColor.success)
-            }
-            HStack(spacing: 10) {
-                bigMetric(icon: .flame, value: "\(checkInDays) 天", label: "打卡天数", tint: GSColor.warning)
-                bigMetric(icon: .percent, value: "\(completionRate)%", label: "完成率", tint: GSColor.accent)
-            }
+        HStack(spacing: 10) {
+            bigMetric(icon: .clock, value: GSFormat.minutesLabel(focusMinutes), label: "专注总时长", tint: GSColor.brand)
+            bigMetric(icon: .check, value: "\(completedTasksCount) 个", label: "完成任务", tint: GSColor.success)
+            bigMetric(icon: .percent, value: "\(completionRate)%", label: "完成率", tint: GSColor.accent)
         }
     }
 
@@ -184,7 +174,7 @@ struct DataView: View {
             Text(store.dataPeriod == .week ? "本周复盘" : "\(store.dataPeriod.title)复盘")
                 .font(GSFont.semibold(GSFont.xl))
                 .foregroundStyle(GSColor.textPrimary)
-            Text("完成 \(completedTasksCount) 个任务 · 专注 \(GSFormat.hoursLabel(focusMinutes)) · 最长连续打卡 \(checkInDays) 天")
+            Text("完成 \(completedTasksCount) 个任务 · 专注 \(GSFormat.hoursLabel(focusMinutes))")
                 .font(GSFont.semibold(GSFont.md))
                 .foregroundStyle(GSColor.textSecondary)
             Text(reviewAdvice)
@@ -258,84 +248,6 @@ struct DataView: View {
             .frame(height: 116)
         }
         .gsCard(radius: GSRadius.panel, padding: 16)
-    }
-
-    private var heatmapCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("习惯记录热力图")
-                    .font(GSFont.semibold(GSFont.xl))
-                    .foregroundStyle(GSColor.textPrimary)
-                Spacer()
-                Text("最近4周 · 上：本周 / 下：更早")
-                    .font(GSFont.semibold(GSFont.md))
-                    .foregroundStyle(GSColor.textSecondary)
-            }
-
-            HStack {
-                ForEach(["一", "二", "三", "四", "五", "六", "日"], id: \.self) { d in
-                    Text(d)
-                        .font(GSFont.semibold(GSFont.sm))
-                        .foregroundStyle(GSColor.textSecondary)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 28)
-                }
-            }
-
-            ForEach(0..<4, id: \.self) { week in
-                HStack {
-                    ForEach(0..<7, id: \.self) { day in
-                        let level = heatLevel(week: week, day: day)
-                        RoundedRectangle(cornerRadius: 4, style: .continuous)
-                            .fill(heatColor(level))
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 28)
-                    }
-                }
-            }
-
-            HStack(spacing: 4) {
-                Spacer()
-                Text("少").font(GSFont.semibold(10)).foregroundStyle(GSColor.textSecondary)
-                ForEach(0..<5, id: \.self) { level in
-                    RoundedRectangle(cornerRadius: 2)
-                        .fill(heatColor(level))
-                        .frame(width: 14, height: 14)
-                }
-                Text("多").font(GSFont.semibold(10)).foregroundStyle(GSColor.textSecondary)
-            }
-        }
-        .gsCard(radius: GSRadius.panel, padding: 16)
-    }
-
-    private func heatColor(_ level: Int) -> Color {
-        switch level {
-        case 0: return GSColor.bgTertiary
-        case 1: return GSColor.brand200.opacity(0.35)
-        case 2: return GSColor.brand200.opacity(0.65)
-        case 3: return GSColor.brand.opacity(0.7)
-        default: return GSColor.brand
-        }
-    }
-
-    private func heatLevel(week: Int, day: Int) -> Int {
-        let cal = Calendar.current
-        let today = cal.startOfDay(for: Date())
-        let weekday = cal.component(.weekday, from: today)
-        let todayIdx = (weekday + 5) % 7
-        let rowStart = cal.date(byAdding: .day, value: -(todayIdx + week * 7), to: today) ?? today
-        guard let cellDate = cal.date(byAdding: .day, value: day, to: rowStart) else { return 0 }
-
-        let fromCheckIns = checkIns.filter { cal.isDate($0.date, inSameDayAs: cellDate) }.count
-        if fromCheckIns > 0 {
-            return min(4, fromCheckIns)
-        }
-        // Fallback for legacy rows without HabitCheckIn history
-        let fromLast = habits.filter { habit in
-            guard let checkIn = habit.lastCheckIn else { return false }
-            return cal.isDate(checkIn, inSameDayAs: cellDate)
-        }.count
-        return min(4, fromLast)
     }
 
     private var rankingSection: some View {

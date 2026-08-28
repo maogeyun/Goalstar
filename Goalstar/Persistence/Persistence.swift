@@ -233,25 +233,6 @@ enum Persistence {
             context.insert(t)
         }
 
-        let habits: [(String, String, Int, HabitState, Int)] = [
-            ("早起", "sun", 12, .done, 0),
-            ("阅读", "bookOpen", 0, .pending, 1),
-            ("冥想", "circleX", 0, .idle, 2)
-        ]
-        for (name, icon, streak, state, order) in habits {
-            let h = Habit(name: name, iconName: icon, streak: streak, state: state, sortOrder: order)
-            if state == .done {
-                h.lastCheckIn = Date()
-                context.insert(HabitCheckIn(date: today, habit: h))
-                for dayOffset in 1..<8 {
-                    if let d = Calendar.current.date(byAdding: .day, value: -dayOffset, to: today) {
-                        context.insert(HabitCheckIn(date: d, habit: h))
-                    }
-                }
-            }
-            context.insert(h)
-        }
-
         let s1 = FocusSession(
             minutes: 25,
             mode: .pomodoro,

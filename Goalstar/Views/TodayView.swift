@@ -11,9 +11,6 @@ struct TodayView: View {
     @Query(sort: \TaskItem.sortOrder)
     private var allTasks: [TaskItem]
 
-    @Query(sort: \Habit.sortOrder)
-    private var habits: [Habit]
-
     @Query(sort: \FocusSession.startedAt, order: .reverse)
     private var sessions: [FocusSession]
 
@@ -50,10 +47,6 @@ struct TodayView: View {
         sessions
             .filter { Calendar.current.isDateInToday($0.startedAt) && $0.isCompleted }
             .reduce(0) { $0 + $1.minutes }
-    }
-
-    private var todayCheckIns: Int {
-        habits.filter { $0.state == .done }.count
     }
 
     var body: some View {
@@ -180,9 +173,6 @@ struct TodayView: View {
                 widgetPromoBanner
             }
             progressCard
-            if !habits.isEmpty {
-                habitsSection
-            }
             if !pendingTasks.isEmpty {
                 pendingTasksSection
             }
@@ -217,12 +207,6 @@ struct TodayView: View {
                         text: GSFormat.focusChip(todayFocusMinutes),
                         tint: GSColor.brand,
                         background: GSColor.brandLight
-                    )
-                    MetricChip(
-                        icon: .checkCircle,
-                        text: GSFormat.checkInChip(todayCheckIns),
-                        tint: GSColor.success,
-                        background: GSColor.successLight
                     )
                 }
             }
@@ -261,38 +245,6 @@ struct TodayView: View {
                 ForEach(skippedTasks, id: \.id) { task in
                     taskRow(task)
                 }
-            }
-        }
-    }
-
-    private var habitsSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            SectionHeader(title: "今日习惯")
-            ForEach(habits, id: \.id) { habit in
-                HStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(habit.name)
-                            .font(GSFont.semibold(GSFont.lg))
-                            .foregroundStyle(GSColor.textPrimary)
-                        Text("连续 \(habit.streak) 天")
-                            .font(GSFont.semibold(GSFont.sm))
-                            .foregroundStyle(GSColor.textSecondary)
-                    }
-                    Spacer()
-                    if habit.state == .done {
-                        CategoryTag(
-                            text: "已打卡",
-                            color: GSColor.successDark,
-                            background: GSColor.successLight,
-                            compact: true
-                        )
-                    } else {
-                        CompactCapsuleButton(title: "打卡") {
-                            store.checkInHabit(habit, context: context)
-                        }
-                    }
-                }
-                .gsCard(radius: GSRadius.card, padding: 14)
             }
         }
     }

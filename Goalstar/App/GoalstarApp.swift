@@ -84,7 +84,6 @@ struct RootTabView: View {
     @EnvironmentObject private var store: AppStore
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
-    @Query(sort: \Habit.sortOrder) private var habits: [Habit]
     @Query(filter: #Predicate<Goal> { !$0.isCompleted }, sort: \Goal.createdAt)
     private var goals: [Goal]
     @Query(sort: \TaskItem.sortOrder) private var tasks: [TaskItem]
@@ -116,7 +115,6 @@ struct RootTabView: View {
             store.consumePendingEndFocusFromLiveActivity(goals: goals)
         }
         .onAppear {
-            store.resetHabitsForNewDay(context: context, habits: habits)
             store.loadProfile(context: context)
             store.reconcileFocusFromLiveActivityIfNeeded()
             store.consumePendingEndFocusFromLiveActivity(goals: goals)

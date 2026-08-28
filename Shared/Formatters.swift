@@ -75,10 +75,6 @@ enum GSFormat {
         "专注 \(minutes) 分钟"
     }
 
-    static func checkInChip(_ count: Int) -> String {
-        "打卡 \(count) 次"
-    }
-
     static func hoursLabel(_ minutes: Int) -> String {
         if minutes < 60 {
             return "\(minutes) 分钟"
@@ -131,10 +127,6 @@ enum Metrics {
         return Int((Double(done) / Double(scoped.count) * 100).rounded())
     }
 
-    static func habitStreakMax(in habits: [Habit]) -> Int {
-        habits.map(\.streak).max() ?? 0
-    }
-
     static func weeklyFocusHoursByWeekday(in sessions: [FocusSession], reference: Date = Date()) -> [CGFloat] {
         let cal = Calendar.current
         var values = Array(repeating: CGFloat(0), count: 7)
@@ -181,7 +173,7 @@ enum Metrics {
         return hour
     }
 
-    static func weeklyReviewAdvice(completionRate: Int, focusMinutes: Int, streak: Int) -> String {
+    static func weeklyReviewAdvice(completionRate: Int, focusMinutes: Int) -> String {
         if completionRate < 50 {
             return "本周完成率偏低，建议下周减少今日任务数量，先保证主目标推进。"
         }
@@ -190,9 +182,6 @@ enum Metrics {
         }
         if focusMinutes < 60 {
             return "专注投入偏少，试试每天固定一段 25 分钟番茄，建立稳定节奏。"
-        }
-        if streak >= 7 {
-            return "打卡连续表现优秀，保持习惯即可，任务上可聚焦高优事项。"
         }
         return "保持当前节奏，优先完成置顶与锁屏上的三件事即可。"
     }

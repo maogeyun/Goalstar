@@ -25,7 +25,7 @@
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>NSUserNotificationsUsageDescription</key>
-	<string>Goalstar 需要发送本地提醒，帮助你按时完成今日任务与习惯打卡。</string>
+	<string>Goalstar 需要发送本地提醒，帮助你按时完成今日任务。</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

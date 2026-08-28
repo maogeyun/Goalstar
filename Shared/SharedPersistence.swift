@@ -5,11 +5,9 @@ enum SharedPersistence {
     static let schema = Schema([
         Goal.self,
         TaskItem.self,
-        Habit.self,
         FocusSession.self,
         UserProfile.self,
-        GoalMilestone.self,
-        HabitCheckIn.self
+        GoalMilestone.self
     ])
 
     static func makeSharedContainer() -> ModelContainer? {

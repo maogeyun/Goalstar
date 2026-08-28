@@ -4,7 +4,6 @@ import WidgetKit
 
 enum NotificationScheduler {
     static let taskReminderID = "goalstar.reminder.tasks"
-    static let habitReminderID = "goalstar.reminder.habits"
     static var focusEndID: String { FocusEndNotifier.notificationID }
 
     static func requestAuthorization() async -> Bool {
@@ -38,14 +37,11 @@ enum NotificationScheduler {
         FocusEndNotifier.cancel()
     }
 
-    static func rescheduleFromDefaults(pendingTaskCount: Int = 0, pendingHabitCount: Int = 0) {
+    static func rescheduleFromDefaults(pendingTaskCount: Int = 0) {
         let defaults = AppConstants.sharedDefaults
         let tasksOn = defaults.object(forKey: AppConstants.notifyTasksEnabledKey) as? Bool ?? true
-        let habitsOn = defaults.object(forKey: AppConstants.notifyHabitsEnabledKey) as? Bool ?? true
         let taskHour = defaults.object(forKey: AppConstants.notifyTasksHourKey) as? Int ?? 8
         let taskMinute = defaults.object(forKey: AppConstants.notifyTasksMinuteKey) as? Int ?? 0
-        let habitHour = defaults.object(forKey: AppConstants.notifyHabitsHourKey) as? Int ?? 21
-        let habitMinute = defaults.object(forKey: AppConstants.notifyHabitsMinuteKey) as? Int ?? 0
 
         cancelAll()
 
@@ -58,17 +54,6 @@ enum NotificationScheduler {
                 body: pendingTaskCount > 0
                     ? "今日还有 \(pendingTaskCount) 件事待完成，继续点亮星图吧"
                     : "查看今日三件事，开始绘制你的星图"
-            )
-        }
-        if habitsOn {
-            scheduleDaily(
-                id: habitReminderID,
-                hour: habitHour,
-                minute: habitMinute,
-                title: "习惯打卡提醒",
-                body: pendingHabitCount > 0
-                    ? "还有 \(pendingHabitCount) 个习惯未打卡"
-                    : "别忘了今日习惯打卡"
             )
         }
     }
@@ -88,7 +73,7 @@ enum NotificationScheduler {
 
     static func cancelAll() {
         UNUserNotificationCenter.current().removePendingNotificationRequests(
-            withIdentifiers: [taskReminderID, habitReminderID]
+            withIdentifiers: [taskReminderID]
         )
     }
 

@@ -336,60 +336,6 @@ extension TaskItem {
     }
 }
 
-enum HabitState: String, Codable {
-    case done
-    case pending
-    case idle
-}
-
-@Model
-final class Habit {
-    var id: UUID
-    var name: String
-    var iconName: String
-    var streak: Int
-    var stateRaw: String
-    var sortOrder: Int
-    var lastCheckIn: Date?
-    @Relationship(deleteRule: .cascade, inverse: \HabitCheckIn.habit)
-    var checkIns: [HabitCheckIn]?
-
-    init(
-        name: String,
-        iconName: String,
-        streak: Int = 0,
-        state: HabitState = .idle,
-        sortOrder: Int = 0
-    ) {
-        self.id = UUID()
-        self.name = name
-        self.iconName = iconName
-        self.streak = streak
-        self.stateRaw = state.rawValue
-        self.sortOrder = sortOrder
-        self.lastCheckIn = nil
-        self.checkIns = []
-    }
-
-    var state: HabitState {
-        get { HabitState(rawValue: stateRaw) ?? .idle }
-        set { stateRaw = newValue.rawValue }
-    }
-}
-
-@Model
-final class HabitCheckIn {
-    var id: UUID
-    var date: Date
-    var habit: Habit?
-
-    init(date: Date = Date(), habit: Habit? = nil) {
-        self.id = UUID()
-        self.date = Calendar.current.startOfDay(for: date)
-        self.habit = habit
-    }
-}
-
 @Model
 final class FocusSession {
     var id: UUID

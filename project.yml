@@ -104,7 +104,7 @@ targets:
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         NSSupportsLiveActivities: true
-        NSUserNotificationsUsageDescription: Goalstar 需要发送本地提醒，帮助你按时完成今日任务与习惯打卡。
+        NSUserNotificationsUsageDescription: Goalstar 需要发送本地提醒，帮助你按时完成今日任务。
         ITSAppUsesNonExemptEncryption: false
     dependencies:
       - target: GoalstarWidgets

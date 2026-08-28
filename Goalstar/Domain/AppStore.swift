@@ -139,23 +139,6 @@ final class AppStore: ObservableObject {
         saveContext(context)
     }
 
-    func resetHabitsForNewDay(context: ModelContext, habits: [Habit]) {
-        let cal = Calendar.current
-        var changed = false
-        for habit in habits {
-            if habit.state == .done,
-               let last = habit.lastCheckIn,
-               !cal.isDateInToday(last) {
-                habit.state = .pending
-                changed = true
-            }
-        }
-        if changed {
-            saveContext(context)
-            NotificationScheduler.reloadWidgets()
-        }
-    }
-
     func openCreateSheet(mode: CreateFormMode = .task, scheduledDate: Date? = nil, preferredGoalID: UUID? = nil) {
         createSheetMode = mode
         createSheetScheduledDate = Calendar.current.startOfDay(for: scheduledDate ?? Date())
@@ -353,27 +336,6 @@ final class AppStore: ObservableObject {
         }
         saveContext(context)
         NotificationScheduler.reloadWidgets()
-    }
-
-    // MARK: - Habits
-
-    func checkInHabit(_ habit: Habit, context: ModelContext) {
-        guard habit.state != .done else { return }
-        let cal = Calendar.current
-        let today = cal.startOfDay(for: Date())
-        let alreadyToday = habit.lastCheckIn.map { cal.isDateInToday($0) } ?? false
-        habit.state = .done
-        habit.lastCheckIn = Date()
-        if !alreadyToday {
-            habit.streak += 1
-            let exists = (habit.checkIns ?? []).contains { cal.isDate($0.date, inSameDayAs: today) }
-            if !exists {
-                context.insert(HabitCheckIn(date: today, habit: habit))
-            }
-        }
-        saveContext(context)
-        NotificationScheduler.reloadWidgets()
-        refreshReminderBodies(context: context)
     }
 
     // MARK: - Goals
@@ -1035,14 +997,11 @@ final class AppStore: ObservableObject {
         let cal = Calendar.current
         let today = cal.startOfDay(for: Date())
         let tasks = (try? context.fetch(FetchDescriptor<TaskItem>())) ?? []
-        let habits = (try? context.fetch(FetchDescriptor<Habit>())) ?? []
         let pendingTasks = tasks.filter {
             $0.spans(today) && $0.status != .done && $0.status != .skipped
         }.count
-        let pendingHabits = habits.filter { $0.state != .done }.count
         NotificationScheduler.rescheduleFromDefaults(
-            pendingTaskCount: pendingTasks,
-            pendingHabitCount: pendingHabits
+            pendingTaskCount: pendingTasks
         )
     }
 

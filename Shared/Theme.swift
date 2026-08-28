@@ -52,10 +52,6 @@ enum GSColor {
     static let surfaceCard = Color.white
     static let border = Color(hex: 0xE2E8F0)
 
-    static let habitDone = Color(hex: 0x10B981)
-    static let habitPending = Color(hex: 0xA855F7)
-    static let habitIdle = Color(hex: 0x94A3B8)
-
     static let cardShadow = Color(hex: 0x0F172A).opacity(0.03)
 }
 
