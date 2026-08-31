@@ -1,7 +1,6 @@
 import Foundation
 
-/// Future feature gates. Call sites should use `ProEntitlement.isUnlocked`;
-/// when StoreKit is wired, only AppStore membership source needs to change.
+/// Feature gates. Membership is `AppStore.isPro` (StoreKit lifetime + DEBUG override).
 enum ProFeature: String, CaseIterable, Identifiable {
     case unlimitedGoals
     case advancedInsights
@@ -31,6 +30,10 @@ enum ProFeature: String, CaseIterable, Identifiable {
 
 enum ProEntitlement {
     static let freeActiveGoalLimit = 3
+
+    static var freeGoalLimitMessage: String {
+        "免费版最多 \(freeActiveGoalLimit) 个进行中目标，升级 Pro 后可创建更多"
+    }
 
     static func isUnlocked(_ feature: ProFeature, isPro: Bool) -> Bool {
         isPro

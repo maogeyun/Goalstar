@@ -16,6 +16,7 @@
 - [x] **昵称编辑**（UserProfile，随 iCloud 同步）
 - [x] App 内隐私政策 + `docs/privacy-policy.html`
 - [x] PrivacyInfo.xcprivacy 已编入工程
+- [x] **Goalstar Pro 终身买断**（StoreKit 2 Non-Consumable，免费版最多 3 个进行中目标）
 
 ## 工程与构建
 
@@ -37,7 +38,8 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
 - App Group: `group.com.goalstar.native`
 - CloudKit: `iCloud.com.goalstar.native`
 - 最低系统: iOS 17.0
-- 版本: MARKETING_VERSION **2.0** (CURRENT_PROJECT_VERSION 1)
+- 版本: MARKETING_VERSION **2.0** (CURRENT_PROJECT_VERSION 2)
+- IAP: `com.goalstar.native.pro.lifetime`（Non-Consumable，本地测试见 `Goalstar/Configuration.storekit`）
 
 ## Developer Portal 必做
 
@@ -57,7 +59,11 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
    - 版本：2.0
    - 分类：效率 / 生活方式
 4. **隐私政策 URL**：托管 `docs/privacy-policy.html`
-5. **App 隐私问卷**：说明 iCloud 同步用户内容；不追踪；本地通知
+5. **App 隐私问卷**：说明 iCloud 同步用户内容；不追踪；本地通知；内购由 Apple 处理
+6. **Paid Applications Agreement**：在 App Store Connect 签署付费应用协议
+7. **内购商品**：创建 Non-Consumable `com.goalstar.native.pro.lifetime`（终身 Pro），价格在 ASC 配置
+8. **提交 IAP 审核**（可与 App 版本一起）
+9. **付费墙截图**：含价格、购买与恢复购买按钮
 
 ## 已知后续（非本期）
 
@@ -74,3 +80,5 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
 - [ ] 开启任务提醒，到点收到本地通知
 - [ ] 第二台设备（同 Apple ID）数据同步
 - [ ] Archive 含 `GoalstarWidgets.appex` 与 `PrivacyInfo.xcprivacy`
+- [ ] 付费墙能显示 App Store 价格；购买 / 恢复购买后 Pro 生效
+- [ ] 免费版第 4 个进行中目标会提示并打开升级页

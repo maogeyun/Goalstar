@@ -15,12 +15,14 @@ enum AppConstants {
     static let lockWidgetCountKey = "goalstar.lock.count"
     static let lockPrivacyModeKey = "goalstar.lock.privacy"
     static let proMembershipKey = "goalstar.pro.isMember"
+    static let proLifetimeProductID = "com.goalstar.native.pro.lifetime"
     static let storeBackupNoticeKey = "goalstar.store.backupNotice"
 
     static var sharedDefaults: UserDefaults {
         UserDefaults(suiteName: appGroupID) ?? .standard
     }
 
+    /// DEBUG-only local override. Production entitlement comes from StoreKit.
     static var isProMember: Bool {
         get { sharedDefaults.bool(forKey: proMembershipKey) }
         set { sharedDefaults.set(newValue, forKey: proMembershipKey) }
