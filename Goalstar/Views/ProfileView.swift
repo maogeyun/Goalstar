@@ -11,7 +11,6 @@ struct ProfileView: View {
 
     @State private var activeSheet: ProfileSheet?
     @State private var showLockSettings = false
-    @State private var showProPaywall = false
 
     private enum ProfileSheet: Identifiable {
         case editName, reminders, theme, storage, about, privacy
@@ -66,11 +65,6 @@ struct ProfileView: View {
             case .privacy:
                 ProfilePrivacySheet()
             }
-        }
-        .sheet(isPresented: $showProPaywall) {
-            ProPaywallSheet()
-                .environmentObject(store)
-                .presentationDetents([.large, .medium])
         }
         .sheet(isPresented: $showLockSettings) {
             LockScreenSettingsView()
@@ -153,7 +147,7 @@ struct ProfileView: View {
     private var menuList: some View {
         VStack(spacing: 0) {
             menuRow(icon: .star, title: "Goalstar Pro", trailing: store.isPro ? "已开通" : "升级") {
-                showProPaywall = true
+                store.requestProPaywall()
             }
             menuRow(icon: .lock, title: "锁屏待办", trailing: AppConstants.lockWidgetEnabled ? "\(AppConstants.lockWidgetCount)条" : "关闭") {
                 showLockSettings = true
@@ -480,7 +474,7 @@ private struct ProfileAboutSheet: View {
     }
 }
 
-private struct ProfilePrivacySheet: View {
+struct ProfilePrivacySheet: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -489,10 +483,11 @@ private struct ProfilePrivacySheet: View {
                 VStack(alignment: .leading, spacing: 14) {
                     privacySection("数据存储", "目标、任务、专注记录与昵称保存在设备本地。我们不运营自有服务器存储你的内容。")
                     privacySection("网络与追踪", "本 App 不收集个人身份信息用于广告，不使用第三方追踪 SDK。")
+                    privacySection("App 内购买", "Goalstar Pro 为一次买断。付款由 Apple 处理，本 App 不收集银行卡或 Apple ID 支付信息。购买记录由 Apple 账户保存，可在本机恢复。")
                     privacySection("通知", "本地通知仅在设备上调度，用于任务提醒，不会上传到我们的服务器。")
                     privacySection("UserDefaults / App Group", "用于保存提醒开关、锁屏引导偏好等本地设置，并与 Widget 共享（可用时）。")
                     privacySection("联系方式", "如有隐私相关问题，请通过 App Store 产品页开发者联系方式与我们沟通。")
-                    Text("最后更新：2026 年 8 月 27 日")
+                    Text("最后更新：2026 年 8 月 31 日")
                         .font(GSFont.semibold(GSFont.sm))
                         .foregroundStyle(GSColor.textSecondary)
                         .padding(.top, 8)
