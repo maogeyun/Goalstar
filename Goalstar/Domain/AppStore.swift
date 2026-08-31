@@ -31,11 +31,22 @@ final class AppStore: ObservableObject {
     @Published var showInterruptFocusConfirm = false
     @Published var showAbandonFocusConfirm = false
     @Published var pendingAutoStartFocus = false
-    @Published var isPro: Bool = AppConstants.isProMember
+    @Published var isPro: Bool = {
+        #if DEBUG
+        AppConstants.isProMember
+        #else
+        false
+        #endif
+    }()
+    @Published var showProPaywall = false
+    @Published var proProductPrice: String?
+    @Published var isProProductLoading = false
+    @Published var isProPurchaseInFlight = false
     @Published var lastSaveError: String?
 
     private var resumeFocusAfterConfirmDismiss = false
     private var pendingInterruptFocusTaskID: UUID?
+    private var pendingProPaywallAfterDismiss = false
 
     /// Legacy alias used by older UI; maps to widget guide visibility inverted.
     var lockScreenEnabled: Bool {
@@ -65,23 +76,72 @@ final class AppStore: ObservableObject {
         }
     }
 
+    func startStoreKit() {
+        let manager = StoreKitManager.shared
+        manager.onEntitlementChange = { [weak self] in
+            self?.applyProStatus()
+        }
+        manager.start()
+        applyProStatus()
+    }
+
     func loadProStatus() {
-        isPro = AppConstants.isProMember
+        applyProStatus()
+    }
+
+    func applyProStatus() {
+        let manager = StoreKitManager.shared
+        #if DEBUG
+        isPro = AppConstants.isProMember || manager.hasLifetimePro
+        #else
+        isPro = manager.hasLifetimePro
+        #endif
+        proProductPrice = manager.product?.displayPrice
+        isProProductLoading = manager.isLoadingProduct
     }
 
     /// Mock membership for local DEBUG QA only. Never unlock Pro in Release builds.
     func setProMock(_ enabled: Bool) {
         #if DEBUG
         AppConstants.isProMember = enabled
-        isPro = enabled
+        applyProStatus()
         #endif
     }
 
-    /// Placeholder for StoreKit restore; currently reloads local mock flag.
-    @discardableResult
-    func restorePurchasesMock() -> Bool {
-        loadProStatus()
-        return isPro
+    func requestProPaywall() {
+        if showCreateSheet {
+            pendingProPaywallAfterDismiss = true
+            showCreateSheet = false
+            return
+        }
+        showProPaywall = true
+    }
+
+    func presentPendingProPaywallIfNeeded() {
+        guard pendingProPaywallAfterDismiss else { return }
+        pendingProPaywallAfterDismiss = false
+        showProPaywall = true
+    }
+
+    func refreshProProduct() async {
+        await StoreKitManager.shared.loadProduct()
+        applyProStatus()
+    }
+
+    func purchasePro() async -> StoreKitPurchaseOutcome {
+        isProPurchaseInFlight = true
+        defer { isProPurchaseInFlight = false }
+        let outcome = await StoreKitManager.shared.purchase()
+        applyProStatus()
+        return outcome
+    }
+
+    func restorePurchases() async -> StoreKitPurchaseOutcome {
+        isProPurchaseInFlight = true
+        defer { isProPurchaseInFlight = false }
+        let outcome = await StoreKitManager.shared.restore()
+        applyProStatus()
+        return outcome
     }
 
     func migrateLegacyTaskFields(context: ModelContext) {
@@ -919,7 +979,7 @@ final class AppStore: ObservableObject {
         let activeCount = (try? context.fetch(FetchDescriptor<Goal>()))?.filter { !$0.isCompleted }.count ?? 0
         let freeLimit = ProEntitlement.freeActiveGoalLimit
         if !ProEntitlement.isUnlocked(.unlimitedGoals, isPro: isPro), activeCount >= freeLimit {
-            return "免费版最多 \(freeLimit) 个进行中目标，升级 Pro 后可创建更多"
+            return ProEntitlement.freeGoalLimitMessage
         }
         let hasPrimary = (try? context.fetch(FetchDescriptor<Goal>()))?.contains(where: { !$0.isCompleted && $0.isPrimary }) ?? false
         let goal = Goal(
