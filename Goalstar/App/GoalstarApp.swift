@@ -23,6 +23,7 @@ struct GoalstarApp: App {
     private let notificationDelegate = AppNotificationDelegate()
 
     init() {
+        // Keep the first SwiftUI frame aligned with the static launch screen.
         UIWindow.appearance().backgroundColor = UIColor(named: "LaunchScreenBackground")
     }
 
