@@ -4,7 +4,8 @@ struct ProPaywallSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var store: AppStore
 
-    @State private var restoreMessage: String?
+    @State private var statusMessage: String?
+    @State private var showPrivacy = false
 
     var body: some View {
         NavigationStack {
@@ -14,8 +15,8 @@ struct ProPaywallSheet: View {
                     benefitsCard
                     pricingCard
                     actionsCard
-                    if let restoreMessage {
-                        Text(restoreMessage)
+                    if let statusMessage {
+                        Text(statusMessage)
                             .font(GSFont.semibold(GSFont.sm))
                             .foregroundStyle(GSColor.textSecondary)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -34,6 +35,12 @@ struct ProPaywallSheet: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("关闭") { dismiss() }
                 }
+            }
+            .task {
+                await store.refreshProProduct()
+            }
+            .sheet(isPresented: $showPrivacy) {
+                ProfilePrivacySheet()
             }
         }
     }
@@ -61,13 +68,9 @@ struct ProPaywallSheet: View {
 
     private var headerSubtitle: String {
         if store.isPro {
-            return "你已解锁 Pro 权益骨架。后续功能上线后将自动可用。"
+            return "你已永久解锁 Pro。后续能力上线后将自动可用。"
         }
-        #if DEBUG
-        return "升级后解锁更多目标管理与数据能力。当前为体验开通（本地 Mock）。"
-        #else
-        return "升级后解锁更多目标管理与数据能力。App Store 订阅即将上线。"
-        #endif
+        return "一次买断，永久解锁无限进行中目标与后续 Pro 能力。"
     }
 
     private var benefitsCard: some View {
@@ -100,68 +103,120 @@ struct ProPaywallSheet: View {
 
     private var pricingCard: some View {
         VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(title: "订阅说明")
-            #if DEBUG
-            Text("即将支持 App Store 订阅 · 现可体验开通")
+            SectionHeader(title: "买断说明")
+            Text("一次购买，终身解锁")
                 .font(GSFont.semibold(GSFont.lg))
                 .foregroundStyle(GSColor.textPrimary)
-            Text("体验开通仅保存在本机，不会产生真实扣费。正式上线后可在此恢复购买。")
+            Text(pricingSubtitle)
                 .font(GSFont.semibold(GSFont.sm))
                 .foregroundStyle(GSColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
-            #else
-            Text("即将支持 App Store 订阅")
-                .font(GSFont.semibold(GSFont.lg))
-                .foregroundStyle(GSColor.textPrimary)
-            Text("正式上线后可在此购买与恢复。当前版本暂不提供本地体验开通。")
-                .font(GSFont.semibold(GSFont.sm))
-                .foregroundStyle(GSColor.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
-            #endif
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .gsCard(radius: GSRadius.panel, padding: 16)
     }
 
+    private var pricingSubtitle: String {
+        if let price = store.proProductPrice {
+            return "价格 \(price)，由 Apple 处理付款，不会自动续费。换机后可恢复购买。"
+        }
+        if store.isProProductLoading {
+            return "正在从 App Store 获取价格…"
+        }
+        return "价格由 App Store 显示。无法获取商品时请检查网络后重试。"
+    }
+
+    private var purchaseTitle: String {
+        if store.isPro {
+            return "已是 Pro 会员"
+        }
+        if store.isProPurchaseInFlight {
+            return "购买中…"
+        }
+        if store.isProProductLoading {
+            return "正在获取价格…"
+        }
+        if let price = store.proProductPrice {
+            return "购买终身 Pro · \(price)"
+        }
+        return "暂时无法购买"
+    }
+
+    private var canPurchase: Bool {
+        !store.isPro && !store.isProPurchaseInFlight && store.proProductPrice != nil
+    }
+
     private var actionsCard: some View {
         VStack(spacing: 10) {
-            if store.isPro {
-                PrimaryButton(title: "已是 Pro 会员", filled: false) {
+            PrimaryButton(title: purchaseTitle, filled: store.isPro ? false : canPurchase) {
+                if store.isPro {
                     dismiss()
+                    return
                 }
-                OutlineActionButton(title: "恢复购买") {
-                    let ok = store.restorePurchasesMock()
-                    restoreMessage = ok
-                        ? "已恢复本地 Pro 状态"
-                        : "未找到可恢复的购买"
+                if store.proProductPrice == nil {
+                    Task { await store.refreshProProduct() }
+                    return
                 }
-            } else {
-                #if DEBUG
-                PrimaryButton(title: "体验开通 Pro") {
-                    store.setProMock(true)
-                    dismiss()
-                }
-                #else
-                PrimaryButton(title: "即将开放订阅", filled: false) {
-                    restoreMessage = "App Store 订阅即将上线，敬请期待"
-                }
-                #endif
-                OutlineActionButton(title: "恢复购买") {
-                    let ok = store.restorePurchasesMock()
-                    restoreMessage = ok
-                        ? "已恢复本地 Pro 状态"
-                        : "未找到可恢复的购买"
-                }
+                Task { await purchase() }
             }
+            .disabled(store.isProPurchaseInFlight)
+            .opacity(store.isPro || canPurchase || store.isProPurchaseInFlight || store.proProductPrice == nil ? 1 : 0.55)
+
+            OutlineActionButton(title: store.isProPurchaseInFlight ? "处理中…" : "恢复购买") {
+                Task { await restore() }
+            }
+            .disabled(store.isProPurchaseInFlight)
         }
         .frame(maxWidth: .infinity)
         .gsCard(radius: GSRadius.panel, padding: 16)
     }
 
     private var footerNote: some View {
-        Text("付款条款与隐私政策将在接入 App Store 订阅后更新。")
+        VStack(alignment: .leading, spacing: 8) {
+            Text("一次买断，不会自动续费。购买由 Apple 处理，本 App 不收集支付信息。")
+                .font(GSFont.semibold(GSFont.sm))
+                .foregroundStyle(GSColor.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Button("查看隐私政策") {
+                showPrivacy = true
+            }
             .font(GSFont.semibold(GSFont.sm))
-            .foregroundStyle(GSColor.textSecondary)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundStyle(GSColor.brand)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private func purchase() async {
+        statusMessage = nil
+        let outcome = await store.purchasePro()
+        switch outcome {
+        case .success:
+            dismiss()
+        case .cancelled:
+            break
+        case .pending:
+            statusMessage = "购买待确1认，请完成批准后点「恢复购买」。"
+        case .notFound:
+            statusMessage = "未找到可恢复的购买"
+        case .failed(let message):
+            statusMessage = message
+        }
+    }
+
+    private func restore() async {
+        statusMessage = nil
+        let outcome = await store.restorePurchases()
+        switch outcome {
+        case .success:
+            statusMessage = "已恢复 Pro"
+        case .cancelled:
+            break
+        case .pending:
+            statusMessage = "购买待确认，请稍后再试。"
+        case .notFound:
+            statusMessage = "未找到可恢复的购买"
+        case .failed(let message):
+            statusMessage = message
+        }
     }
 }
