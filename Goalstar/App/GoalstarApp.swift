@@ -23,7 +23,6 @@ struct GoalstarApp: App {
     private let notificationDelegate = AppNotificationDelegate()
 
     init() {
-        // Keep the first SwiftUI frame aligned with the static launch screen.
         UIWindow.appearance().backgroundColor = UIColor(named: "LaunchScreenBackground")
     }
 
@@ -53,7 +52,7 @@ struct GoalstarApp: App {
                 UNUserNotificationCenter.current().delegate = notificationDelegate
                 Persistence.seedIfNeeded(context: container.mainContext)
                 store.loadProfile(context: container.mainContext)
-                store.loadProStatus()
+                store.startStoreKit()
                 store.refreshReminderBodies(context: container.mainContext)
                 applyLaunchArguments()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.9) {
@@ -122,10 +121,16 @@ struct RootTabView: View {
         .sheet(isPresented: $store.showCreateSheet, onDismiss: {
             store.clearCreateSheetPreferences()
             DispatchQueue.main.async {
+                store.presentPendingProPaywallIfNeeded()
                 store.presentPendingCreateSheetIfNeeded()
             }
         }) {
             CreateSheet()
+                .environmentObject(store)
+                .presentationDetents([.large, .medium])
+        }
+        .sheet(isPresented: $store.showProPaywall) {
+            ProPaywallSheet()
                 .environmentObject(store)
                 .presentationDetents([.large, .medium])
         }
