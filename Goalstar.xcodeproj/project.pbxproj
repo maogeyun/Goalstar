@@ -24,6 +24,7 @@
 		51E6CE8E156774DD0C5DC697 /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6ED238469C89CFE88A2A5E /* Cards.swift */; };
 		5293EBD3264B0924C7FC816F /* FocusActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */; };
 		560A70485E06B8316CE68D40 /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */; };
+		B4C18A5F6039C1D8E247D7E2 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B31C4A7D2F90516A4E8B21 /* StoreKitManager.swift */; };
 		60DCD78F2EA148DA1DD5D35D /* GoalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F6258467CB4C777CE36719 /* GoalDetailView.swift */; };
 		62533AF86CC29DC05DCF1D45 /* GSIconName.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CF6612E5237FB8B273C031 /* GSIconName.swift */; };
 		630332E32D4BA671F7F1C641 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9DD9BF1E91965949BA656D /* AppConstants.swift */; };
@@ -84,6 +85,7 @@
 
 /* Begin PBXFileReference section */
 		0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
+		E8B31C4A7D2F90516A4E8B21 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		06E21EF8EFA2FB221ADE475C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusActivityAttributes.swift; sourceTree = "<group>"; };
 		1EB5DD7C80E5B7B24FC53629 /* ToggleTaskIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTaskIntent.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 		C0CF6612E5237FB8B273C031 /* GSIconName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSIconName.swift; sourceTree = "<group>"; };
 		CCF89C83F72DFA769AB8FD8F /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		CE23F2E48EF219CF95DB7158 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A41F8C2E6B9D0471C3E5A018 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Configuration.storekit; sourceTree = "<group>"; };
 		D5F4398FBC50F7CF788A7EAA /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		D6AE395B7228B197CE63DC16 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		D95D45B2FBFA154D0910D041 /* GoalstarWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = GoalstarWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -176,6 +179,7 @@
 			children = (
 				9CE7A89E6C242192458879DD /* AppIcon.icon */,
 				CE23F2E48EF219CF95DB7158 /* Assets.xcassets */,
+				A41F8C2E6B9D0471C3E5A018 /* Configuration.storekit */,
 				B77C891522CC4AA3F766073B /* Goalstar.Debug.entitlements */,
 				F7E37DD17BAB9DF9CF55BAC6 /* Goalstar.entitlements */,
 				741C6372F02BD4C952C50F25 /* Info.plist */,
@@ -249,6 +253,7 @@
 			children = (
 				0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */,
 				FF1B707F12D65616B6F0351C /* NotificationScheduler.swift */,
+				E8B31C4A7D2F90516A4E8B21 /* StoreKitManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -396,6 +401,7 @@
 				C67D4F3892A7BA5FFCDA4215 /* SharedPersistence.swift in Sources */,
 				4977AABFBD4BD2042792F4ED /* SkeletonRefresh.swift in Sources */,
 				23159934E54146F41F14632F /* SplashView.swift in Sources */,
+				B4C18A5F6039C1D8E247D7E2 /* StoreKitManager.swift in Sources */,
 				C3A4443B357DC6C0E09BDE93 /* TaskDetailSheet.swift in Sources */,
 				17E777775DFF86C475A58E93 /* Theme.swift in Sources */,
 				455729633D8FC3A4C107E273 /* TodayView.swift in Sources */,
