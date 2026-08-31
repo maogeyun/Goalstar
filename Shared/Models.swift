@@ -420,6 +420,8 @@ enum TodayTaskRanking {
         return tasks
             .filter { $0.spans(today) }
             .filter { task in
+                // Archived / completed goals leave Today and widgets.
+                if let goal = task.goal, goal.isCompleted { return false }
                 if let deferred = task.deferredTo, cal.startOfDay(for: deferred) > today {
                     return false
                 }

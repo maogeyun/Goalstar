@@ -75,7 +75,7 @@ struct GoalstarApp: App {
             }
         }
         if args.contains("-emptyToday") {
-            UserDefaults.standard.set(false, forKey: "goalstar.seeded.v1")
+            UserDefaults.standard.set(false, forKey: AppConstants.demoSeededKey)
         }
     }
 }

@@ -111,7 +111,9 @@ targets:
         embed: true
     entitlements:
       path: Goalstar/Goalstar.entitlements
-      properties: {}
+      properties:
+        com.apple.security.application-groups:
+          - group.com.goalstar.native
 
   GoalstarWidgets:
     type: app-extension
@@ -152,7 +154,9 @@ targets:
         NSSupportsLiveActivities: true
     entitlements:
       path: GoalstarWidgets/GoalstarWidgets.entitlements
-      properties: {}
+      properties:
+        com.apple.security.application-groups:
+          - group.com.goalstar.native
 
 schemes:
   Goalstar:

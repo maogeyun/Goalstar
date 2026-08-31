@@ -10,6 +10,7 @@ enum AppConstants {
     static let widgetGuideDismissedKey = "goalstar.widgetGuideDismissed"
     static let taskEndDateMigratedKey = "goalstar.taskEndDateMigrated.v1"
     static let storeMigratedKey = "goalstar.store.migrated.v5"
+    static let demoSeededKey = "goalstar.seeded.v1"
     static let lockWidgetEnabledKey = "goalstar.lock.enabled"
     static let lockWidgetCountKey = "goalstar.lock.count"
     static let lockPrivacyModeKey = "goalstar.lock.privacy"

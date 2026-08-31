@@ -50,15 +50,24 @@ struct ProPaywallSheet: View {
                     background: store.isPro ? GSColor.brandLight : GSColor.bgTertiary
                 )
             }
-            Text(store.isPro
-                 ? "你已解锁 Pro 权益骨架。后续功能上线后将自动可用。"
-                 : "升级后解锁更多目标管理与数据能力。当前为体验开通（本地 Mock）。")
+            Text(headerSubtitle)
                 .font(GSFont.semibold(GSFont.md))
                 .foregroundStyle(GSColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .gsCard(radius: GSRadius.panel, padding: 16)
+    }
+
+    private var headerSubtitle: String {
+        if store.isPro {
+            return "你已解锁 Pro 权益骨架。后续功能上线后将自动可用。"
+        }
+        #if DEBUG
+        return "升级后解锁更多目标管理与数据能力。当前为体验开通（本地 Mock）。"
+        #else
+        return "升级后解锁更多目标管理与数据能力。App Store 订阅即将上线。"
+        #endif
     }
 
     private var benefitsCard: some View {
@@ -92,6 +101,7 @@ struct ProPaywallSheet: View {
     private var pricingCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             SectionHeader(title: "订阅说明")
+            #if DEBUG
             Text("即将支持 App Store 订阅 · 现可体验开通")
                 .font(GSFont.semibold(GSFont.lg))
                 .foregroundStyle(GSColor.textPrimary)
@@ -99,6 +109,15 @@ struct ProPaywallSheet: View {
                 .font(GSFont.semibold(GSFont.sm))
                 .foregroundStyle(GSColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
+            #else
+            Text("即将支持 App Store 订阅")
+                .font(GSFont.semibold(GSFont.lg))
+                .foregroundStyle(GSColor.textPrimary)
+            Text("正式上线后可在此购买与恢复。当前版本暂不提供本地体验开通。")
+                .font(GSFont.semibold(GSFont.sm))
+                .foregroundStyle(GSColor.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+            #endif
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .gsCard(radius: GSRadius.panel, padding: 16)
@@ -114,18 +133,24 @@ struct ProPaywallSheet: View {
                     let ok = store.restorePurchasesMock()
                     restoreMessage = ok
                         ? "已恢复本地 Pro 状态"
-                        : "未找到可恢复的购买（当前为 Mock）"
+                        : "未找到可恢复的购买"
                 }
             } else {
+                #if DEBUG
                 PrimaryButton(title: "体验开通 Pro") {
                     store.setProMock(true)
                     dismiss()
                 }
+                #else
+                PrimaryButton(title: "即将开放订阅", filled: false) {
+                    restoreMessage = "App Store 订阅即将上线，敬请期待"
+                }
+                #endif
                 OutlineActionButton(title: "恢复购买") {
                     let ok = store.restorePurchasesMock()
                     restoreMessage = ok
                         ? "已恢复本地 Pro 状态"
-                        : "未找到可恢复的购买（当前为 Mock）"
+                        : "未找到可恢复的购买"
                 }
             }
         }

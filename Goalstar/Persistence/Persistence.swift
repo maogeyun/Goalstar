@@ -121,9 +121,16 @@ enum Persistence {
     }
 
     static func seedIfNeeded(context: ModelContext) {
-        let goalCount = (try? context.fetchCount(FetchDescriptor<Goal>())) ?? 0
-        if goalCount == 0 {
-            seedDemoData(context: context)
+        // Gate demo seed on a one-shot flag so deleting all goals stays empty
+        // (clean install / first launch still seeds when the flag is unset).
+        let defaults = UserDefaults.standard
+        let alreadySeeded = defaults.bool(forKey: AppConstants.demoSeededKey)
+        if !alreadySeeded {
+            let goalCount = (try? context.fetchCount(FetchDescriptor<Goal>())) ?? 0
+            if goalCount == 0 {
+                seedDemoData(context: context)
+            }
+            defaults.set(true, forKey: AppConstants.demoSeededKey)
         }
 
         let profileCount = (try? context.fetchCount(FetchDescriptor<UserProfile>())) ?? 0
@@ -131,8 +138,6 @@ enum Persistence {
             context.insert(UserProfile(displayName: "Yunduan"))
             try? context.save()
         }
-
-        UserDefaults.standard.set(true, forKey: "goalstar.seeded.v1")
     }
 
     private static func seedDemoData(context: ModelContext) {

@@ -69,10 +69,12 @@ final class AppStore: ObservableObject {
         isPro = AppConstants.isProMember
     }
 
-    /// Mock membership for E+B skeleton. Replace with StoreKit entitlement sync later.
+    /// Mock membership for local DEBUG QA only. Never unlock Pro in Release builds.
     func setProMock(_ enabled: Bool) {
+        #if DEBUG
         AppConstants.isProMember = enabled
         isPro = enabled
+        #endif
     }
 
     /// Placeholder for StoreKit restore; currently reloads local mock flag.
@@ -998,7 +1000,10 @@ final class AppStore: ObservableObject {
         let today = cal.startOfDay(for: Date())
         let tasks = (try? context.fetch(FetchDescriptor<TaskItem>())) ?? []
         let pendingTasks = tasks.filter {
-            $0.spans(today) && $0.status != .done && $0.status != .skipped
+            $0.spans(today)
+                && $0.status != .done
+                && $0.status != .skipped
+                && !($0.goal?.isCompleted ?? false)
         }.count
         NotificationScheduler.rescheduleFromDefaults(
             pendingTaskCount: pendingTasks
