@@ -5,7 +5,7 @@ struct CreateSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
     @EnvironmentObject private var store: AppStore
-    @Query(filter: #Predicate<Goal> { !$0.isCompleted }, sort: \Goal.createdAt)
+    @Query(filter: #Predicate<Goal> { !$0.isCompleted }, sort: \\Goal.createdAt)
     private var goals: [Goal]
 
     @State private var mode: CreateFormMode = .task
@@ -56,6 +56,11 @@ struct CreateSheet: View {
                             .font(GSFont.semibold(GSFont.lg))
                             .foregroundStyle(GSColor.danger)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                        if titleError == ProEntitlement.freeGoalLimitMessage {
+                            OutlineActionButton(title: "升级 Pro") {
+                                store.requestProPaywall()
+                            }
+                        }
                     }
 
                     PrimaryButton(title: "保存") {
@@ -371,7 +376,7 @@ struct GSTextFieldStyle: TextFieldStyle {
 struct TomorrowPreviewSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var store: AppStore
-    @Query(sort: \TaskItem.sortOrder) private var allTasks: [TaskItem]
+    @Query(sort: \\TaskItem.sortOrder) private var allTasks: [TaskItem]
 
     private var tomorrowTasks: [TaskItem] {
         let cal = Calendar.current

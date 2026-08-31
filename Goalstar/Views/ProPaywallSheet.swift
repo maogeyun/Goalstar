@@ -195,7 +195,7 @@ struct ProPaywallSheet: View {
         case .cancelled:
             break
         case .pending:
-            statusMessage = "购买待确1认，请完成批准后点「恢复购买」。"
+            statusMessage = "购买待确认，请完成批准后点「恢复购买」。"
         case .notFound:
             statusMessage = "未找到可恢复的购买"
         case .failed(let message):
