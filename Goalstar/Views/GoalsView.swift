@@ -12,7 +12,10 @@ struct GoalsView: View {
     private var sessions: [FocusSession]
 
     @State private var detailGoalID: UUID?
-    @State private var goalToArchive: Goal?
+    /// Bool-bound confirm (like GoalDetailView). Do not drive the dialog off an optional Goal —
+    /// SwiftUI clears optional-based `isPresented` before the confirm action runs.
+    @State private var showArchiveConfirm = false
+    @State private var pendingArchiveGoalID: UUID?
     @State private var isRefreshing = false
 
     private var active: [Goal] { goals.filter { !$0.isCompleted } }
@@ -57,7 +60,8 @@ struct GoalsView: View {
                                             Label("设为主要目标", systemImage: "star")
                                         }
                                         Button(role: .destructive) {
-                                            goalToArchive = goal
+                                            pendingArchiveGoalID = goal.id
+                                            showArchiveConfirm = true
                                         } label: {
                                             Label("归档", systemImage: "archivebox")
                                         }
@@ -124,18 +128,20 @@ struct GoalsView: View {
                 detailGoalID = nil
             }
         }
-        .confirmationDialog("归档后目标将移至已归档列表", isPresented: Binding(
-            get: { goalToArchive != nil },
-            set: { if !$0 { goalToArchive = nil } }
-        ), titleVisibility: .visible) {
-            if let goal = goalToArchive {
-                Button("归档目标", role: .destructive) {
+        .confirmationDialog(
+            "归档后目标将移至已归档列表",
+            isPresented: $showArchiveConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("归档目标", role: .destructive) {
+                if let id = pendingArchiveGoalID,
+                   let goal = goals.first(where: { $0.id == id }) {
                     store.archiveGoal(goal, context: context)
-                    goalToArchive = nil
                 }
+                pendingArchiveGoalID = nil
             }
             Button("取消", role: .cancel) {
-                goalToArchive = nil
+                pendingArchiveGoalID = nil
             }
         }
     }

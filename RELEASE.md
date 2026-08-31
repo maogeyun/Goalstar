@@ -43,8 +43,9 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
 
 1. 为 `com.goalstar.native` 开启 **App Groups**、**iCloud (CloudKit)**、**Push Notifications 非必需**（本期为本地通知）
 2. 为 `com.goalstar.native.widgets` 开启 **App Groups**（同一 `group.com.goalstar.native`）
-3. 创建 CloudKit container `iCloud.com.goalstar.native`
-4. Xcode 中对两 target 使用 Automatic Signing（Team `A47KHX4UCC`）
+3. **Team `A47KHX4UCC`：在 Identifiers 为两个 App ID 勾选 App Group `group.com.goalstar.native`，并重新生成/下载 Provisioning Profile。** 若 entitlements 声明了该 Group 但 profile 未包含，真机会在启动时 SIGKILL（无 Swift 栈）；模拟器不强制校验。代码层无法捕获该 SIGKILL，仅能在 Group 容器不可用时回退到 Application Support。
+4. 创建 CloudKit container `iCloud.com.goalstar.native`
+5. Xcode 中对两 target 使用 Automatic Signing（Team `A47KHX4UCC`）
 
 ## App Store Connect 待办
 

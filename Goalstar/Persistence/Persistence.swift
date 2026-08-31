@@ -4,39 +4,146 @@ import SwiftData
 enum Persistence {
     static var schema: Schema { SharedPersistence.schema }
 
+    /// Never crashes on store load. Prefers App Group, then Application Support, then memory/temp.
+    ///
+    /// Note: if the provisioning profile omits App Group `group.com.goalstar.native` while
+    /// entitlements declare it, iOS may SIGKILL before any Swift runs — that cannot be caught here.
+    /// Enable the App Group for team `A47KHX4UCC` in Apple Developer and regenerate profiles.
     static func makeContainer() -> ModelContainer {
         migrateStoreIfNeeded()
 
-        let url = SharedPersistence.sharedStoreURLOrFallback()
-        ensureStoreDirectory(for: url)
-
-        do {
-            let local = ModelConfiguration(
-                schema: schema,
-                url: url,
-                cloudKitDatabase: .none
+        if AppConstants.sharedStoreURL == nil {
+            SharedPersistence.log(
+                "App Group container unavailable for \(AppConstants.appGroupID); using Application Support"
             )
-            return try ModelContainer(for: schema, configurations: [local])
+        }
+
+        // 1) App Group store (shared with widgets) when container exists
+        if let groupURL = AppConstants.sharedStoreURL {
+            ensureStoreDirectory(for: groupURL)
+            if let container = openPersistent(at: groupURL, allowReset: true) {
+                return container
+            }
+            SharedPersistence.log("App Group store failed; falling back to Application Support")
+        }
+
+        // 2) App sandbox Application Support — mis-provisioned devices still launch
+        let sandboxURL = SharedPersistence.applicationSupportStoreURL()
+        ensureStoreDirectory(for: sandboxURL)
+        if let container = openPersistent(at: sandboxURL, allowReset: true) {
+            return container
+        }
+        SharedPersistence.log("Application Support store failed; trying temp then memory")
+
+        // 3) Unique temp file (avoids a corrupted sandbox path)
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("goalstar-fallback-\(UUID().uuidString).store")
+        if let container = openPersistent(at: tempURL, allowReset: false) {
+            return container
+        }
+
+        // 4) In-memory — soft open, no force try
+        if let memory = SharedPersistence.openMemoryStore(schema: schema) {
+            SharedPersistence.log("Using in-memory ModelContainer")
+            return memory
+        }
+
+        // 5) Soft last resorts — no force unwrap
+        SharedPersistence.resetStoreFiles(at: sandboxURL)
+        if let container = SharedPersistence.openStore(at: sandboxURL, schema: schema, allowReset: false) {
+            return container
+        }
+
+        let caches = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first
+            ?? FileManager.default.temporaryDirectory
+        let cacheStore = caches.appendingPathComponent("goalstar.emergency.store")
+        try? FileManager.default.createDirectory(at: caches, withIntermediateDirectories: true)
+        SharedPersistence.resetStoreFiles(at: cacheStore)
+        if let container = SharedPersistence.openStore(at: cacheStore, schema: schema, allowReset: false) {
+            return container
+        }
+
+        for _ in 0..<8 {
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent("goalstar-\(UUID().uuidString).store")
+            if let container = SharedPersistence.openStore(at: url, schema: schema, allowReset: false) {
+                return container
+            }
+        }
+
+        if let memory = SharedPersistence.openMemoryStore(schema: schema) {
+            return memory
+        }
+
+        // Result-based construction — never force-try store creation.
+        return makeContainerViaResult()
+    }
+
+    /// Last-line soft path using Result — never force-try store creation.
+    private static func makeContainerViaResult() -> ModelContainer {
+        if case .success(let container) = Result(catching: {
+            try ModelContainer(
+                for: schema,
+                configurations: [ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)]
+            )
+        }) {
+            return container
+        }
+
+        let url = FileManager.default.temporaryDirectory
+            .appendingPathComponent("goalstar-final-\(UUID().uuidString).store")
+        if case .success(let container) = Result(catching: {
+            try ModelContainer(
+                for: schema,
+                configurations: [ModelConfiguration(schema: schema, url: url, cloudKitDatabase: .none)]
+            )
+        }) {
+            return container
+        }
+
+        if case .success(let container) = Result(catching: {
+            try ModelContainer(for: schema)
+        }) {
+            return container
+        }
+
+        // Valid schema succeeds for in-memory on iOS 17+; bounded soft retries.
+        for _ in 0..<32 {
+            if case .success(let container) = Result(catching: {
+                try ModelContainer(
+                    for: schema,
+                    configurations: [ModelConfiguration(isStoredInMemoryOnly: true)]
+                )
+            }) {
+                return container
+            }
+        }
+
+        // Schema/runtime catastrophe only — normal App Group / sandbox failures never reach here.
+        preconditionFailure("[Persistence] Unable to create any ModelContainer")
+    }
+
+    private static func openPersistent(at url: URL, allowReset: Bool) -> ModelContainer? {
+        let dir = url.deletingLastPathComponent()
+        try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        let config = ModelConfiguration(
+            schema: schema,
+            url: url,
+            cloudKitDatabase: .none
+        )
+        do {
+            return try ModelContainer(for: schema, configurations: [config])
         } catch {
-            #if DEBUG
-            print("[Persistence] Local store incompatible, resetting store: \(error)")
-            #endif
+            SharedPersistence.log("Local store incompatible at \(url.lastPathComponent): \(error)")
+            guard allowReset else { return nil }
             backupStoreFiles(at: url)
             AppConstants.sharedDefaults.set(true, forKey: AppConstants.storeBackupNoticeKey)
             resetStoreFiles(at: url)
             do {
-                let local = ModelConfiguration(
-                    schema: schema,
-                    url: url,
-                    cloudKitDatabase: .none
-                )
-                return try ModelContainer(for: schema, configurations: [local])
+                return try ModelContainer(for: schema, configurations: [config])
             } catch {
-                #if DEBUG
-                print("[Persistence] Reset store failed, using memory: \(error)")
-                #endif
-                let memory = ModelConfiguration(schema: schema, isStoredInMemoryOnly: true)
-                return try! ModelContainer(for: schema, configurations: [memory])
+                SharedPersistence.log("Reset store failed at \(url.lastPathComponent): \(error)")
+                return nil
             }
         }
     }
@@ -66,14 +173,7 @@ enum Persistence {
     }
 
     private static func resetStoreFiles(at url: URL) {
-        let fm = FileManager.default
-        let suffixes = ["", "-shm", "-wal"]
-        for suffix in suffixes {
-            let path = url.path + suffix
-            if fm.fileExists(atPath: path) {
-                try? fm.removeItem(atPath: path)
-            }
-        }
+        SharedPersistence.resetStoreFiles(at: url)
     }
 
     static func migrateStoreIfNeeded() {

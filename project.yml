@@ -10,6 +10,8 @@ attributes:
   LastSwiftUpdateCheck: "2660"
 settings:
   base:
+    # Team A47KHX4UCC must enable App Group group.com.goalstar.native in Apple Developer
+    # (Identifiers + Profiles) or a physical device SIGKILLs at launch before Swift runs.
     DEVELOPMENT_TEAM: A47KHX4UCC
     SWIFT_VERSION: "5.0"
     TARGETED_DEVICE_FAMILY: "1"
