@@ -66,6 +66,10 @@ targets:
         excludes:
           - "Resources/**"
           - "AppIcon.icon"
+          - "Configuration.storekit"
+      - path: Goalstar/Configuration.storekit
+        buildPhase: none
+        type: file
       - path: Shared
       # LiveActivityIntent 必须在主 App 进程编译，否则锁屏按钮不可点
       - path: GoalstarWidgets/FocusLiveActivityIntents.swift
@@ -168,3 +172,4 @@ schemes:
         GoalstarWidgets: all
     run:
       config: Debug
+      storeKitConfiguration: Goalstar/Configuration.storekit
