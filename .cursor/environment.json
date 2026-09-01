@@ -1,0 +1,5 @@
+{
+  "name": "Goalstar (iOS / SwiftUI)",
+  "user": "ubuntu",
+  "install": "bash .cursor/install.sh"
+}
