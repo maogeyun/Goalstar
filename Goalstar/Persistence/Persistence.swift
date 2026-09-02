@@ -221,26 +221,19 @@ enum Persistence {
     }
 
     static func seedIfNeeded(context: ModelContext) {
-        // Gate demo seed on a one-shot flag so deleting all goals stays empty
-        // (clean install / first launch still seeds when the flag is unset).
-        let defaults = UserDefaults.standard
-        let alreadySeeded = defaults.bool(forKey: AppConstants.demoSeededKey)
-        if !alreadySeeded {
-            let goalCount = (try? context.fetchCount(FetchDescriptor<Goal>())) ?? 0
-            if goalCount == 0 {
-                seedDemoData(context: context)
-            }
-            defaults.set(true, forKey: AppConstants.demoSeededKey)
-        }
-
         let profileCount = (try? context.fetchCount(FetchDescriptor<UserProfile>())) ?? 0
         if profileCount == 0 {
-            context.insert(UserProfile(displayName: "Yunduan"))
+            context.insert(UserProfile())
             try? context.save()
         }
     }
 
-    private static func seedDemoData(context: ModelContext) {
+#if DEBUG
+    /// Injects sample goals/tasks for local QA and App Store screenshots. First install stays empty.
+    static func seedDemoData(context: ModelContext) {
+        let goalCount = (try? context.fetchCount(FetchDescriptor<Goal>())) ?? 0
+        guard goalCount == 0 else { return }
+
         let english = Goal(
             name: "系统学习英语",
             emoji: "📖",
@@ -356,12 +349,17 @@ enum Persistence {
         )
         context.insert(s1)
         context.insert(s2)
-        context.insert(UserProfile(displayName: "Yunduan"))
+        let profileCount = (try? context.fetchCount(FetchDescriptor<UserProfile>())) ?? 0
+        if profileCount == 0 {
+            context.insert(UserProfile())
+        }
 
         try? context.save()
+        UserDefaults.standard.set(true, forKey: AppConstants.demoSeededKey)
         // Don't force-show the widget tip again on every reseed of an existing install.
         if AppConstants.sharedDefaults.object(forKey: AppConstants.widgetGuideDismissedKey) == nil {
             AppConstants.sharedDefaults.set(false, forKey: AppConstants.widgetGuideDismissedKey)
         }
     }
+#endif
 }

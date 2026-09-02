@@ -23,7 +23,7 @@ final class AppStore: ObservableObject {
     @Published var selectedFocusGoalID: UUID?
     @Published var dataPeriod: DataPeriod = .week
     @Published var widgetGuideDismissed: Bool = AppConstants.sharedDefaults.bool(forKey: AppConstants.widgetGuideDismissedKey)
-    @Published var userName: String = "Yunduan"
+    @Published var userName: String = "朋友"
     @Published var activeFocusTaskTitle: String?
     @Published var selectedGoalID: UUID?
     @Published var showGoalDetail = false

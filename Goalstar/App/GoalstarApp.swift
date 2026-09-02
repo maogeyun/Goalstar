@@ -52,10 +52,10 @@ struct GoalstarApp: App {
             .onAppear {
                 UNUserNotificationCenter.current().delegate = notificationDelegate
                 Persistence.seedIfNeeded(context: container.mainContext)
+                applyLaunchArguments(context: container.mainContext)
                 store.loadProfile(context: container.mainContext)
                 store.startStoreKit()
                 store.refreshReminderBodies(context: container.mainContext)
-                applyLaunchArguments()
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.9) {
                     showSplash = false
                 }
@@ -63,7 +63,7 @@ struct GoalstarApp: App {
         }
     }
 
-    private func applyLaunchArguments() {
+    private func applyLaunchArguments(context: ModelContext) {
         let args = ProcessInfo.processInfo.arguments
         if let idx = args.firstIndex(of: "-tab"), args.indices.contains(idx + 1) {
             switch args[idx + 1] {
@@ -74,9 +74,11 @@ struct GoalstarApp: App {
             default: store.selectedTab = .today
             }
         }
-        if args.contains("-emptyToday") {
-            UserDefaults.standard.set(false, forKey: AppConstants.demoSeededKey)
+        #if DEBUG
+        if args.contains("-seedDemo") {
+            Persistence.seedDemoData(context: context)
         }
+        #endif
     }
 }
 

@@ -4,6 +4,7 @@
 
 - [x] 五 Tab 导航：今日 / 目标 / 专注 / 数据 / 我的
 - [x] 今日三态：空态 / 主态 / 全部完成
+- [x] 首次安装无演示数据（默认昵称「朋友」；DEBUG 可用 `-seedDemo` 注入样例）
 - [x] 任务勾选、专注倒计时与记录
 - [x] FAB 创建目标/任务，空态默认打开「新建目标」
 - [x] 任务播放 → 专注页联动，专注完成自动勾选任务
@@ -49,7 +50,7 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
 ## App Store Connect 待办
 
 1. **Archive**：Xcode → Product → Archive → Distribute App
-2. **截图**：含 Widget / Live Activity 说明图（可选）
+2. **截图**：按 [docs/app-store-screenshots.md](./docs/app-store-screenshots.md) 拍摄（6.9 寸竖屏 6 张；Widget / Live Activity 可选）
 3. **元数据**
    - 名称：Goalstar
    - 副标题：把每一天画进自己的星图
@@ -60,7 +61,7 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
 6. **Paid Applications Agreement**：在 App Store Connect 签署付费应用协议
 7. **内购商品**：创建 Non-Consumable `com.goalstar.native.pro.lifetime`（终身 Pro），价格在 ASC 配置
 8. **提交 IAP 审核**（可与 App 版本一起）
-9. **付费墙截图**：含价格、购买与恢复购买按钮
+9. **付费墙截图**：含价格、购买与恢复购买按钮（商店可选，审核备注必附；详见截图说明）
 
 ## 已知后续（非本期）
 
@@ -70,6 +71,7 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
 
 ## 提交前自检
 
+- [ ] 删除 App 重装：今日为空态，昵称「朋友」，无演示目标/任务
 - [ ] 真机安装：主 App + Widget Extension
 - [ ] 添加锁屏 Widget，勾选任务后 App 内同步
 - [ ] 开始专注 → Live Activity 出现；暂停 / 完成行为正确

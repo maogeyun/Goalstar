@@ -39,7 +39,7 @@ final class UserProfile {
     var displayName: String
     var updatedAt: Date
 
-    init(displayName: String = "Yunduan") {
+    init(displayName: String = "朋友") {
         self.id = UUID()
         self.displayName = displayName
         self.updatedAt = Date()
