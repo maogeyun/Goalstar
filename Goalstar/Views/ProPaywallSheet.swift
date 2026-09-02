@@ -68,15 +68,15 @@ struct ProPaywallSheet: View {
 
     private var headerSubtitle: String {
         if store.isPro {
-            return "你已永久解锁 Pro。后续能力上线后将自动可用。"
+            return "你已永久解锁无限进行中目标。"
         }
-        return "一次买断，永久解锁无限进行中目标与后续 Pro 能力。"
+        return "一次买断，永久解锁无限进行中目标。"
     }
 
     private var benefitsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionHeader(title: "Pro 权益")
-            ForEach(ProFeature.allCases) { feature in
+            SectionHeader(title: "本次购买包含")
+            ForEach(paywallBenefits) { benefit in
                 HStack(alignment: .top, spacing: 12) {
                     ZStack {
                         Circle()
@@ -85,10 +85,10 @@ struct ProPaywallSheet: View {
                         GSIcon(name: .star, size: 14, color: GSColor.brand)
                     }
                     VStack(alignment: .leading, spacing: 4) {
-                        Text(feature.title)
+                        Text(benefit.title)
                             .font(GSFont.semibold(GSFont.lg))
                             .foregroundStyle(GSColor.textPrimary)
-                        Text(feature.subtitle)
+                        Text(benefit.subtitle)
                             .font(GSFont.semibold(GSFont.sm))
                             .foregroundStyle(GSColor.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
@@ -99,6 +99,15 @@ struct ProPaywallSheet: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .gsCard(radius: GSRadius.panel, padding: 16)
+    }
+
+    private var paywallBenefits: [PaywallBenefit] {
+        let feature = ProFeature.unlimitedGoals
+        return [
+            PaywallBenefit(id: feature.id, title: feature.title, subtitle: feature.subtitle),
+            PaywallBenefit(id: "lifetime", title: "一次买断", subtitle: "永久有效，不会自动续费。"),
+            PaywallBenefit(id: "restore", title: "换机可恢复", subtitle: "同一 Apple ID 在新设备上点「恢复购买」即可。")
+        ]
     }
 
     private var pricingCard: some View {
@@ -219,4 +228,10 @@ struct ProPaywallSheet: View {
             statusMessage = message
         }
     }
+}
+
+private struct PaywallBenefit: Identifiable {
+    let id: String
+    let title: String
+    let subtitle: String
 }

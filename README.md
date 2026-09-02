@@ -22,7 +22,7 @@ Bundle ID：`com.goalstar.native`（Widget：`com.goalstar.native.widgets`）
 
 ## 上线发布
 
-详见 [RELEASE.md](./RELEASE.md)（v2.0：Widget、Live Activity、iCloud、本地通知、昵称编辑）。
+详见 [RELEASE.md](./RELEASE.md)（v2.0：Widget、Live Activity、本地通知、昵称编辑、Pro 终身买断）。
 
 ## 结构
 
@@ -31,7 +31,7 @@ Bundle ID：`com.goalstar.native`（Widget：`com.goalstar.native.widgets`）
 - `Goalstar/Components` — 卡片、进度环、TabBar、FAB、创建 Sheet
 - `Goalstar/Domain` — AppStore（打卡、专注计时、创建、Live Activity）
 - `Goalstar/Services` — LiveActivityManager、NotificationScheduler
-- `Goalstar/Persistence` — SwiftData + App Group + CloudKit
+- `Goalstar/Persistence` — SwiftData + App Group（本机存储）
 - `GoalstarWidgets` — 锁屏/主屏 Widget + Live Activity UI + App Intent
 - `Shared` — Theme / Models / Formatters / AppConstants / FocusActivityAttributes
 

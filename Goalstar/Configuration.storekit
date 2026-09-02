@@ -20,12 +20,12 @@
       "internalID" : "2D6B4A91",
       "localizations" : [
         {
-          "description" : "One-time purchase to unlock unlimited active goals and Pro features forever.",
+          "description" : "One-time purchase to unlock unlimited active goals forever.",
           "displayName" : "Goalstar Pro Lifetime",
           "locale" : "en_US"
         },
         {
-          "description" : "一次购买，永久解锁无限进行中目标与后续 Pro 能力。",
+          "description" : "一次购买，永久解锁无限进行中目标。",
           "displayName" : "Goalstar Pro 终身",
           "locale" : "zh_CN"
         }

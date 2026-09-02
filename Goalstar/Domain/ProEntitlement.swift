@@ -1,29 +1,21 @@
 import Foundation
 
-/// Feature gates. Membership is `AppStore.isPro` (StoreKit lifetime + DEBUG override).
+/// Shipped Pro gates only. Membership is `AppStore.isPro` (StoreKit lifetime + DEBUG override).
+/// Do not list unreleased capabilities here — they must not appear on the paywall.
 enum ProFeature: String, CaseIterable, Identifiable {
     case unlimitedGoals
-    case advancedInsights
-    case themePack
-    case prioritySupport
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
-        case .unlimitedGoals: return "无限目标与任务"
-        case .advancedInsights: return "高级数据洞察"
-        case .themePack: return "主题外观包"
-        case .prioritySupport: return "优先支持"
+        case .unlimitedGoals: return "无限进行中目标"
         }
     }
 
     var subtitle: String {
         switch self {
-        case .unlimitedGoals: return "免费版最多 3 个进行中目标"
-        case .advancedInsights: return "更长周期复盘与导出（开发中）"
-        case .themePack: return "更多配色与外观（开发中）"
-        case .prioritySupport: return "问题反馈优先处理"
+        case .unlimitedGoals: return "免费版最多 3 个。升级后不再限制数量。"
         }
     }
 }

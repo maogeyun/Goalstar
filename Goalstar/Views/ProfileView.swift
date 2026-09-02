@@ -481,13 +481,13 @@ struct ProfilePrivacySheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
-                    privacySection("数据存储", "目标、任务、专注记录与昵称保存在设备本地。我们不运营自有服务器存储你的内容。")
+                    privacySection("数据存储", "目标、任务、专注记录与昵称仅保存在本机（SwiftData）。我们不通过 iCloud / CloudKit 同步内容，也不运营自有服务器存储你的数据。卸载后本机数据可能丢失。")
                     privacySection("网络与追踪", "本 App 不收集个人身份信息用于广告，不使用第三方追踪 SDK。")
-                    privacySection("App 内购买", "Goalstar Pro 为一次买断。付款由 Apple 处理，本 App 不收集银行卡或 Apple ID 支付信息。购买记录由 Apple 账户保存，可在本机恢复。")
+                    privacySection("App 内购买", "Goalstar Pro 为一次买断，当前权益为无限进行中目标。付款由 Apple 处理，本 App 不收集银行卡或 Apple ID 支付信息。购买记录由 Apple 账户保存，可在本机恢复。")
                     privacySection("通知", "本地通知仅在设备上调度，用于任务提醒，不会上传到我们的服务器。")
-                    privacySection("UserDefaults / App Group", "用于保存提醒开关、锁屏引导偏好等本地设置，并与 Widget 共享（可用时）。")
+                    privacySection("UserDefaults / App Group", "用于保存提醒开关、锁屏引导偏好等本地设置，并与本机 Widget 共享（可用时）。")
                     privacySection("联系方式", "如有隐私相关问题，请通过 App Store 产品页开发者联系方式与我们沟通。")
-                    Text("最后更新：2026 年 8 月 31 日")
+                    Text("最后更新：2026 年 9 月 2 日")
                         .font(GSFont.semibold(GSFont.sm))
                         .foregroundStyle(GSColor.textSecondary)
                         .padding(.top, 8)
