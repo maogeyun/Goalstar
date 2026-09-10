@@ -37,7 +37,7 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
 - App Group: `group.com.goalstar.native`
 - 存储：本机 SwiftData（无 CloudKit / iCloud 同步）
 - 最低系统: iOS 17.0
-- 版本: MARKETING_VERSION **2.0** (CURRENT_PROJECT_VERSION 2)
+- 版本: MARKETING_VERSION **1.0** (CURRENT_PROJECT_VERSION 2)
 - IAP: `com.goalstar.native.pro.lifetime`（Non-Consumable，本地测试见 `Goalstar/Configuration.storekit`）
 
 ## Developer Portal 必做
@@ -54,7 +54,7 @@ xcodebuild -project Goalstar.xcodeproj -scheme Goalstar \
 3. **元数据**
    - 名称：Goalstar
    - 副标题：把每一天画进自己的星图
-   - 版本：2.0
+   - 版本：1.0
    - 分类：效率 / 生活方式
 4. **隐私政策 URL**：托管 `docs/privacy-policy.html`
 5. **App 隐私问卷**：仅本机存储（不要勾选 iCloud 用户内容）；不追踪；本地通知；内购由 Apple 处理
