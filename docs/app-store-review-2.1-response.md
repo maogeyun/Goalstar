@@ -32,11 +32,11 @@ Goalstar 是一款**本地优先**的目标 / 任务 / 专注管理 App。核对
 
 > A screen recording captured on a physical iPhone running the latest iOS is attached. It starts from a cold launch and shows the typical flow: create a goal, add today's tasks, check off a task, run a focus timer, and view the Data tab. It also demonstrates accessing the paid feature: opening the Pro paywall (via **Profile → Goalstar Pro**, and via the free-tier limit prompt when creating a 4th active goal), the purchase flow, and **Restore Purchase**, ending with Pro unlocked (unlimited active goals). The app has **no account system and no user-generated/social content**, so registration/login/deletion and content reporting/blocking flows are **not applicable**.
 
-### Q2. App 用途与目标用户
-> **Purpose.** Goalstar is a local-first goal, task, and focus companion. Users set long-term goals, break them into daily tasks, check them off, run a focus timer, and see progress on a Data dashboard, with optional Home/Lock-Screen Widgets, a focus Live Activity, and local reminder notifications.
-> **Problem it solves.** People struggle to keep long-term goals on track and lack a lightweight, private daily execution list with visible progress.
-> **Target audience.** Individuals who want personal productivity and self-management — students, freelancers, and professionals — who prefer a privacy-friendly, on-device tool.
-> **Value.** Simple daily planning, focus timing, progress visualization, and privacy (all data stays on device; no account, no tracking).
+### Q2. App 用途与目标用户（已按 App 描述细化）
+> **Purpose.** Goalstar is a local-first goal, task, and focus companion — "turn each day into your own star map." Users set long-term goals, break them into daily tasks, and build momentum day by day. The app has five tabs: **Today** (empty / active / all-done states), **Goals**, **Focus**, **Data**, and **Profile**. Core features: create goals and daily tasks from the "+" button; check off tasks; a **focus countdown timer** that can auto-complete the linked task; a **Data** dashboard with real on-device aggregates; a Home/Lock-Screen **Widget** showing "today's three things" (checkable); a **focus Live Activity** on the Lock Screen / Dynamic Island; configurable **local reminder notifications**; and an editable nickname. All data is stored on device (Apple SwiftData); minimum iOS 17.
+> **Problem it solves.** People struggle to keep long-term goals on track and lack a lightweight, private daily execution list with visible progress and focused-work timing.
+> **Target audience.** Individuals practicing personal productivity, habit/goal building, and focused (Pomodoro-style) work — students, freelancers, and knowledge workers — who prefer a privacy-friendly, on-device tool with no account and no tracking.
+> **Value.** Simple daily planning, focus timing, progress visualization, and privacy: everything stays on the device, with no account, no server, and no third-party tracking.
 
 ### Q3. 设置与访问主要功能的说明（含登录凭据 / 样例文件）
 > **No login is required and no account is used**, so no demo credentials or sample files are needed. The app is fully usable immediately after install.
@@ -56,11 +56,12 @@ Goalstar 是一款**本地优先**的目标 / 任务 / 专注管理 App。核对
 ### Q6. 受监管行业 / 受保护第三方素材
 > **Not applicable.** The app does not operate in a highly regulated industry and does not include protected third-party material. All content and assets are original/owned by us.
 
-### Q7. 内购概览 + 如何导航到购买流程
-> **What can be purchased.** A single non-consumable, one-time purchase — **Goalstar Pro (Lifetime)**, product ID `com.goalstar.native.pro.lifetime`. It unlocks **unlimited active goals** (the free tier is limited to 3 active goals). It is a one-time purchase, **not** an auto-renewing subscription, and is restorable on the same Apple ID.
+### Q7. 内购概览 + 如何导航到购买流程（已按实际售价细化）
+> **What can be purchased.** Exactly one In-App Purchase — **Goalstar Pro (Lifetime)**, a **non-consumable** product, ID `com.goalstar.native.pro.lifetime`, priced at **¥28 (CNY, one-time)**. It is **not** an auto-renewing subscription and never auto-renews. Price is localized automatically by the App Store per storefront. The purchase unlocks **unlimited active goals**; on the free tier the app allows up to **3 active goals**. No other content or feature is gated behind the purchase. It is restorable on the same Apple ID via "Restore Purchase".
 > **How to reach the purchase flow.**
-> 1. **Profile tab → "Goalstar Pro"** → the paywall shows the price, **"Purchase Lifetime Pro"**, and **"Restore Purchase"**.
+> 1. **Profile tab → "Goalstar Pro"** → the paywall shows the price, a **"Purchase Lifetime Pro · ¥28"** button, and a **"Restore Purchase"** button.
 > 2. Or, when creating a **4th active goal** on the free tier, the upgrade paywall is presented automatically.
+> Payment is handled entirely by Apple; the app never collects or stores any payment information.
 
 ---
 
@@ -149,7 +150,7 @@ Goalstar 是一款**本地优先**的目标 / 任务 / 专注管理 App。核对
 ```
 Demo account: Not applicable. Goalstar has no account system and requires no login; it is fully usable immediately after install.
 
-App purpose & audience: Goalstar is a local-first goal, task, and focus companion. Users set long-term goals, break them into daily tasks, check them off, run a focus timer, and track progress on a Data dashboard. Optional Home/Lock-Screen Widgets, a focus Live Activity, and local reminder notifications are included. Target audience: individuals who want private, on-device personal productivity (students, freelancers, professionals).
+App purpose & audience: Goalstar is a local-first goal, task, and focus companion ("turn each day into your own star map"). It has five tabs (Today, Goals, Focus, Data, Profile). Users create goals and daily tasks, check them off, run a focus countdown timer that can auto-complete the linked task, and track progress on a Data dashboard. It also includes a Home/Lock-Screen Widget ("today's three things", checkable), a focus Live Activity (Lock Screen / Dynamic Island), configurable local reminder notifications, and an editable nickname. Minimum iOS 17. Target audience: individuals practicing private, on-device personal productivity, habit/goal building, and focused work (students, freelancers, knowledge workers).
 
 How to use main features: Today tab: tap "+" to create a goal or task; tap a task to complete it. Goals tab: manage active goals (free tier allows up to 3). Focus tab: start a countdown focus session. Data tab: local aggregated stats. Profile tab: edit nickname, manage local notification permission, and open Goalstar Pro.
 
@@ -161,7 +162,49 @@ Regional differences: None. Features and content are identical in all regions; o
 
 Regulated industry / protected third-party material: Not applicable. All content is original and owned by us.
 
-In-App Purchase: One non-consumable, one-time purchase — "Goalstar Pro (Lifetime)", product ID com.goalstar.native.pro.lifetime — unlocks unlimited active goals (free tier limited to 3). Not an auto-renewing subscription; restorable on the same Apple ID. To reach it: Profile tab -> "Goalstar Pro" (shows price, "Purchase Lifetime Pro", and "Restore Purchase"); or it appears automatically when creating a 4th active goal on the free tier.
+In-App Purchase: Exactly one non-consumable, one-time purchase — "Goalstar Pro (Lifetime)", product ID com.goalstar.native.pro.lifetime, priced at ¥28 (CNY, one-time; localized per storefront). It never auto-renews and is not a subscription. It unlocks unlimited active goals (free tier limited to 3 active goals); no other content is gated. Restorable on the same Apple ID. To reach it: Profile tab -> "Goalstar Pro" (shows price, "Purchase Lifetime Pro · ¥28", and "Restore Purchase"); or it appears automatically when creating a 4th active goal on the free tier. Payment is handled entirely by Apple.
 
 Privacy: The app does not collect personal data for advertising or analytics, does not track users, and does not use third-party SDKs.
+```
+
+---
+
+## 9. 可直接发送的成稿（纯英文，粘贴到 App Store Connect 的 Reply / 回帖）
+
+> 直接复制以下全文回复审核团队即可。发送前请把 `[App Name]`、录屏是否已附上等占位说明按实际情况处理（录屏需通过 App Store Connect 的回复附件或共享链接提供）。
+
+```
+Dear App Review Team,
+
+Thank you for your review of Goalstar and for the opportunity to provide additional information. Please find our responses below, addressing each of your questions in order. We have also added this information to the App Review Information > Notes field for future reference.
+
+1. Demonstration video
+A screen recording captured on a physical iPhone running the latest iOS is attached. It begins with a cold launch of the app and shows the typical user flow: creating a goal, adding today's tasks, checking off a task, running a focus timer, and viewing the Data dashboard. It also demonstrates accessing the paid feature: opening the Goalstar Pro paywall (via Profile > Goalstar Pro, and via the free-tier limit prompt when creating a 4th active goal), completing the purchase flow, and using Restore Purchase, ending with Pro unlocked (unlimited active goals).
+Please note: Goalstar has no account system and no user-generated or social content. Therefore, account registration/login/deletion flows and content reporting/blocking mechanisms are not applicable and are not shown in the recording.
+
+2. App purpose and target audience
+Goalstar is a local-first goal, task, and focus companion — the idea is to "turn each day into your own star map." Users set long-term goals, break them into daily tasks, build momentum day by day, and can time focused work sessions. The app has five tabs: Today (empty / active / all-done states), Goals, Focus, Data, and Profile. Core features include creating goals and daily tasks from the "+" button, checking off tasks, a focus countdown timer that can auto-complete the linked task, a Data dashboard with real on-device aggregates, a Home/Lock-Screen Widget showing "today's three things" (checkable), a focus Live Activity on the Lock Screen and Dynamic Island, configurable local reminder notifications, and an editable nickname. The minimum supported OS is iOS 17.
+Problem it solves: people struggle to keep long-term goals on track and lack a lightweight, private daily execution list with visible progress and focused-work timing.
+Target audience: individuals practicing personal productivity, habit/goal building, and focused (Pomodoro-style) work — students, freelancers, and knowledge workers — who prefer a privacy-friendly, on-device tool.
+
+3. Setup and access instructions (credentials / sample files)
+No login is required and no account is used, so no demo credentials or sample files are needed; the app is fully usable immediately after install. Main features: Today tab — tap "+" to create a goal or task, and tap a task to complete it; Goals tab — manage active goals (the free tier allows up to 3 active goals); Focus tab — start a countdown focus session; Data tab — view aggregated statistics from local data; Profile tab — edit your nickname, manage local notification permission, and open Goalstar Pro. Widgets, the Live Activity, and local notifications are optional and configured on-device.
+
+4. External services, tools, or platforms
+The app uses only Apple StoreKit, for In-App Purchase (payment handled by Apple). There are no third-party services: no external data providers, no authentication service, no third-party payment processor, no AI services, and no analytics, advertising, or tracking SDKs. All user content is stored locally on the device using Apple SwiftData; there is no iCloud/CloudKit sync and no custom server.
+
+5. Regional differences
+The app's features and content are identical across all regions. There is no geofencing and no region-specific content. Only the In-App Purchase price is localized automatically by the App Store per storefront.
+
+6. Regulated industry or protected third-party material
+Not applicable. The app does not operate in a highly regulated industry and does not include protected third-party material. All content and assets are original and owned by us.
+
+7. In-App Purchase overview and how to navigate to it
+Goalstar offers exactly one In-App Purchase: "Goalstar Pro (Lifetime)", a non-consumable product (product ID com.goalstar.native.pro.lifetime), priced at ¥28 (CNY, one-time; the price is localized per storefront by the App Store). It is a one-time purchase that never auto-renews and is not a subscription. It unlocks unlimited active goals; on the free tier the app allows up to 3 active goals. No other content or feature is gated behind the purchase, and it is restorable on the same Apple ID.
+To navigate to the purchase flow: open the Profile tab and tap "Goalstar Pro" to open the paywall, which shows the price, a "Purchase Lifetime Pro · ¥28" button, and a "Restore Purchase" button. Alternatively, the upgrade paywall is presented automatically when a free-tier user attempts to create a 4th active goal. Payment is handled entirely by Apple; the app never collects or stores any payment information.
+
+We have tested the submitted build on physical devices. Please let us know if any further information would be helpful. Thank you for your time and consideration.
+
+Best regards,
+The Goalstar Team
 ```
