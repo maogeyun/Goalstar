@@ -57,9 +57,9 @@ Goalstar 是一款**本地优先**的目标 / 任务 / 专注管理 App。核对
 > **Not applicable.** The app does not operate in a highly regulated industry and does not include protected third-party material. All content and assets are original/owned by us.
 
 ### Q7. 内购概览 + 如何导航到购买流程（已按实际售价细化）
-> **What can be purchased.** Exactly one In-App Purchase — **Goalstar Pro (Lifetime)**, a **non-consumable** product, ID `com.goalstar.native.pro.lifetime`, priced at **¥28 (CNY, one-time)**. It is **not** an auto-renewing subscription and never auto-renews. Price is localized automatically by the App Store per storefront. The purchase unlocks **unlimited active goals**; on the free tier the app allows up to **3 active goals**. No other content or feature is gated behind the purchase. It is restorable on the same Apple ID via "Restore Purchase".
+> **What can be purchased.** Exactly one In-App Purchase — **Goalstar Pro (Lifetime)**, a **non-consumable** product, ID `com.goalstar.native.pro.lifetime`, priced at **¥8 (CNY, one-time)**. It is **not** an auto-renewing subscription and never auto-renews. Price is localized automatically by the App Store per storefront. The purchase unlocks **unlimited active goals**; on the free tier the app allows up to **3 active goals**. No other content or feature is gated behind the purchase. It is restorable on the same Apple ID via "Restore Purchase".
 > **How to reach the purchase flow.**
-> 1. **Profile tab → "Goalstar Pro"** → the paywall shows the price, a **"Purchase Lifetime Pro · ¥28"** button, and a **"Restore Purchase"** button.
+> 1. **Profile tab → "Goalstar Pro"** → the paywall shows the price, a **"Purchase Lifetime Pro · ¥8"** button, and a **"Restore Purchase"** button.
 > 2. Or, when creating a **4th active goal** on the free tier, the upgrade paywall is presented automatically.
 > Payment is handled entirely by Apple; the app never collects or stores any payment information.
 
@@ -162,7 +162,7 @@ Regional differences: None. Features and content are identical in all regions; o
 
 Regulated industry / protected third-party material: Not applicable. All content is original and owned by us.
 
-In-App Purchase: Exactly one non-consumable, one-time purchase — "Goalstar Pro (Lifetime)", product ID com.goalstar.native.pro.lifetime, priced at ¥28 (CNY, one-time; localized per storefront). It never auto-renews and is not a subscription. It unlocks unlimited active goals (free tier limited to 3 active goals); no other content is gated. Restorable on the same Apple ID. To reach it: Profile tab -> "Goalstar Pro" (shows price, "Purchase Lifetime Pro · ¥28", and "Restore Purchase"); or it appears automatically when creating a 4th active goal on the free tier. Payment is handled entirely by Apple.
+In-App Purchase: Exactly one non-consumable, one-time purchase — "Goalstar Pro (Lifetime)", product ID com.goalstar.native.pro.lifetime, priced at ¥8 (CNY, one-time; localized per storefront). It never auto-renews and is not a subscription. It unlocks unlimited active goals (free tier limited to 3 active goals); no other content is gated. Restorable on the same Apple ID. To reach it: Profile tab -> "Goalstar Pro" (shows price, "Purchase Lifetime Pro · ¥8", and "Restore Purchase"); or it appears automatically when creating a 4th active goal on the free tier. Payment is handled entirely by Apple.
 
 Privacy: The app does not collect personal data for advertising or analytics, does not track users, and does not use third-party SDKs.
 ```
@@ -200,8 +200,8 @@ The app's features and content are identical across all regions. There is no geo
 Not applicable. The app does not operate in a highly regulated industry and does not include protected third-party material. All content and assets are original and owned by us.
 
 7. In-App Purchase overview and how to navigate to it
-Goalstar offers exactly one In-App Purchase: "Goalstar Pro (Lifetime)", a non-consumable product (product ID com.goalstar.native.pro.lifetime), priced at ¥28 (CNY, one-time; the price is localized per storefront by the App Store). It is a one-time purchase that never auto-renews and is not a subscription. It unlocks unlimited active goals; on the free tier the app allows up to 3 active goals. No other content or feature is gated behind the purchase, and it is restorable on the same Apple ID.
-To navigate to the purchase flow: open the Profile tab and tap "Goalstar Pro" to open the paywall, which shows the price, a "Purchase Lifetime Pro · ¥28" button, and a "Restore Purchase" button. Alternatively, the upgrade paywall is presented automatically when a free-tier user attempts to create a 4th active goal. Payment is handled entirely by Apple; the app never collects or stores any payment information.
+Goalstar offers exactly one In-App Purchase: "Goalstar Pro (Lifetime)", a non-consumable product (product ID com.goalstar.native.pro.lifetime), priced at ¥8 (CNY, one-time; the price is localized per storefront by the App Store). It is a one-time purchase that never auto-renews and is not a subscription. It unlocks unlimited active goals; on the free tier the app allows up to 3 active goals. No other content or feature is gated behind the purchase, and it is restorable on the same Apple ID.
+To navigate to the purchase flow: open the Profile tab and tap "Goalstar Pro" to open the paywall, which shows the price, a "Purchase Lifetime Pro · ¥8" button, and a "Restore Purchase" button. Alternatively, the upgrade paywall is presented automatically when a free-tier user attempts to create a 4th active goal. Payment is handled entirely by Apple; the app never collects or stores any payment information.
 
 We have tested the submitted build on physical devices. Please let us know if any further information would be helpful. Thank you for your time and consideration.
 
