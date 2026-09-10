@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -24,7 +24,6 @@
 		51E6CE8E156774DD0C5DC697 /* Cards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B6ED238469C89CFE88A2A5E /* Cards.swift */; };
 		5293EBD3264B0924C7FC816F /* FocusActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */; };
 		560A70485E06B8316CE68D40 /* LiveActivityManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */; };
-		B4C18A5F6039C1D8E247D7E2 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B31C4A7D2F90516A4E8B21 /* StoreKitManager.swift */; };
 		60DCD78F2EA148DA1DD5D35D /* GoalDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F6258467CB4C777CE36719 /* GoalDetailView.swift */; };
 		62533AF86CC29DC05DCF1D45 /* GSIconName.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CF6612E5237FB8B273C031 /* GSIconName.swift */; };
 		630332E32D4BA671F7F1C641 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F9DD9BF1E91965949BA656D /* AppConstants.swift */; };
@@ -38,6 +37,7 @@
 		9455C23181BD10744C491F8F /* CreateSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1CCC357CA9C27060994CE6 /* CreateSheet.swift */; };
 		9B3AC63E87727D1B35DB7BB8 /* WidgetDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6CDE0A2BD7D3A91D4C545C2C /* WidgetDataProvider.swift */; };
 		A3757B0C7F6ADCFAA6D32D42 /* FocusEndNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31F496086D47EA183F2261F4 /* FocusEndNotifier.swift */; };
+		B4C18A5F6039C1D8E247D7E2 /* StoreKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8B31C4A7D2F90516A4E8B21 /* StoreKitManager.swift */; };
 		B8F425024D013262755BBB56 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = A5E07DC8EB411A4E9959A3EF /* PrivacyInfo.xcprivacy */; };
 		BA02B88E42CAE5BF5A52B520 /* GoalsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517FE91D9E5695F9DF81E3DA /* GoalsView.swift */; };
 		BEFA1BF7B7E46A797ACF00F8 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1B707F12D65616B6F0351C /* NotificationScheduler.swift */; };
@@ -85,7 +85,6 @@
 
 /* Begin PBXFileReference section */
 		0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
-		E8B31C4A7D2F90516A4E8B21 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		06E21EF8EFA2FB221ADE475C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusActivityAttributes.swift; sourceTree = "<group>"; };
 		1EB5DD7C80E5B7B24FC53629 /* ToggleTaskIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTaskIntent.swift; sourceTree = "<group>"; };
@@ -105,15 +104,16 @@
 		7072F9755A5CD48229FEA330 /* CreateMilestoneSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateMilestoneSheet.swift; sourceTree = "<group>"; };
 		70A65B8A39348C6F97550E13 /* LockScreenSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockScreenSettingsView.swift; sourceTree = "<group>"; };
 		713CAA1CF74A7CC1CF7030B0 /* SharedPersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedPersistence.swift; sourceTree = "<group>"; };
-		7384CBA2D3E4F00BE796E604 /* Goalstar.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Goalstar.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7384CBA2D3E4F00BE796E604 /* Goalstar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Goalstar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		741C6372F02BD4C952C50F25 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		7F9DD9BF1E91965949BA656D /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		9B78EE150B9D7DD016357649 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		9C824F97923ECCAD1A820A63 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
-		9CE7A89E6C242192458879DD /* AppIcon.icon */ = {isa = PBXFileReference; path = AppIcon.icon; sourceTree = "<group>"; };
+		9CE7A89E6C242192458879DD /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		A19452AE764713511F5A8441 /* FocusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusView.swift; sourceTree = "<group>"; };
 		A2D15D895817753FFA1E8977 /* FocusLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusLiveActivity.swift; sourceTree = "<group>"; };
-		A5E07DC8EB411A4E9959A3EF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		A41F8C2E6B9D0471C3E5A018 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Configuration.storekit; sourceTree = "<group>"; };
+		A5E07DC8EB411A4E9959A3EF /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		A8B1E4F8447025A8026CECBD /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		B2F6258467CB4C777CE36719 /* GoalDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDetailView.swift; sourceTree = "<group>"; };
 		B4F7651B4FAE9151D522DD7E /* GoalstarWidgetsBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalstarWidgetsBundle.swift; sourceTree = "<group>"; };
@@ -123,11 +123,11 @@
 		C0CF6612E5237FB8B273C031 /* GSIconName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GSIconName.swift; sourceTree = "<group>"; };
 		CCF89C83F72DFA769AB8FD8F /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		CE23F2E48EF219CF95DB7158 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A41F8C2E6B9D0471C3E5A018 /* Configuration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Configuration.storekit; sourceTree = "<group>"; };
 		D5F4398FBC50F7CF788A7EAA /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		D6AE395B7228B197CE63DC16 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		D95D45B2FBFA154D0910D041 /* GoalstarWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = GoalstarWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2A7042CD9FA3E6DD9521A72 /* TodayTasksWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayTasksWidget.swift; sourceTree = "<group>"; };
+		E8B31C4A7D2F90516A4E8B21 /* StoreKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitManager.swift; sourceTree = "<group>"; };
 		F033A6AB1BBD4C43A6B3E0CD /* GoalstarWidgets.Debug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoalstarWidgets.Debug.entitlements; sourceTree = "<group>"; };
 		F7E37DD17BAB9DF9CF55BAC6 /* Goalstar.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Goalstar.entitlements; sourceTree = "<group>"; };
 		FF1B707F12D65616B6F0351C /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
@@ -319,7 +319,6 @@
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
 					6E46B9E94668CB748758A872 = {
-						DevelopmentTeam = A47KHX4UCC;
 						ProvisioningStyle = Automatic;
 					};
 					E9CD777FDAFECE394C6B8F75 = {
@@ -338,7 +337,6 @@
 			);
 			mainGroup = 30BD09D795D1293C1DCDCC98;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -502,7 +500,11 @@
 				INFOPLIST_FILE = GoalstarWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native.widgets;
 				PRODUCT_NAME = GoalstarWidgets;
@@ -521,7 +523,11 @@
 				INFOPLIST_FILE = GoalstarWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
 				MARKETING_VERSION = 2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native.widgets;
 				PRODUCT_NAME = GoalstarWidgets;
@@ -539,6 +545,7 @@
 				CODE_SIGN_ENTITLEMENTS = Goalstar/Goalstar.Debug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = A47KHX4UCC;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Goalstar/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
@@ -561,6 +568,7 @@
 				CODE_SIGN_ENTITLEMENTS = Goalstar/Goalstar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = A47KHX4UCC;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Goalstar/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
