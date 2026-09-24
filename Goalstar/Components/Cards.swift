@@ -468,6 +468,8 @@ struct EmptyStateCard: View {
     var title: String
     var message: String
     var actionTitle: String? = nil
+    var secondaryActionTitle: String? = nil
+    var secondaryAction: (() -> Void)? = nil
     var compact: Bool = false
     var embedded: Bool = false
     var action: (() -> Void)? = nil
@@ -500,6 +502,9 @@ struct EmptyStateCard: View {
                     .buttonStyle(.plain)
                 } else {
                     PrimaryButton(title: actionTitle, action: action)
+                    if let secondaryActionTitle, let secondaryAction {
+                        OutlineActionButton(title: secondaryActionTitle, action: secondaryAction)
+                    }
                 }
             }
         }
@@ -564,6 +569,7 @@ struct PrimaryButton: View {
     var title: String
     var icon: GSIconName? = nil
     var filled: Bool = true
+    var height: CGFloat = 50
     var action: () -> Void
 
     var body: some View {
@@ -577,7 +583,7 @@ struct PrimaryButton: View {
             }
             .foregroundStyle(filled ? Color.white : GSColor.brand)
             .frame(maxWidth: .infinity)
-            .frame(height: 50)
+            .frame(height: height)
             .background(filled ? GSColor.brand : GSColor.brandLight.opacity(0.35))
             .overlay(
                 RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous)

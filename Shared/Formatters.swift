@@ -20,18 +20,23 @@ enum GSFormat {
     static func greeting(for date: Date = Date()) -> String {
         let hour = calendar.component(.hour, from: date)
         switch hour {
-        case 5..<12: return "早上好"
-        case 12..<18: return "下午好"
-        default: return "晚上好"
+        case 5..<12: return L10n.s("早上好")
+        case 12..<18: return L10n.s("下午好")
+        default: return L10n.s("晚上好")
         }
     }
 
     static func dateLine(_ date: Date = Date()) -> String {
+        let language = AppLanguagePreference.current
         let f = DateFormatter()
-        f.locale = Locale(identifier: "zh_CN")
-        f.dateFormat = "M月d日 EEEE"
+        f.locale = language.locale
+        if language == .zhHans {
+            f.dateFormat = "M月d日 EEEE"
+            return f.string(from: date)
+                .replacingOccurrences(of: "星期", with: "周")
+        }
+        f.setLocalizedDateFormatFromTemplate("MdEEEE")
         return f.string(from: date)
-            .replacingOccurrences(of: "星期", with: "周")
     }
 
     static func shortDate(_ date: Date) -> String {

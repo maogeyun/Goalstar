@@ -5,7 +5,13 @@ import SwiftUI
 enum CreateFormMode: String, CaseIterable, Identifiable {
     case task, goal
     var id: String { rawValue }
-    var title: String { self == .task ? "新建任务" : "新建目标" }
+    var title: String { self == .task ? L10n.s("新建任务") : L10n.s("新建目标") }
+    var segmentTitle: String { self == .task ? L10n.s("任务") : L10n.s("目标") }
+}
+
+enum CreateSheetEntry: Equatable {
+    case standard
+    case oneLiner
 }
 
 enum TaskStatus: String, Codable, CaseIterable {
@@ -140,6 +146,7 @@ final class GoalMilestone {
     var completedAt: Date?
     var startDate: Date?
     var endDate: Date?
+    var summary: String = ""
     var goal: Goal?
 
     init(
@@ -148,6 +155,7 @@ final class GoalMilestone {
         isCompleted: Bool = false,
         startDate: Date? = nil,
         endDate: Date? = nil,
+        summary: String = "",
         goal: Goal? = nil
     ) {
         self.id = UUID()
@@ -155,6 +163,7 @@ final class GoalMilestone {
         self.order = order
         self.isCompleted = isCompleted
         self.completedAt = isCompleted ? Date() : nil
+        self.summary = summary
         self.goal = goal
         Self.applyDateRange(start: startDate, end: endDate) { s, e in
             self.startDate = s

@@ -57,6 +57,22 @@
 		F9689DED32F4ED954400BD83 /* FocusActivityAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */; };
 		FC15D725AA1C025F097722A7 /* FocusLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D15D895817753FFA1E8977 /* FocusLiveActivity.swift */; };
 		FF43F9B9B29F37B7282786E4 /* LockScreenSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A65B8A39348C6F97550E13 /* LockScreenSettingsView.swift */; };
+
+		AA1100000000000000000011 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000001 /* AppLanguage.swift */; };
+		AA1100000000000000000012 /* AppLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000001 /* AppLanguage.swift */; };
+		AA1100000000000000000013 /* AppLanguageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000002 /* AppLanguageStore.swift */; };
+		AA1100000000000000000014 /* GoalstarAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000003 /* GoalstarAnalytics.swift */; };
+		AA1100000000000000000015 /* GoalDraftDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000004 /* GoalDraftDTO.swift */; };
+		AA1100000000000000000016 /* GoalDraftTemplates.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000005 /* GoalDraftTemplates.swift */; };
+		AA1100000000000000000017 /* OnDeviceGoalDraftGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000006 /* OnDeviceGoalDraftGenerator.swift */; };
+		AA1100000000000000000018 /* RegenQuotaStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000007 /* RegenQuotaStore.swift */; };
+		AA1100000000000000000019 /* GoalAISection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000008 /* GoalAISection.swift */; };
+		AA110000000000000000001A /* GoalTaskSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1100000000000000000009 /* GoalTaskSegmentedControl.swift */; };
+		AA110000000000000000001B /* ConfirmDraftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA110000000000000000000A /* ConfirmDraftView.swift */; };
+		AA110000000000000000001C /* LanguageSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA110000000000000000000B /* LanguageSettingsView.swift */; };
+		AA110000000000000000001D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA110000000000000000000C /* Localizable.xcstrings */; };
+		AA110000000000000000001E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA110000000000000000000C /* Localizable.xcstrings */; };
+		AA110000000000000000001F /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = AA110000000000000000000D /* InfoPlist.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +100,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA1100000000000000000001 /* AppLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguage.swift; sourceTree = "<group>"; };
+		AA1100000000000000000002 /* AppLanguageStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppLanguageStore.swift; sourceTree = "<group>"; };
+		AA1100000000000000000003 /* GoalstarAnalytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalstarAnalytics.swift; sourceTree = "<group>"; };
+		AA1100000000000000000004 /* GoalDraftDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDraftDTO.swift; sourceTree = "<group>"; };
+		AA1100000000000000000005 /* GoalDraftTemplates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalDraftTemplates.swift; sourceTree = "<group>"; };
+		AA1100000000000000000006 /* OnDeviceGoalDraftGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnDeviceGoalDraftGenerator.swift; sourceTree = "<group>"; };
+		AA1100000000000000000007 /* RegenQuotaStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegenQuotaStore.swift; sourceTree = "<group>"; };
+		AA1100000000000000000008 /* GoalAISection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalAISection.swift; sourceTree = "<group>"; };
+		AA1100000000000000000009 /* GoalTaskSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalTaskSegmentedControl.swift; sourceTree = "<group>"; };
+		AA110000000000000000000A /* ConfirmDraftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmDraftView.swift; sourceTree = "<group>"; };
+		AA110000000000000000000B /* LanguageSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSettingsView.swift; sourceTree = "<group>"; };
+		AA110000000000000000000C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		AA110000000000000000000D /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
+
 		0547A15552C11FFBDE19EC4B /* LiveActivityManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveActivityManager.swift; sourceTree = "<group>"; };
 		06E21EF8EFA2FB221ADE475C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusActivityAttributes.swift; sourceTree = "<group>"; };
@@ -166,6 +196,7 @@
 			children = (
 				5B6ED238469C89CFE88A2A5E /* Cards.swift */,
 				7072F9755A5CD48229FEA330 /* CreateMilestoneSheet.swift */,
+				AA1100000000000000000009 /* GoalTaskSegmentedControl.swift */,
 				BC1CCC357CA9C27060994CE6 /* CreateSheet.swift */,
 				5E628908AFC1251FB4420949 /* Icons.swift */,
 				42A9154E25863124D1805489 /* SkeletonRefresh.swift */,
@@ -187,6 +218,8 @@
 				AFCCE21C7DFF94062074DCF1 /* App */,
 				542FEA40B2525F14D451727D /* Components */,
 				FC8279D1F53558B5D58BE6C7 /* Domain */,
+				AA1100000000000000000020 /* GoalDraft */,
+				AA1100000000000000000021 /* Localization */,
 				03E5C5D49B6ABA80E5508853 /* Persistence */,
 				EFE0CC8EE9ACB6A67866F019 /* Services */,
 				E1169DE3C0FD48109C6660E4 /* Views */,
@@ -197,6 +230,7 @@
 		8407C5C236485190EBDF413D /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				AA1100000000000000000001 /* AppLanguage.swift */,
 				7F9DD9BF1E91965949BA656D /* AppConstants.swift */,
 				0862B0206FD9D9AFDA7D3F76 /* FocusActivityAttributes.swift */,
 				31F496086D47EA183F2261F4 /* FocusEndNotifier.swift */,
@@ -220,7 +254,9 @@
 		E1169DE3C0FD48109C6660E4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				AA110000000000000000000A /* ConfirmDraftView.swift */,
 				6B51571B695838975E9D2A05 /* DataView.swift */,
+				AA110000000000000000000B /* LanguageSettingsView.swift */,
 				A19452AE764713511F5A8441 /* FocusView.swift */,
 				B2F6258467CB4C777CE36719 /* GoalDetailView.swift */,
 				517FE91D9E5695F9DF81E3DA /* GoalsView.swift */,
@@ -262,9 +298,33 @@
 			isa = PBXGroup;
 			children = (
 				9C824F97923ECCAD1A820A63 /* AppStore.swift */,
+				AA1100000000000000000003 /* GoalstarAnalytics.swift */,
 				B9DC1CAE68200E42AA1B5601 /* ProEntitlement.swift */,
 			);
 			path = Domain;
+			sourceTree = "<group>";
+		};
+
+		AA1100000000000000000020 /* GoalDraft */ = {
+			isa = PBXGroup;
+			children = (
+				AA1100000000000000000004 /* GoalDraftDTO.swift */,
+				AA1100000000000000000005 /* GoalDraftTemplates.swift */,
+				AA1100000000000000000008 /* GoalAISection.swift */,
+				AA1100000000000000000006 /* OnDeviceGoalDraftGenerator.swift */,
+				AA1100000000000000000007 /* RegenQuotaStore.swift */,
+			);
+			path = GoalDraft;
+			sourceTree = "<group>";
+		};
+		AA1100000000000000000021 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				AA1100000000000000000002 /* AppLanguageStore.swift */,
+				AA110000000000000000000D /* InfoPlist.xcstrings */,
+				AA110000000000000000000C /* Localizable.xcstrings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -333,6 +393,8 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
+				en,
+				ja,
 				"zh-Hans",
 			);
 			mainGroup = 30BD09D795D1293C1DCDCC98;
@@ -351,6 +413,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA110000000000000000001F /* InfoPlist.xcstrings in Resources */,
+				AA110000000000000000001D /* Localizable.xcstrings in Resources */,
 				EE15A715A065D52FE197C2F3 /* AppIcon.icon in Resources */,
 				1A51FEED900BFAA98B88BB3F /* Assets.xcassets in Resources */,
 				B8F425024D013262755BBB56 /* PrivacyInfo.xcprivacy in Resources */,
@@ -361,6 +425,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA110000000000000000001E /* Localizable.xcstrings in Resources */,
 				7961FC84D24F4C709E40AF90 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -372,6 +437,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA1100000000000000000011 /* AppLanguage.swift in Sources */,
+				AA1100000000000000000013 /* AppLanguageStore.swift in Sources */,
+				AA110000000000000000001B /* ConfirmDraftView.swift in Sources */,
+				AA1100000000000000000019 /* GoalAISection.swift in Sources */,
+				AA1100000000000000000015 /* GoalDraftDTO.swift in Sources */,
+				AA1100000000000000000016 /* GoalDraftTemplates.swift in Sources */,
+				AA1100000000000000000014 /* GoalstarAnalytics.swift in Sources */,
+				AA110000000000000000001A /* GoalTaskSegmentedControl.swift in Sources */,
+				AA110000000000000000001C /* LanguageSettingsView.swift in Sources */,
+				AA1100000000000000000017 /* OnDeviceGoalDraftGenerator.swift in Sources */,
+				AA1100000000000000000018 /* RegenQuotaStore.swift in Sources */,
 				22D3190CFF058BD96FD6EF97 /* AppConstants.swift in Sources */,
 				157FC62CC2F37586251B52C9 /* AppStore.swift in Sources */,
 				51E6CE8E156774DD0C5DC697 /* Cards.swift in Sources */,
@@ -410,6 +486,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA1100000000000000000012 /* AppLanguage.swift in Sources */,
 				630332E32D4BA671F7F1C641 /* AppConstants.swift in Sources */,
 				F9689DED32F4ED954400BD83 /* FocusActivityAttributes.swift in Sources */,
 				A3757B0C7F6ADCFAA6D32D42 /* FocusEndNotifier.swift in Sources */,
@@ -496,7 +573,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = GoalstarWidgets/GoalstarWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				INFOPLIST_FILE = GoalstarWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
@@ -505,7 +582,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native.widgets;
 				PRODUCT_NAME = GoalstarWidgets;
 				SKIP_INSTALL = YES;
@@ -519,7 +596,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = GoalstarWidgets/GoalstarWidgets.Debug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				INFOPLIST_FILE = GoalstarWidgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Goalstar;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
@@ -528,7 +605,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native.widgets;
 				PRODUCT_NAME = GoalstarWidgets;
 				SKIP_INSTALL = YES;
@@ -544,7 +621,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Goalstar/Goalstar.Debug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = A47KHX4UCC;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Goalstar/Info.plist;
@@ -553,7 +630,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native;
 				PRODUCT_NAME = Goalstar;
 			};
@@ -567,7 +644,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = Goalstar/Goalstar.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_TEAM = A47KHX4UCC;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Goalstar/Info.plist;
@@ -576,7 +653,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.goalstar.native;
 				PRODUCT_NAME = Goalstar;
 			};

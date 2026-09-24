@@ -18,6 +18,7 @@ final class AppNotificationDelegate: NSObject, UNUserNotificationCenterDelegate 
 @main
 struct GoalstarApp: App {
     @StateObject private var store = AppStore()
+    @StateObject private var languageStore = AppLanguageStore()
     @State private var showSplash = true
     private let container = Persistence.makeContainer()
     private let notificationDelegate = AppNotificationDelegate()
@@ -35,6 +36,8 @@ struct GoalstarApp: App {
             ZStack {
                 RootTabView()
                     .environmentObject(store)
+                    .environmentObject(languageStore)
+                    .id(languageStore.language)
                     .modelContainer(container)
                     .preferredColorScheme(.light)
                     .opacity(showSplash ? 0 : 1)
@@ -112,8 +115,16 @@ struct RootTabView: View {
             store.consumePendingEndFocusFromLiveActivity(goals: goals)
         }
         .sheet(isPresented: $store.showCreateSheet, onDismiss: {
+            let goalID = store.consumePendingGoalDetail()
             store.clearCreateSheetPreferences()
             DispatchQueue.main.async {
+                if let goalID {
+                    store.selectedTab = .goals
+                    store.selectedGoalID = goalID
+                    DispatchQueue.main.async {
+                        store.showGoalDetail = true
+                    }
+                }
                 store.presentPendingProPaywallIfNeeded()
                 store.presentPendingCreateSheetIfNeeded()
             }
