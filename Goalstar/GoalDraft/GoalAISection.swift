@@ -36,7 +36,7 @@ struct GoalAISection: View {
                 .font(GSFont.semibold(GSFont.xl))
                 .foregroundStyle(GSColor.textPrimary)
             Text(L10n.s("设备支持且模型可用时可重试"))
-                .font(GSFont.semibold(GSFont.md))
+                .font(GSFont.regular(GSFont.md))
                 .foregroundStyle(GSColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -52,7 +52,7 @@ struct GoalAISection: View {
                     .font(GSFont.semibold(GSFont.xl))
                     .foregroundStyle(GSColor.textPrimary)
                 Text(L10n.s("用一句话描述你想达成的目标，本机生成可编辑阶段与任务。"))
-                    .font(GSFont.semibold(GSFont.md))
+                    .font(GSFont.regular(GSFont.md))
                     .foregroundStyle(GSColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
             }
@@ -74,7 +74,7 @@ struct GoalAISection: View {
             .submitLabel(.done)
 
             Text(L10n.s("可选情境（可多选）"))
-                .font(GSFont.semibold(GSFont.sm))
+                .font(GSFont.regular(GSFont.sm))
                 .foregroundStyle(GSColor.textSecondary)
 
             HStack(spacing: 8) {
@@ -93,7 +93,7 @@ struct GoalAISection: View {
                 generatingButton
                 fullWidthOutline(title: L10n.s("取消"), action: onCancel)
                 Text(L10n.s("阶段 ≤5 · 任务 ≤8 · 可取消回手动"))
-                    .font(GSFont.semibold(GSFont.sm))
+                    .font(GSFont.regular(GSFont.sm))
                     .foregroundStyle(GSColor.textSecondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             } else {
@@ -107,7 +107,7 @@ struct GoalAISection: View {
                 .opacity(canGenerate ? 1 : 0.45)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(L10n.s("首次生成免费 · 再生成每日 3 次（与目标数上限分开）"))
-                        .font(GSFont.semibold(GSFont.sm))
+                        .font(GSFont.regular(GSFont.sm))
                     Text(L10n.s("仅在设备端运行，不上传内容"))
                         .font(GSFont.regular(GSFont.sm))
                 }

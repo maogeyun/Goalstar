@@ -64,13 +64,13 @@ struct CreateSheet: View {
         NavigationStack {
             VStack(spacing: 0) {
                 if !showConfirm {
+                    // SegmentHint is not shipped. The control itself insets 16 on each side.
                     GoalTaskSegmentedControl(
                         mode: segmentMode,
                         taskEnabled: !lockToGoalMode,
                         goalTitle: CreateFormMode.goal.segmentTitle,
                         taskTitle: CreateFormMode.task.segmentTitle
                     )
-                    .padding(.horizontal, GSSpacing.page)
                     .padding(.top, 8)
                     .padding(.bottom, 4)
                 }
@@ -181,7 +181,7 @@ struct CreateSheet: View {
                 .font(GSFont.semibold(GSFont.lg))
                 .foregroundStyle(GSColor.textPrimary)
             Text(L10n.s("可选用分语种模板，或直接手动填写。语言切换不受影响。"))
-                .font(GSFont.semibold(GSFont.md))
+                .font(GSFont.regular(GSFont.md))
                 .foregroundStyle(GSColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -198,10 +198,10 @@ struct CreateSheet: View {
     private var mutedGoalSummary: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(L10n.s("类型预设 · 名称 · Emoji · 分类 · 天数 · 截止日"))
-                .font(GSFont.semibold(GSFont.md))
+                .font(GSFont.regular(GSFont.md))
                 .foregroundStyle(GSColor.textPrimary)
             Text(L10n.s("生成时可取消，手动表单始终保留"))
-                .font(GSFont.semibold(GSFont.sm))
+                .font(GSFont.regular(GSFont.sm))
                 .foregroundStyle(GSColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
@@ -291,6 +291,49 @@ struct CreateSheet: View {
         taskEndDate = end
     }
 
+    /// Task duration row is 36pt. The − / value / + cluster is 122×28, not the old tall stepper row.
+    private var minutesStepperRow: some View {
+        HStack(spacing: 12) {
+            Text(L10n.s("时长（分钟）"))
+                .font(GSFont.semibold(GSFont.lg))
+                .foregroundStyle(GSColor.textPrimary)
+                .lineLimit(1)
+            Spacer(minLength: 8)
+            HStack(spacing: 0) {
+                minutesStepButton(title: "−", enabled: minutes > 5) {
+                    minutes = max(5, minutes - 5)
+                }
+                Text(L10n.f("%d min", minutes))
+                    .font(GSFont.semibold(GSFont.lg))
+                    .foregroundStyle(GSColor.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+                    .frame(maxWidth: .infinity)
+                minutesStepButton(title: "+", enabled: minutes < 120) {
+                    minutes = min(120, minutes + 5)
+                }
+            }
+            .frame(width: 122, height: 28)
+            .fixedSize(horizontal: true, vertical: true)
+        }
+        .padding(.horizontal, 12)
+        .frame(maxWidth: .infinity)
+        .frame(height: 36)
+        .background(GSColor.bgTertiary)
+        .clipShape(RoundedRectangle(cornerRadius: GSRadius.card, style: .continuous))
+    }
+
+    private func minutesStepButton(title: String, enabled: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(GSFont.medium(GSFont.lg))
+                .foregroundStyle(enabled ? GSColor.textPrimary : GSColor.textSecondary.opacity(0.4))
+                .frame(width: 28, height: 28)
+        }
+        .buttonStyle(.plain)
+        .disabled(!enabled)
+    }
+
     private var taskForm: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 8) {
@@ -300,18 +343,7 @@ struct CreateSheet: View {
                     .onChange(of: title) { _, _ in titleError = nil }
             }
 
-            DetailFormRow(label: L10n.s("时长（分钟）")) {
-                // Match the 1.0 taskForm stepper (DetailFormRow minHeight 44). Do not stretch this row.
-                HStack(spacing: 8) {
-                    Text(L10n.f("%d min", minutes))
-                        .font(GSFont.semibold(GSFont.lg))
-                        .foregroundStyle(GSColor.textPrimary)
-                        .lineLimit(1)
-                    Stepper("", value: $minutes, in: 5...120, step: 5)
-                        .labelsHidden()
-                        .fixedSize()
-                }
-            }
+            minutesStepperRow
 
             DatePickerFormRow(
                 title: L10n.s("开始日期"),

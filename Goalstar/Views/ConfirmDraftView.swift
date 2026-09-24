@@ -24,13 +24,13 @@ struct ConfirmDraftView: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: GSSpacing.lg) {
                     Text(L10n.s("保存前可编辑 · 取消不落库 · AI 保存一次写入 Goal+阶段+任务"))
-                        .font(GSFont.semibold(GSFont.sm))
+                        .font(GSFont.regular(GSFont.sm))
                         .foregroundStyle(GSColor.textSecondary)
                         .fixedSize(horizontal: false, vertical: true)
 
                     if let notice, !notice.isEmpty {
                         Text(notice)
-                            .font(GSFont.semibold(GSFont.md))
+                            .font(GSFont.regular(GSFont.md))
                             .foregroundStyle(GSColor.textSecondary)
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -80,7 +80,7 @@ struct ConfirmDraftView: View {
     private var structureSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(L10n.s("阶段与任务（阶段≤5 · 任务≤8）"))
-                .font(GSFont.semibold(GSFont.md))
+                .font(GSFont.regular(GSFont.md))
                 .foregroundStyle(GSColor.textSecondary)
 
             ForEach(draft.milestones) { milestone in
@@ -152,7 +152,7 @@ struct ConfirmDraftView: View {
     private var unassignedCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(L10n.s("未归入阶段"))
-                .font(GSFont.semibold(GSFont.md))
+                .font(GSFont.regular(GSFont.md))
                 .foregroundStyle(GSColor.textSecondary)
             ForEach(draft.tasks.filter { $0.milestoneIndex == nil }) { task in
                 VStack(alignment: .leading, spacing: 4) {
@@ -221,7 +221,7 @@ struct ConfirmDraftView: View {
                 Spacer(minLength: 8)
 
                 Text(quotaLabel)
-                    .font(GSFont.semibold(GSFont.md))
+                    .font(GSFont.regular(GSFont.md))
                     .foregroundStyle(GSColor.textSecondary)
                     .lineLimit(1)
             }
