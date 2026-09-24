@@ -2,7 +2,7 @@ import Foundation
 
 /// Optional context chip. It only enriches the on-device prompt and template.
 /// It does not change the 1.0 goal preset / category fields.
-enum GoalDraftSaveFailure: Equatable {
+enum GoalDraftSaveFailure: Error, Equatable {
     case emptyName
     case goalLimit
     case persistence

@@ -134,11 +134,11 @@ struct TodayView: View {
             message: L10n.s("创建第一个目标，开始绘制你的星图"),
             actionTitle: L10n.s("一句话创建目标"),
             secondaryActionTitle: L10n.s("创建我的第一个目标"),
-            action: {
-                store.openCreateSheet(mode: .goal, entry: .oneLiner)
-            },
             secondaryAction: {
                 store.openCreateSheet(mode: .goal, entry: .standard)
+            },
+            action: {
+                store.openCreateSheet(mode: .goal, entry: .oneLiner)
             }
         )
         .padding(.top, 80)
