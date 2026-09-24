@@ -29,11 +29,11 @@ struct CreateSheet: View {
     @State private var titleError: String?
 
     @State private var prompt = ""
-    @State private var chip: GoalContextChip?
+    @State private var chips: Set<GoalContextChip> = []
     @State private var phase: GoalCreatePhase = .editing
     @State private var draft = GoalDraftDTO.empty
     @State private var draftBaseline = GoalDraftDTO.empty
-    @State private var aiNotice: String?
+    @State private var aiAvailable = false
     @State private var confirmNotice: String?
     @State private var confirmLimitMessage: String?
     @State private var isRegenerating = false
@@ -44,6 +44,7 @@ struct CreateSheet: View {
     @State private var sheetOpenedAt = Date()
     @State private var didConfigure = false
     @State private var activePaywall: ProPaywallContext?
+    @State private var showRegenWall = false
     @FocusState private var oneLinerFocused: Bool
 
     private var goalPresets: [(String, String, String)] {
@@ -62,15 +63,17 @@ struct CreateSheet: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                GoalTaskSegmentedControl(
-                    mode: segmentMode,
-                    taskEnabled: !lockToGoalMode,
-                    goalTitle: CreateFormMode.goal.segmentTitle,
-                    taskTitle: CreateFormMode.task.segmentTitle
-                )
-                .padding(.horizontal, GSSpacing.page)
-                .padding(.top, 8)
-                .padding(.bottom, 4)
+                if !showConfirm {
+                    GoalTaskSegmentedControl(
+                        mode: segmentMode,
+                        taskEnabled: !lockToGoalMode,
+                        goalTitle: CreateFormMode.goal.segmentTitle,
+                        taskTitle: CreateFormMode.task.segmentTitle
+                    )
+                    .padding(.horizontal, GSSpacing.page)
+                    .padding(.top, 8)
+                    .padding(.bottom, 4)
+                }
 
                 if showConfirm {
                     ConfirmDraftView(
@@ -88,26 +91,23 @@ struct CreateSheet: View {
                     editingContent
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .background(PageBackground())
             .navigationTitle(showConfirm ? L10n.s("确认草稿") : navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(L10n.s("取消")) { attemptClose() }
+                    Button(L10n.s("关闭")) { attemptClose() }
                 }
             }
             .onAppear(perform: configureIfNeeded)
-        }
-        .confirmationDialog(L10n.s("放弃草稿？"), isPresented: $showDiscard, titleVisibility: .visible) {
-            Button(L10n.s("放弃"), role: .destructive) {
-                confirmDiscard()
+            .overlay {
+                if showDiscard {
+                    discardOverlay
+                } else if showRegenWall {
+                    regenWallOverlay
+                }
             }
-            Button(L10n.s("继续编辑"), role: .cancel) {
-                pendingDismiss = false
-                pendingMode = nil
-            }
-        } message: {
-            Text(L10n.s("未保存的草稿不会写入。"))
         }
         .sheet(item: $activePaywall) { context in
             ProPaywallSheet(context: context)
@@ -133,41 +133,95 @@ struct CreateSheet: View {
                 if mode == .task && !lockToGoalMode {
                     taskForm
                 } else {
-                    GoalAISection(
-                        prompt: $prompt,
-                        chip: $chip,
-                        isGenerating: phase == .generating,
-                        notice: aiNotice,
-                        focused: $oneLinerFocused,
-                        onGenerate: { startGenerate(regenerating: false) },
-                        onCancel: cancelGenerate
-                    )
-                    manualDivider
-                    goalForm
-                }
-
-                if let titleError {
-                    Text(titleError)
-                        .font(GSFont.semibold(GSFont.lg))
-                        .foregroundStyle(GSColor.danger)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    if titleError == ProEntitlement.freeGoalLimitMessage {
-                        OutlineActionButton(title: L10n.s("升级 Pro")) {
-                            store.requestProPaywall()
-                        }
-                    }
-                }
-
-                if phase != .generating {
-                    PrimaryButton(title: L10n.s("保存")) {
-                        save()
-                    }
+                    goalSegment
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, GSSpacing.page)
             .padding(.top, 8)
             .padding(.bottom, 32)
+        }
+    }
+
+    @ViewBuilder
+    private var goalSegment: some View {
+        if aiAvailable {
+            GoalAISection(
+                prompt: $prompt,
+                chips: $chips,
+                presentation: phase == .generating ? .generating : .ready,
+                focused: $oneLinerFocused,
+                onGenerate: { startGenerate(regenerating: false) },
+                onCancel: cancelGenerate
+            )
+            manualDivider
+            if phase == .generating {
+                mutedGoalSummary
+            } else {
+                goalForm
+            }
+        } else {
+            unavailableBanner
+            GoalAISection(
+                prompt: $prompt,
+                chips: $chips,
+                presentation: .unavailable,
+                focused: $oneLinerFocused,
+                onGenerate: {},
+                onCancel: {}
+            )
+            manualDivider
+            goalForm
+        }
+    }
+
+    private var unavailableBanner: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(L10n.s("本机 AI 暂不可用"))
+                .font(GSFont.semibold(GSFont.lg))
+                .foregroundStyle(GSColor.textPrimary)
+            Text(L10n.s("可选用分语种模板，或直接手动填写。语言切换不受影响。"))
+                .font(GSFont.semibold(GSFont.md))
+                .foregroundStyle(GSColor.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(12)
+        .background(GSColor.warningLight)
+        .overlay(
+            RoundedRectangle(cornerRadius: GSRadius.card, style: .continuous)
+                .stroke(GSColor.warning, lineWidth: 1)
+        )
+        .clipShape(RoundedRectangle(cornerRadius: GSRadius.card, style: .continuous))
+    }
+
+    private var mutedGoalSummary: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(L10n.s("类型预设 · 名称 · Emoji · 分类 · 天数 · 截止日"))
+                .font(GSFont.semibold(GSFont.md))
+                .foregroundStyle(GSColor.textPrimary)
+            Text(L10n.s("生成时可取消，手动表单始终保留"))
+                .font(GSFont.semibold(GSFont.sm))
+                .foregroundStyle(GSColor.textSecondary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .gsCard(radius: GSRadius.panel, padding: 16)
+        .opacity(0.55)
+    }
+
+    @ViewBuilder
+    private var saveError: some View {
+        if let titleError {
+            Text(titleError)
+                .font(GSFont.semibold(GSFont.lg))
+                .foregroundStyle(GSColor.danger)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            if titleError == ProEntitlement.freeGoalLimitMessage {
+                OutlineActionButton(title: L10n.s("升级 Pro")) {
+                    store.requestProPaywall()
+                }
+            }
         }
     }
 
@@ -247,6 +301,7 @@ struct CreateSheet: View {
             }
 
             DetailFormRow(label: L10n.s("时长（分钟）")) {
+                // Match the 1.0 taskForm stepper (DetailFormRow minHeight 44). Do not stretch this row.
                 HStack(spacing: 8) {
                     Text(L10n.f("%d min", minutes))
                         .font(GSFont.semibold(GSFont.lg))
@@ -318,6 +373,11 @@ struct CreateSheet: View {
                     .labelsHidden()
                     .tint(GSColor.brand)
             }
+
+            saveError
+            PrimaryButton(title: L10n.s("保存"), height: 46) {
+                save()
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .gsCard(radius: GSRadius.panel, padding: 16)
@@ -328,21 +388,16 @@ struct CreateSheet: View {
             VStack(alignment: .leading, spacing: 8) {
                 DetailFieldLabel(text: L10n.s("类型预设"))
                 ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
+                    HStack(spacing: 8) {
                         ForEach(goalPresets, id: \.0) { preset in
-                            Button {
+                            SelectableCapsuleChip(
+                                title: "\(preset.1) \(preset.0)",
+                                selected: category == preset.0
+                            ) {
                                 category = preset.0
                                 emoji = preset.1
                                 if title.isEmpty { title = preset.2 }
-                            } label: {
-                                CategoryTag(
-                                    text: "\(preset.1) \(preset.0)",
-                                    color: category == preset.0 ? GSColor.brand : GSColor.textPrimary,
-                                    background: category == preset.0 ? GSColor.brandLight : GSColor.bgTertiary
-                                )
                             }
-                            .buttonStyle(.plain)
-                            .contentShape(Rectangle())
                         }
                     }
                 }
@@ -401,6 +456,11 @@ struct CreateSheet: View {
             Text(L10n.s("衡量方式：默认按任务完成推进"))
                 .font(GSFont.semibold(GSFont.base, relativeTo: .caption))
                 .foregroundStyle(GSColor.textSecondary)
+
+            saveError
+            PrimaryButton(title: L10n.s("保存"), height: 46) {
+                save()
+            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .gsCard(radius: GSRadius.panel, padding: 16)
@@ -425,7 +485,8 @@ struct CreateSheet: View {
         taskEndDate = day
         syncMilestoneSelection(for: selectedGoalID)
         clampTaskDatesToSelectedMilestone()
-        if mode == .goal && store.createSheetEntry == .oneLiner {
+        aiAvailable = OnDeviceModelAvailability.isReady
+        if mode == .goal && store.createSheetEntry == .oneLiner && aiAvailable {
             oneLinerFocused = true
         }
     }
@@ -470,6 +531,8 @@ struct CreateSheet: View {
     }
 
     private func confirmDiscard() {
+        showDiscard = false
+        showRegenWall = false
         GoalstarAnalytics.track("goal_ai_discard", ["edited": draftIsDirty ? "true" : "false"])
         generateTask?.cancel()
         generateTask = nil
@@ -491,33 +554,30 @@ struct CreateSheet: View {
 
     private func startGenerate(regenerating: Bool) {
         let sentence = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !sentence.isEmpty else {
-            aiNotice = L10n.s("请先写一句话")
-            return
-        }
+        guard !sentence.isEmpty else { return }
         if regenerating && !RegenQuotaStore.canRegenerate(isPro: store.isPro) {
             GoalstarAnalytics.track("goal_ai_regen_blocked", [
                 "language": AppLanguagePreference.current.analyticsCode
             ])
-            activePaywall = .regen
+            showRegenWall = true
             return
         }
         GoalstarAnalytics.track(regenerating ? "goal_ai_regen_tap" : "goal_ai_generate_tap", [
-            "language": AppLanguagePreference.current.analyticsCode
+            "language": AppLanguagePreference.current.analyticsCode,
+            "chips": String(chips.count)
         ])
-        aiNotice = nil
         if regenerating {
             isRegenerating = true
         } else {
             phase = .generating
         }
-        let selectedChip = chip
+        let selectedChips = chips
         let language = AppLanguagePreference.current
         generateTask?.cancel()
         generateTask = Task {
             let outcome = await OnDeviceGoalDraftGenerator.make(
                 sentence: sentence,
-                chip: selectedChip,
+                chips: selectedChips,
                 language: language
             )
             if Task.isCancelled { return }
@@ -572,7 +632,14 @@ struct CreateSheet: View {
         phase = .editing
         isRegenerating = false
         confirmNotice = nil
+        showRegenWall = false
         mode = .goal
+    }
+
+    private func keepEditingDraft() {
+        showDiscard = false
+        pendingDismiss = false
+        pendingMode = nil
     }
 
     private func saveDraft() {
@@ -637,6 +704,109 @@ struct CreateSheet: View {
         }
         store.clearCreateSheetPreferences()
         dismiss()
+    }
+
+    private var discardOverlay: some View {
+        ZStack {
+            Color.black.opacity(0.35)
+                .ignoresSafeArea()
+            VStack(alignment: .leading, spacing: 12) {
+                Text(L10n.s("放弃草稿？"))
+                    .font(GSFont.semibold(GSFont.title))
+                    .foregroundStyle(GSColor.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Text(L10n.s("您已修改内容。关闭确认卡将不写入目标 / 阶段 / 任务。"))
+                    .font(GSFont.semibold(GSFont.md))
+                    .foregroundStyle(GSColor.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                Button(action: keepEditingDraft) {
+                    Text(L10n.s("继续编辑"))
+                        .font(GSFont.semibold(GSFont.xl))
+                        .foregroundStyle(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 46)
+                        .background(GSColor.brand)
+                        .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
+                }
+                .buttonStyle(.plain)
+                Button(action: confirmDiscard) {
+                    Text(L10n.s("放弃草稿"))
+                        .font(GSFont.semibold(GSFont.xl))
+                        .foregroundStyle(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 46)
+                        .background(GSColor.danger)
+                        .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(20)
+            .background(GSColor.surfaceCard)
+            .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
+            .padding(.horizontal, 28)
+        }
+    }
+
+    private var regenWallOverlay: some View {
+        ZStack {
+            Color.black.opacity(0.35)
+                .ignoresSafeArea()
+            VStack(alignment: .leading, spacing: 12) {
+                Text(L10n.s("今日再生成次数已用完"))
+                    .font(GSFont.semibold(GSFont.title))
+                    .foregroundStyle(GSColor.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                Text(L10n.s("免费每日 3 次再生成已用尽。升级 Pro 可无限再生成。"))
+                    .font(GSFont.semibold(GSFont.md))
+                    .foregroundStyle(GSColor.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                Text(L10n.s("无限再生成（与目标数量上限分开计量）"))
+                    .font(GSFont.semibold(GSFont.md))
+                    .foregroundStyle(GSColor.textPrimary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Button {
+                    showRegenWall = false
+                    activePaywall = .regen
+                } label: {
+                    Text(L10n.s("升级 Pro"))
+                        .font(GSFont.semibold(GSFont.xl))
+                        .foregroundStyle(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 46)
+                        .background(GSColor.brand)
+                        .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
+                }
+                .buttonStyle(.plain)
+                Button {
+                    showRegenWall = false
+                } label: {
+                    Text(L10n.s("保留当前草稿并继续编辑"))
+                        .font(GSFont.semibold(GSFont.base))
+                        .foregroundStyle(GSColor.brand)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 40)
+                }
+                .buttonStyle(.plain)
+                Button(action: useManualForm) {
+                    Text(L10n.s("改用手动填写"))
+                        .font(GSFont.semibold(GSFont.base))
+                        .foregroundStyle(GSColor.brand)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 36)
+                }
+                .buttonStyle(.plain)
+                Text(L10n.s("不挡保存 · 不挡手动"))
+                    .font(GSFont.regular(GSFont.sm))
+                    .foregroundStyle(GSColor.textSecondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+            .padding(20)
+            .background(GSColor.surfaceCard)
+            .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
+            .padding(.horizontal, 28)
+        }
     }
 }
 

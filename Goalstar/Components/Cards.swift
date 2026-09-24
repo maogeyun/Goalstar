@@ -569,6 +569,7 @@ struct PrimaryButton: View {
     var title: String
     var icon: GSIconName? = nil
     var filled: Bool = true
+    var height: CGFloat = 50
     var action: () -> Void
 
     var body: some View {
@@ -582,7 +583,7 @@ struct PrimaryButton: View {
             }
             .foregroundStyle(filled ? Color.white : GSColor.brand)
             .frame(maxWidth: .infinity)
-            .frame(height: 50)
+            .frame(height: height)
             .background(filled ? GSColor.brand : GSColor.brandLight.opacity(0.35))
             .overlay(
                 RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous)

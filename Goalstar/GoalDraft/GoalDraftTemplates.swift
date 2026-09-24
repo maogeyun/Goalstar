@@ -3,8 +3,8 @@ import Foundation
 /// Language-specific template drafts used when the on-device model is missing, fails, or times out.
 /// Copy is in code so fallback still matches the UI language if the string catalog has not been built.
 enum GoalDraftTemplates {
-    static func make(sentence: String, chip: GoalContextChip?, language: AppLanguage) -> GoalDraftDTO {
-        let pack = pack(for: chip, language: language)
+    static func make(sentence: String, chips: Set<GoalContextChip>, language: AppLanguage) -> GoalDraftDTO {
+        let pack = pack(for: chips, language: language)
         let milestones = pack.milestones.map { item in
             GoalDraftDTO.Milestone(id: UUID(), title: item.title, summary: item.summary)
         }
@@ -40,7 +40,30 @@ enum GoalDraftTemplates {
         var tasks: [String]
     }
 
-    private static func pack(for chip: GoalContextChip?, language: AppLanguage) -> Pack {
+    /// Empty selection uses the generic pack. Several chips are merged in chip order and clamped to 5 / 8.
+    private static func pack(for chips: Set<GoalContextChip>, language: AppLanguage) -> Pack {
+        let ordered = GoalContextChip.allCases.filter { chips.contains($0) }
+        if ordered.isEmpty {
+            return single(nil, language: language)
+        }
+        if ordered.count == 1 {
+            return single(ordered[0], language: language)
+        }
+        var milestones: [(title: String, summary: String)] = []
+        var tasks: [String] = []
+        for chip in ordered {
+            let piece = single(chip, language: language)
+            for milestone in piece.milestones where milestones.count < GoalDraftDTO.maxMilestones {
+                milestones.append(milestone)
+            }
+            for task in piece.tasks where tasks.count < GoalDraftDTO.maxTasks {
+                tasks.append(task)
+            }
+        }
+        return Pack(milestones: milestones, tasks: tasks)
+    }
+
+    private static func single(_ chip: GoalContextChip?, language: AppLanguage) -> Pack {
         switch language {
         case .zhHans: return zh(chip)
         case .en: return en(chip)

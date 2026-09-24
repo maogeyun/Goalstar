@@ -3657,6 +3657,581 @@
           }
         }
       }
+    },
+    "一句话生成": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一句话生成"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One-line draft"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一文で下書き"
+          }
+        }
+      }
+    },
+    "一句话生成（暂不可用）": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一句话生成（暂不可用）"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "One-line draft (unavailable)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一文で下書き（現在使えません）"
+          }
+        }
+      }
+    },
+    "不挡保存 · 不挡手动": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不挡保存 · 不挡手动"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving and manual entry stay available"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存も手入力もそのまま使えます"
+          }
+        }
+      }
+    },
+    "不限次数": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "不限次数"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlimited"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "回数制限なし"
+          }
+        }
+      }
+    },
+    "仅在设备端运行，不上传内容": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "仅在设备端运行，不上传内容"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Runs only on this device. Nothing is uploaded."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このデバイス上だけで動き、内容は送信しません。"
+          }
+        }
+      }
+    },
+    "今日剩余 %d/3": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日剩余 %d/3"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%d/3 left today"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今日残り %d/3"
+          }
+        }
+      }
+    },
+    "例：三个月内通过 CET-6，每周阅读 5 篇文章": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例：三个月内通过 CET-6，每周阅读 5 篇文章"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. Pass CET-6 in three months, reading 5 articles a week"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例：3か月でCET-6に合格し、毎週記事を5本読む"
+          }
+        }
+      }
+    },
+    "保存前可编辑 · 取消不落库 · AI 保存一次写入 Goal+阶段+任务": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存前可编辑 · 取消不落库 · AI 保存一次写入 Goal+阶段+任务"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit before saving. Closing does not write. Save writes the goal, milestones, and tasks together."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存前に編集できます。閉じても書き込まれません。保存すると目標・段階・タスクを一度に書き込みます。"
+          }
+        }
+      }
+    },
+    "保留当前草稿并继续编辑": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保留当前草稿并继续编辑"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep this draft and keep editing"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この下書きを残して編集を続ける"
+          }
+        }
+      }
+    },
+    "免费每日 3 次再生成已用尽。升级 Pro 可无限再生成。": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "免费每日 3 次再生成已用尽。升级 Pro 可无限再生成。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's 3 free regenerations are used up. Pro regenerates without a daily cap."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料の再生成（1日3回）を使い切りました。Pro なら回数の上限なく再生成できます。"
+          }
+        }
+      }
+    },
+    "可选情境（可多选）": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可选情境（可多选）"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Optional context (select any)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "任意の状況（複数選択可）"
+          }
+        }
+      }
+    },
+    "可选用分语种模板，或直接手动填写。语言切换不受影响。": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可选用分语种模板，或直接手动填写。语言切换不受影响。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use a language template, or fill the form yourself. Switching language still works."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "言語別のテンプレートを使うか、そのまま手入力できます。言語の切り替えには影響しません。"
+          }
+        }
+      }
+    },
+    "您已修改内容。关闭确认卡将不写入目标 / 阶段 / 任务。": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "您已修改内容。关闭确认卡将不写入目标 / 阶段 / 任务。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You changed this draft. Closing it will not save the goal, milestones, or tasks."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "内容を変更しています。閉じると目標・段階・タスクは保存されません。"
+          }
+        }
+      }
+    },
+    "改用手动填写（只建目标壳，不写阶段/任务）": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "改用手动填写（只建目标壳，不写阶段/任务）"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fill in manually (goal only, no milestones or tasks)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "手入力に切り替える（目標だけ作り、段階とタスクは書きません）"
+          }
+        }
+      }
+    },
+    "放弃草稿": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "放弃草稿"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Discard draft"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "下書きを破棄"
+          }
+        }
+      }
+    },
+    "无限再生成（与目标数量上限分开计量）": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "无限再生成（与目标数量上限分开计量）"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unlimited regeneration (counted separately from the active-goal limit)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無制限の再生成（進行中の目標数とは別に数えます）"
+          }
+        }
+      }
+    },
+    "未归入阶段": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未归入阶段"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not in a milestone"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "段階に入っていない"
+          }
+        }
+      }
+    },
+    "本机 AI 暂不可用": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本机 AI 暂不可用"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "On-device AI is unavailable"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このデバイスの AI は今使えません"
+          }
+        }
+      }
+    },
+    "生成时可取消，手动表单始终保留": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成时可取消，手动表单始终保留"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You can cancel while it generates. The manual form stays available."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "生成中でもキャンセルでき、手入力フォームはそのまま残ります。"
+          }
+        }
+      }
+    },
+    "用一句话描述你想达成的目标，本机生成可编辑阶段与任务。": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "用一句话描述你想达成的目标，本机生成可编辑阶段与任务。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Describe the goal in one sentence. This device drafts editable milestones and tasks."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "達成したいことを一文で書いてください。このデバイス上で、編集できる段階とタスクを作ります。"
+          }
+        }
+      }
+    },
+    "类型预设 · 名称 · Emoji · 分类 · 天数 · 截止日": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "类型预设 · 名称 · Emoji · 分类 · 天数 · 截止日"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type preset · Name · Emoji · Category · Days · Deadline"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "種類 · 名前 · 絵文字 · 分類 · 日数 · 期限"
+          }
+        }
+      }
+    },
+    "设备支持且模型可用时可重试": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "设备支持且模型可用时可重试"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Try again when this device and the model are available."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デバイスとモデルが使えるときに再試行できます。"
+          }
+        }
+      }
+    },
+    "阶段 ≤5 · 任务 ≤8 · 可取消回手动": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "阶段 ≤5 · 任务 ≤8 · 可取消回手动"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Up to 5 milestones · 8 tasks · Cancel returns to manual"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "段階≤5 · タスク≤8 · キャンセルして手入力に戻れます"
+          }
+        }
+      }
+    },
+    "阶段与任务（阶段≤5 · 任务≤8）": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "阶段与任务（阶段≤5 · 任务≤8）"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Milestones and tasks (≤5 · ≤8)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "段階とタスク（段階≤5 · タスク≤8）"
+          }
+        }
+      }
+    },
+    "首次生成免费 · 再生成每日 3 次（与目标数上限分开）": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "首次生成免费 · 再生成每日 3 次（与目标数上限分开）"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The first draft is free · 3 regenerations a day (separate from the goal limit)"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "初回の生成は無料 · 再生成は1日3回（目標数の上限とは別）"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

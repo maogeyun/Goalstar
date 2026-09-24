@@ -12,10 +12,22 @@ enum GoalDraftOutcome {
 
 /// On-device draft generation. No cloud inference and no ML account.
 /// iOS 26+ Foundation Models when `SystemLanguageModel` is available; otherwise a language-specific template.
+enum OnDeviceModelAvailability {
+    /// False when Foundation Models cannot be imported, the OS is below 26, or the system model is unavailable.
+    static var isReady: Bool {
+        #if canImport(FoundationModels)
+        if #available(iOS 26.0, *) {
+            return FoundationModelsGoalDraftClient.isAvailable
+        }
+        #endif
+        return false
+    }
+}
+
 enum OnDeviceGoalDraftGenerator {
     static func make(
         sentence: String,
-        chip: GoalContextChip?,
+        chips: Set<GoalContextChip>,
         language: AppLanguage
     ) async -> GoalDraftOutcome {
         let started = Date()
@@ -24,11 +36,11 @@ enum OnDeviceGoalDraftGenerator {
             do {
                 let generated = try await FoundationModelsGoalDraftClient.generate(
                     sentence: sentence,
-                    chip: chip,
+                    chips: chips,
                     language: language
                 )
                 if Task.isCancelled { return .cancelled }
-                let merged = merge(model: generated, sentence: sentence, chip: chip, language: language)
+                let merged = merge(model: generated, sentence: sentence, chips: chips, language: language)
                 return .ready(
                     merged.draft,
                     source: merged.usedFallback ? .template : .model,
@@ -39,7 +51,7 @@ enum OnDeviceGoalDraftGenerator {
                 return .cancelled
             } catch {
                 if Task.isCancelled { return .cancelled }
-                let template = GoalDraftTemplates.make(sentence: sentence, chip: chip, language: language)
+                let template = GoalDraftTemplates.make(sentence: sentence, chips: chips, language: language)
                 return .ready(
                     template,
                     source: .template,
@@ -50,7 +62,7 @@ enum OnDeviceGoalDraftGenerator {
         }
         #endif
         if Task.isCancelled { return .cancelled }
-        let template = GoalDraftTemplates.make(sentence: sentence, chip: chip, language: language)
+        let template = GoalDraftTemplates.make(sentence: sentence, chips: chips, language: language)
         return .ready(
             template,
             source: .template,
@@ -62,10 +74,10 @@ enum OnDeviceGoalDraftGenerator {
     private static func merge(
         model: GoalDraftDTO,
         sentence: String,
-        chip: GoalContextChip?,
+        chips: Set<GoalContextChip>,
         language: AppLanguage
     ) -> (draft: GoalDraftDTO, usedFallback: Bool) {
-        let template = GoalDraftTemplates.make(sentence: sentence, chip: chip, language: language)
+        let template = GoalDraftTemplates.make(sentence: sentence, chips: chips, language: language)
         var draft = model.normalized(fallbackName: sentence)
         let missingStructure = draft.milestones.isEmpty && draft.tasks.isEmpty
         if draft.name.isEmpty {
@@ -124,9 +136,16 @@ struct GoalDraftTaskGeneration {
 
 @available(iOS 26.0, *)
 enum FoundationModelsGoalDraftClient {
+    static var isAvailable: Bool {
+        if case .available = SystemLanguageModel.default.availability {
+            return true
+        }
+        return false
+    }
+
     static func generate(
         sentence: String,
-        chip: GoalContextChip?,
+        chips: Set<GoalContextChip>,
         language: AppLanguage
     ) async throws -> GoalDraftDTO {
         switch SystemLanguageModel.default.availability {
@@ -137,7 +156,7 @@ enum FoundationModelsGoalDraftClient {
         }
 
         let instructionsText = instructions(language: language)
-        let promptText = prompt(sentence: sentence, chip: chip, language: language)
+        let promptText = prompt(sentence: sentence, chips: chips, language: language)
         let response = try await withTimeout(seconds: 15) {
             let session = LanguageModelSession(instructions: instructionsText)
             return try await session.respond(
@@ -158,13 +177,17 @@ enum FoundationModelsGoalDraftClient {
         """
     }
 
-    private static func prompt(sentence: String, chip: GoalContextChip?, language: AppLanguage) -> String {
+    private static func prompt(sentence: String, chips: Set<GoalContextChip>, language: AppLanguage) -> String {
         var lines = [
             "Output language: \(language.promptLanguageName).",
             "User sentence: \(sentence)"
         ]
-        if let chip {
-            lines.append("Optional context chip: \(chip.title(language: language)). Use it only as a hint. Do not replace the user's sentence.")
+        let ordered = GoalContextChip.allCases.filter { chips.contains($0) }
+        if !ordered.isEmpty {
+            let names = ordered.map { $0.title(language: language) }.joined(separator: ", ")
+            lines.append(
+                "Optional context chips (hints only): \(names). Use them only to strengthen the draft. Do not replace the user's sentence. Do not choose or change a goal type preset, category, or emoji."
+            )
         }
         lines.append("Return 2 to 5 milestones and 3 to 8 tasks. No identifiers.")
         return lines.joined(separator: "\n")
