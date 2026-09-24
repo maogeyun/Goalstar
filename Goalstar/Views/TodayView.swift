@@ -75,7 +75,6 @@ struct TodayView: View {
                 }
                 .padding(.horizontal, GSSpacing.page)
                 .padding(.top, 8)
-                .padding(.bottom, GSSpacing.tabContentBottomWithFAB)
             }
             .skeletonRefreshable(isRefreshing: $isRefreshing) {
                 await store.refreshTodayPage(context: context, goals: activeGoals, tasks: allTasks)

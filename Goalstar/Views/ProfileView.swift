@@ -33,7 +33,6 @@ struct ProfileView: View {
                 }
                 .padding(.horizontal, GSSpacing.page)
                 .padding(.top, 8)
-                .padding(.bottom, 100)
             }
         }
         .onAppear {

@@ -10,8 +10,6 @@ enum GSSpacing {
     static let xl: CGFloat = 20
     static let xxl: CGFloat = 24
     static let page: CGFloat = 16
-    static let tabContentBottom: CGFloat = 100
-    static let tabContentBottomWithFAB: CGFloat = 120
 }
 
 enum GSRadius {

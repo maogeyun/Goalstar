@@ -609,45 +609,6 @@ struct FABButton: View {
     }
 }
 
-struct GSTabBar: View {
-    @Binding var selection: AppStore.AppTab
-
-    var body: some View {
-        VStack(spacing: 0) {
-            Rectangle()
-                .fill(GSColor.border)
-                .frame(height: 1)
-            HStack(spacing: 0) {
-                ForEach(AppStore.AppTab.allCases) { tab in
-                    Button {
-                        selection = tab
-                    } label: {
-                        VStack(spacing: 4) {
-                            GSIcon(
-                                name: tab.icon,
-                                size: 20,
-                                color: selection == tab ? GSColor.brandDeep : GSColor.textSecondary,
-                                lineWidth: selection == tab ? 2 : 1.6
-                            )
-                            Text(tab.title)
-                                .font(GSFont.semibold(GSFont.xs + 2))
-                                .foregroundStyle(selection == tab ? GSColor.brandDeep : GSColor.textSecondary)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, 6)
-                        .padding(.bottom, 4)
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            .frame(height: 49)
-            .padding(.horizontal, 12)
-        }
-        .background(GSColor.surfaceCard.ignoresSafeArea(edges: .bottom))
-    }
-}
-
 struct SectionHeader: View {
     let title: String
     var trailing: String? = nil

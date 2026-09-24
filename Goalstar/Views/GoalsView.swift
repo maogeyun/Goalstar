@@ -87,7 +87,6 @@ struct GoalsView: View {
                 }
                 .padding(.horizontal, GSSpacing.page)
                 .padding(.top, 8)
-                .padding(.bottom, GSSpacing.tabContentBottomWithFAB)
             }
             .skeletonRefreshable(isRefreshing: $isRefreshing) {
                 await store.refreshGoalsPage(context: context, goals: goals, tasks: allTasks)
