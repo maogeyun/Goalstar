@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct GSIcon: View {
     let name: GSIconName
@@ -211,5 +212,53 @@ private struct IconShape: Shape {
             path.addLine(to: p(7, 17))
         }
         return path
+    }
+}
+
+/// Template images of the existing tab icons, so the system tab bar keeps
+/// the same marks (house / target / timer / chart / user) as the pages.
+@MainActor
+enum GSTabSymbol {
+    private static var cache: [AppStore.AppTab: UIImage] = [:]
+    private static var attempted: Set<AppStore.AppTab> = []
+
+    static func image(_ tab: AppStore.AppTab) -> Image {
+        let rendered = uiImage(for: tab)
+        if rendered.size.width > 1 {
+            return Image(uiImage: rendered)
+        }
+        return Image(systemName: systemName(tab))
+    }
+
+    private static func uiImage(for tab: AppStore.AppTab) -> UIImage {
+        if let cached = cache[tab] {
+            return cached
+        }
+        if attempted.contains(tab) {
+            return UIImage()
+        }
+        attempted.insert(tab)
+        let renderer = ImageRenderer(
+            content: GSIcon(name: tab.icon, size: 20, color: .black, lineWidth: 1.75)
+                .frame(width: 24, height: 24)
+        )
+        renderer.scale = 3
+        renderer.isOpaque = false
+        guard let rendered = renderer.uiImage, rendered.size.width > 1 else {
+            return UIImage()
+        }
+        let image = rendered.withRenderingMode(.alwaysTemplate)
+        cache[tab] = image
+        return image
+    }
+
+    private static func systemName(_ tab: AppStore.AppTab) -> String {
+        switch tab {
+        case .today: return "house"
+        case .goals: return "target"
+        case .focus: return "timer"
+        case .data: return "chart.bar"
+        case .profile: return "person"
+        }
     }
 }
