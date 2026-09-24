@@ -98,7 +98,6 @@ struct DataView: View {
                 }
                 .padding(.horizontal, GSSpacing.page)
                 .padding(.top, 8)
-                .padding(.bottom, GSSpacing.tabContentBottom)
             }
             .skeletonRefreshable(isRefreshing: $isRefreshing) {
                 await store.refreshDataPage(context: context, goals: goals, tasks: tasks)

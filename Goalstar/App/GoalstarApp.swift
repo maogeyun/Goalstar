@@ -295,18 +295,153 @@ struct RootTabView: View {
     }
 }
 
-/// iOS 26: system Liquid Glass capsule. Reduce Transparency swaps that capsule
-/// for the solid plate in the dual-state frame. A custom bar background would
-/// replace both. Older systems get the solid system tab bar.
+/// Opaque system tab bar while Reduce Transparency or Increase Contrast is on.
+/// Turning both off clears that appearance so iOS 26 Liquid Glass comes back.
 private struct RootTabBarChrome: ViewModifier {
-    @ViewBuilder
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+
+    private var forceOpaque: Bool {
+        reduceTransparency || colorSchemeContrast == .increased
+    }
+
     func body(content: Content) -> some View {
-        if #available(iOS 26.0, *) {
-            content
-        } else {
-            content
-                .toolbarBackground(.visible, for: .tabBar)
-                .toolbarBackground(GSColor.surfaceCard, for: .tabBar)
+        content.background {
+            TabBarOpaqueBridge(forceOpaque: forceOpaque)
+                .frame(width: 0, height: 0)
+                .allowsHitTesting(false)
+                .accessibilityHidden(true)
         }
+    }
+}
+
+private struct TabBarOpaqueBridge: UIViewControllerRepresentable {
+    var forceOpaque: Bool
+
+    func makeUIViewController(context: Context) -> TabBarOpaqueBridgeController {
+        TabBarOpaqueBridgeController()
+    }
+
+    func updateUIViewController(_ controller: TabBarOpaqueBridgeController, context: Context) {
+        controller.forceOpaque = forceOpaque
+        controller.apply()
+    }
+}
+
+private final class TabBarOpaqueBridgeController: UIViewController {
+    var forceOpaque = false
+    private var tokens: [NSObjectProtocol] = []
+    private var contrastRegistration: (any UITraitChangeRegistration)?
+    private var appliedOpaque: Bool?
+    private weak var styledBar: UITabBar?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.isUserInteractionEnabled = false
+        view.backgroundColor = .clear
+        let names = [
+            UIAccessibility.reduceTransparencyStatusDidChangeNotification,
+            UIAccessibility.darkerSystemColorsStatusDidChangeNotification
+        ]
+        tokens = names.map { name in
+            NotificationCenter.default.addObserver(
+                forName: name,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                self?.syncFromAccessibility()
+            }
+        }
+        contrastRegistration = registerForTraitChanges([UITraitAccessibilityContrast.self]) { (controller: Self, _: UITraitCollection) in
+            controller.syncFromAccessibility()
+        }
+    }
+
+    deinit {
+        tokens.forEach { NotificationCenter.default.removeObserver($0) }
+        contrastRegistration = nil
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        apply()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if styledBar == nil || appliedOpaque != Optional(forceOpaque) {
+            apply()
+        }
+    }
+
+    private func syncFromAccessibility() {
+        forceOpaque = UIAccessibility.isReduceTransparencyEnabled
+            || UIAccessibility.isDarkerSystemColorsEnabled
+            || traitCollection.accessibilityContrast == .high
+        apply()
+    }
+
+    func apply() {
+        guard let tabBar = resolveTabBar() else { return }
+        if styledBar !== tabBar {
+            styledBar = tabBar
+            appliedOpaque = nil
+        }
+        if appliedOpaque == forceOpaque { return }
+
+        if forceOpaque {
+            let appearance = UITabBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            applyItemColors(to: appearance)
+            tabBar.standardAppearance = appearance
+            tabBar.scrollEdgeAppearance = appearance
+            appliedOpaque = true
+        } else if appliedOpaque == true {
+            // Bare appearance: do not call configureWithOpaqueBackground /
+            // configureWithDefaultBackground, or iOS 26 keeps the opaque plate
+            // instead of returning to Liquid Glass.
+            let appearance = UITabBarAppearance()
+            tabBar.standardAppearance = appearance
+            tabBar.scrollEdgeAppearance = nil
+            tabBar.tintColor = UIColor(GSColor.brandDeep)
+            tabBar.unselectedItemTintColor = UIColor(Color(hex: 0x1A1A1A))
+            appliedOpaque = false
+        } else {
+            appliedOpaque = false
+        }
+    }
+
+    private func applyItemColors(to appearance: UITabBarAppearance) {
+        let selected = UIColor(GSColor.brandDeep)
+        let normal = UIColor(Color(hex: 0x1A1A1A))
+        for layout in [
+            appearance.stackedLayoutAppearance,
+            appearance.inlineLayoutAppearance,
+            appearance.compactInlineLayoutAppearance
+        ] {
+            layout.normal.iconColor = normal
+            layout.normal.titleTextAttributes = [.foregroundColor: normal]
+            layout.selected.iconColor = selected
+            layout.selected.titleTextAttributes = [.foregroundColor: selected]
+        }
+    }
+
+    private func resolveTabBar() -> UITabBar? {
+        if let bar = tabBarController?.tabBar { return bar }
+        var ancestor = parent
+        while let current = ancestor {
+            if let tabs = current as? UITabBarController { return tabs.tabBar }
+            ancestor = current.parent
+        }
+        guard let root = view.window?.rootViewController else { return nil }
+        return firstTabBar(in: root)
+    }
+
+    private func firstTabBar(in controller: UIViewController) -> UITabBar? {
+        if let tabs = controller as? UITabBarController { return tabs.tabBar }
+        for child in controller.children {
+            if let bar = firstTabBar(in: child) { return bar }
+        }
+        return nil
     }
 }
