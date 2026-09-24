@@ -1,6 +1,12 @@
 import SwiftUI
 import SwiftData
 
+private enum GoalCreatePhase {
+    case editing
+    case generating
+    case confirm
+}
+
 struct CreateSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
@@ -12,7 +18,7 @@ struct CreateSheet: View {
     @State private var title = ""
     @State private var minutes = 25
     @State private var days = 30
-    @State private var category = "语言学习"
+    @State private var category = L10n.s("语言学习")
     @State private var emoji = "📖"
     @State private var selectedGoalID: UUID?
     @State private var selectedMilestoneID: UUID?
@@ -22,84 +28,162 @@ struct CreateSheet: View {
     @State private var endDate = Calendar.current.date(byAdding: .day, value: 30, to: Date()) ?? Date()
     @State private var titleError: String?
 
-    private let goalPresets: [(String, String, String)] = [
-        ("语言学习", "📖", "系统学习英语"),
-        ("工作项目", "💼", "推进本周关键交付"),
-        ("健康运动", "💪", "每周三次力量训练"),
-        ("生活习惯", "🌱", "早睡早起 30 天")
-    ]
+    @State private var prompt = ""
+    @State private var chip: GoalContextChip?
+    @State private var phase: GoalCreatePhase = .editing
+    @State private var draft = GoalDraftDTO.empty
+    @State private var draftBaseline = GoalDraftDTO.empty
+    @State private var aiNotice: String?
+    @State private var confirmNotice: String?
+    @State private var confirmLimitMessage: String?
+    @State private var isRegenerating = false
+    @State private var showDiscard = false
+    @State private var pendingDismiss = false
+    @State private var pendingMode: CreateFormMode?
+    @State private var generateTask: Task<Void, Never>?
+    @State private var sheetOpenedAt = Date()
+    @State private var didConfigure = false
+    @State private var activePaywall: ProPaywallContext?
+    @FocusState private var oneLinerFocused: Bool
+
+    private var goalPresets: [(String, String, String)] {
+        [
+            (L10n.s("语言学习"), "📖", L10n.s("系统学习英语")),
+            (L10n.s("工作项目"), "💼", L10n.s("推进本周关键交付")),
+            (L10n.s("健康运动"), "💪", L10n.s("每周三次力量训练")),
+            (L10n.s("生活习惯"), "🌱", L10n.s("早睡早起 30 天"))
+        ]
+    }
 
     private var lockToGoalMode: Bool { goals.isEmpty }
+    private var showConfirm: Bool { phase == .confirm && mode == .goal }
+    private var draftIsDirty: Bool { draft != draftBaseline }
 
     var body: some View {
         NavigationStack {
-            ScrollView(showsIndicators: false) {
-                VStack(alignment: .leading, spacing: GSSpacing.lg) {
-                    if !lockToGoalMode {
-                        Picker("", selection: $mode) {
-                            ForEach(CreateFormMode.allCases) { m in
-                                Text(m.title).tag(m)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .tint(GSColor.brand)
-                    }
-
-                    if mode == .task && !lockToGoalMode {
-                        taskForm
-                    } else {
-                        goalForm
-                    }
-
-                    if let titleError {
-                        Text(titleError)
-                            .font(GSFont.semibold(GSFont.lg))
-                            .foregroundStyle(GSColor.danger)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        if titleError == ProEntitlement.freeGoalLimitMessage {
-                            OutlineActionButton(title: "升级 Pro") {
-                                store.requestProPaywall()
-                            }
-                        }
-                    }
-
-                    PrimaryButton(title: "保存") {
-                        save()
-                    }
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(spacing: 0) {
+                GoalTaskSegmentedControl(
+                    mode: segmentMode,
+                    taskEnabled: !lockToGoalMode,
+                    goalTitle: CreateFormMode.goal.segmentTitle,
+                    taskTitle: CreateFormMode.task.segmentTitle
+                )
                 .padding(.horizontal, GSSpacing.page)
                 .padding(.top, 8)
-                .padding(.bottom, 32)
+                .padding(.bottom, 4)
+
+                if showConfirm {
+                    ConfirmDraftView(
+                        draft: $draft,
+                        isRegenerating: isRegenerating,
+                        remainingRegen: RegenQuotaStore.remaining(isPro: store.isPro),
+                        notice: confirmNotice,
+                        limitMessage: confirmLimitMessage,
+                        onRegen: { startGenerate(regenerating: true) },
+                        onSave: saveDraft,
+                        onManual: useManualForm,
+                        onUpgradeGoalLimit: { activePaywall = .goals }
+                    )
+                } else {
+                    editingContent
+                }
             }
             .background(PageBackground())
-            .navigationTitle(lockToGoalMode ? CreateFormMode.goal.title : mode.title)
+            .navigationTitle(showConfirm ? L10n.s("确认草稿") : navigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") {
-                        store.clearCreateSheetPreferences()
-                        dismiss()
+                    Button(L10n.s("取消")) { attemptClose() }
+                }
+            }
+            .onAppear(perform: configureIfNeeded)
+        }
+        .confirmationDialog(L10n.s("放弃草稿？"), isPresented: $showDiscard, titleVisibility: .visible) {
+            Button(L10n.s("放弃"), role: .destructive) {
+                confirmDiscard()
+            }
+            Button(L10n.s("继续编辑"), role: .cancel) {
+                pendingDismiss = false
+                pendingMode = nil
+            }
+        } message: {
+            Text(L10n.s("未保存的草稿不会写入。"))
+        }
+        .sheet(item: $activePaywall) { context in
+            ProPaywallSheet(context: context)
+                .environmentObject(store)
+                .presentationDetents([.medium, .large])
+        }
+    }
+
+    private var navigationTitle: String {
+        lockToGoalMode ? CreateFormMode.goal.title : mode.title
+    }
+
+    private var segmentMode: Binding<CreateFormMode> {
+        Binding(
+            get: { mode },
+            set: { requestMode($0) }
+        )
+    }
+
+    private var editingContent: some View {
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: GSSpacing.lg) {
+                if mode == .task && !lockToGoalMode {
+                    taskForm
+                } else {
+                    GoalAISection(
+                        prompt: $prompt,
+                        chip: $chip,
+                        isGenerating: phase == .generating,
+                        notice: aiNotice,
+                        focused: $oneLinerFocused,
+                        onGenerate: { startGenerate(regenerating: false) },
+                        onCancel: cancelGenerate
+                    )
+                    manualDivider
+                    goalForm
+                }
+
+                if let titleError {
+                    Text(titleError)
+                        .font(GSFont.semibold(GSFont.lg))
+                        .foregroundStyle(GSColor.danger)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    if titleError == ProEntitlement.freeGoalLimitMessage {
+                        OutlineActionButton(title: L10n.s("升级 Pro")) {
+                            store.requestProPaywall()
+                        }
+                    }
+                }
+
+                if phase != .generating {
+                    PrimaryButton(title: L10n.s("保存")) {
+                        save()
                     }
                 }
             }
-            .onAppear {
-                if lockToGoalMode || store.createSheetMode == .goal {
-                    mode = .goal
-                } else {
-                    mode = store.createSheetMode
-                }
-                if let preferred = store.createSheetPreferredGoalID {
-                    selectedGoalID = preferred
-                } else {
-                    selectedGoalID = goals.first(where: \.isPrimary)?.id ?? goals.first?.id
-                }
-                let day = store.createSheetScheduledDate
-                taskStartDate = day
-                taskEndDate = day
-                syncMilestoneSelection(for: selectedGoalID)
-                clampTaskDatesToSelectedMilestone()
-            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, GSSpacing.page)
+            .padding(.top, 8)
+            .padding(.bottom, 32)
+        }
+    }
+
+    private var manualDivider: some View {
+        HStack(spacing: 12) {
+            Rectangle()
+                .fill(GSColor.border)
+                .frame(height: 1)
+            Text(L10n.s("或手动填写"))
+                .font(GSFont.semibold(GSFont.md))
+                .foregroundStyle(GSColor.textSecondary)
+                .lineLimit(1)
+                .fixedSize()
+            Rectangle()
+                .fill(GSColor.border)
+                .frame(height: 1)
         }
     }
 
@@ -156,15 +240,15 @@ struct CreateSheet: View {
     private var taskForm: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 8) {
-                DetailFieldLabel(text: "任务名称")
-                TextField("例如：完成英语阅读", text: $title)
+                DetailFieldLabel(text: L10n.s("任务名称"))
+                TextField(L10n.s("例如：完成英语阅读"), text: $title)
                     .textFieldStyle(GSTextFieldStyle())
                     .onChange(of: title) { _, _ in titleError = nil }
             }
 
-            DetailFormRow(label: "时长（分钟）") {
+            DetailFormRow(label: L10n.s("时长（分钟）")) {
                 HStack(spacing: 8) {
-                    Text("\(minutes) min")
+                    Text(L10n.f("%d min", minutes))
                         .font(GSFont.semibold(GSFont.lg))
                         .foregroundStyle(GSColor.textPrimary)
                         .lineLimit(1)
@@ -175,7 +259,7 @@ struct CreateSheet: View {
             }
 
             DatePickerFormRow(
-                title: "开始日期",
+                title: L10n.s("开始日期"),
                 selection: $taskStartDate,
                 range: taskDateBounds
             )
@@ -186,7 +270,7 @@ struct CreateSheet: View {
             }
 
             DatePickerFormRow(
-                title: "结束日期",
+                title: L10n.s("结束日期"),
                 selection: $taskEndDate,
                 range: taskEndDateRange
             )
@@ -196,13 +280,13 @@ struct CreateSheet: View {
             }
 
             if let range = taskDateBounds {
-                Text("需在阶段范围内：\(GSFormat.dateRangeLabel(start: range.lowerBound, end: range.upperBound))")
+                Text(L10n.f("需在阶段范围内：%@", GSFormat.dateRangeLabel(start: range.lowerBound, end: range.upperBound)))
                     .font(GSFont.semibold(GSFont.md))
                     .foregroundStyle(GSColor.textSecondary)
             }
 
-            MenuPickerFormRow(title: "关联目标", selection: $selectedGoalID) {
-                Text("无").tag(UUID?.none)
+            MenuPickerFormRow(title: L10n.s("关联目标"), selection: $selectedGoalID) {
+                Text(L10n.s("无")).tag(UUID?.none)
                 ForEach(goals, id: \.id) { g in
                     Text("\(g.emoji) \(g.name)")
                         .lineLimit(1)
@@ -214,8 +298,8 @@ struct CreateSheet: View {
             }
 
             if let goal = selectedGoal, !goal.sortedMilestones.isEmpty {
-                MenuPickerFormRow(title: "关联阶段", selection: $selectedMilestoneID) {
-                    Text("自动（当前阶段）")
+                MenuPickerFormRow(title: L10n.s("关联阶段"), selection: $selectedMilestoneID) {
+                    Text(L10n.s("自动（当前阶段）"))
                         .lineLimit(1)
                         .tag(UUID?.none)
                     ForEach(goal.sortedMilestones, id: \.id) { milestone in
@@ -229,7 +313,7 @@ struct CreateSheet: View {
                 }
             }
 
-            DetailFormRow(label: "设为优先") {
+            DetailFormRow(label: L10n.s("设为优先")) {
                 Toggle("", isOn: $priority)
                     .labelsHidden()
                     .tint(GSColor.brand)
@@ -242,7 +326,7 @@ struct CreateSheet: View {
     private var goalForm: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 8) {
-                DetailFieldLabel(text: "类型预设")
+                DetailFieldLabel(text: L10n.s("类型预设"))
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 10) {
                         ForEach(goalPresets, id: \.0) { preset in
@@ -265,27 +349,27 @@ struct CreateSheet: View {
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                DetailFieldLabel(text: "目标名称")
-                TextField("例如：系统学习英语", text: $title)
+                DetailFieldLabel(text: L10n.s("目标名称"))
+                TextField(L10n.s("例如：系统学习英语"), text: $title)
                     .textFieldStyle(GSTextFieldStyle())
                     .onChange(of: title) { _, _ in titleError = nil }
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                DetailFieldLabel(text: "分类")
-                TextField("语言学习", text: $category)
+                DetailFieldLabel(text: L10n.s("分类"))
+                TextField(L10n.s("语言学习"), text: $category)
                     .textFieldStyle(GSTextFieldStyle())
             }
 
             VStack(alignment: .leading, spacing: 8) {
-                DetailFieldLabel(text: "Emoji")
+                DetailFieldLabel(text: L10n.s("Emoji"))
                 TextField("📖", text: $emoji)
                     .textFieldStyle(GSTextFieldStyle())
             }
 
-            DetailFormRow(label: "计划天数") {
+            DetailFormRow(label: L10n.s("计划天数")) {
                 HStack(spacing: 8) {
-                    Text("\(days) 天")
+                    Text(L10n.f("%d 天", days))
                         .font(GSFont.semibold(GSFont.lg))
                         .foregroundStyle(GSColor.textPrimary)
                         .lineLimit(1)
@@ -302,7 +386,7 @@ struct CreateSheet: View {
             }
 
             DatePickerFormRow(
-                title: "截止日期（可选）",
+                title: L10n.s("截止日期（可选）"),
                 selection: Binding(
                     get: { endDate },
                     set: { newValue in
@@ -314,7 +398,7 @@ struct CreateSheet: View {
                 )
             )
 
-            Text("衡量方式：默认按任务完成推进")
+            Text(L10n.s("衡量方式：默认按任务完成推进"))
                 .font(GSFont.semibold(GSFont.base, relativeTo: .caption))
                 .foregroundStyle(GSColor.textSecondary)
         }
@@ -322,10 +406,204 @@ struct CreateSheet: View {
         .gsCard(radius: GSRadius.panel, padding: 16)
     }
 
+    private func configureIfNeeded() {
+        guard !didConfigure else { return }
+        didConfigure = true
+        sheetOpenedAt = Date()
+        if lockToGoalMode || store.createSheetMode == .goal {
+            mode = .goal
+        } else {
+            mode = store.createSheetMode
+        }
+        if let preferred = store.createSheetPreferredGoalID {
+            selectedGoalID = preferred
+        } else {
+            selectedGoalID = goals.first(where: \.isPrimary)?.id ?? goals.first?.id
+        }
+        let day = store.createSheetScheduledDate
+        taskStartDate = day
+        taskEndDate = day
+        syncMilestoneSelection(for: selectedGoalID)
+        clampTaskDatesToSelectedMilestone()
+        if mode == .goal && store.createSheetEntry == .oneLiner {
+            oneLinerFocused = true
+        }
+    }
+
+    private func requestMode(_ newMode: CreateFormMode) {
+        guard newMode != mode else { return }
+        if newMode == .task && lockToGoalMode { return }
+        if showConfirm {
+            pendingMode = newMode
+            pendingDismiss = false
+            if draftIsDirty {
+                showDiscard = true
+            } else {
+                confirmDiscard()
+            }
+            return
+        }
+        if phase == .generating {
+            cancelGenerate()
+        }
+        mode = newMode
+    }
+
+    private func attemptClose() {
+        if showConfirm {
+            pendingMode = nil
+            if draftIsDirty {
+                pendingDismiss = true
+                showDiscard = true
+            } else {
+                GoalstarAnalytics.track("goal_ai_discard", ["edited": "false"])
+                store.clearCreateSheetPreferences()
+                dismiss()
+            }
+            return
+        }
+        if phase == .generating {
+            cancelGenerate()
+        }
+        store.clearCreateSheetPreferences()
+        dismiss()
+    }
+
+    private func confirmDiscard() {
+        GoalstarAnalytics.track("goal_ai_discard", ["edited": draftIsDirty ? "true" : "false"])
+        generateTask?.cancel()
+        generateTask = nil
+        isRegenerating = false
+        phase = .editing
+        let shouldDismiss = pendingDismiss
+        let nextMode = pendingMode
+        pendingDismiss = false
+        pendingMode = nil
+        if shouldDismiss {
+            store.clearCreateSheetPreferences()
+            dismiss()
+            return
+        }
+        if let nextMode {
+            mode = nextMode
+        }
+    }
+
+    private func startGenerate(regenerating: Bool) {
+        let sentence = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !sentence.isEmpty else {
+            aiNotice = L10n.s("请先写一句话")
+            return
+        }
+        if regenerating && !RegenQuotaStore.canRegenerate(isPro: store.isPro) {
+            GoalstarAnalytics.track("goal_ai_regen_blocked", [
+                "language": AppLanguagePreference.current.analyticsCode
+            ])
+            activePaywall = .regen
+            return
+        }
+        GoalstarAnalytics.track(regenerating ? "goal_ai_regen_tap" : "goal_ai_generate_tap", [
+            "language": AppLanguagePreference.current.analyticsCode
+        ])
+        aiNotice = nil
+        if regenerating {
+            isRegenerating = true
+        } else {
+            phase = .generating
+        }
+        let selectedChip = chip
+        let language = AppLanguagePreference.current
+        generateTask?.cancel()
+        generateTask = Task {
+            let outcome = await OnDeviceGoalDraftGenerator.make(
+                sentence: sentence,
+                chip: selectedChip,
+                language: language
+            )
+            if Task.isCancelled { return }
+            apply(outcome, regenerating: regenerating)
+        }
+    }
+
+    private func cancelGenerate() {
+        generateTask?.cancel()
+        generateTask = nil
+        isRegenerating = false
+        if phase == .generating {
+            phase = .editing
+        }
+    }
+
+    private func apply(_ outcome: GoalDraftOutcome, regenerating: Bool) {
+        isRegenerating = false
+        switch outcome {
+        case .cancelled:
+            if !regenerating, phase == .generating {
+                phase = .editing
+            }
+        case .ready(let next, let source, let reason, let milliseconds):
+            var properties = [
+                "language": AppLanguagePreference.current.analyticsCode,
+                "generate_ms": String(milliseconds),
+                "source": source.rawValue
+            ]
+            if source == .template {
+                if let reason { properties["fail_reason"] = reason }
+                GoalstarAnalytics.track("goal_ai_generate_fail", properties)
+                GoalstarAnalytics.track("goal_ai_fallback_template", properties)
+            } else {
+                GoalstarAnalytics.track("goal_ai_generate_ok", properties)
+            }
+            if regenerating {
+                RegenQuotaStore.record(isPro: store.isPro)
+            }
+            draft = next
+            draftBaseline = next
+            confirmLimitMessage = nil
+            confirmNotice = next.usedTemplateFallback ? L10n.s("已使用模板草稿，可继续修改后保存") : nil
+            phase = .confirm
+            mode = .goal
+        }
+    }
+
+    private func useManualForm() {
+        let name = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !name.isEmpty { title = name }
+        phase = .editing
+        isRegenerating = false
+        confirmNotice = nil
+        mode = .goal
+    }
+
+    private func saveDraft() {
+        let edited = draft != draftBaseline
+        switch store.createGoalFromDraft(draft, context: context) {
+        case .success(let id):
+            let elapsed = Int(Date().timeIntervalSince(sheetOpenedAt) * 1000)
+            GoalstarAnalytics.track("goal_ai_edit_before_save", [
+                "edited": edited ? "true" : "false"
+            ])
+            GoalstarAnalytics.track("goal_ai_confirm_save", [
+                "create_to_save_ms": String(elapsed),
+                "fallback": draft.usedTemplateFallback ? "true" : "false",
+                "language": AppLanguagePreference.current.analyticsCode
+            ])
+            store.scheduleGoalDetail(id)
+            store.clearCreateSheetPreferences()
+            dismiss()
+        case .failure(.emptyName):
+            confirmLimitMessage = L10n.s("请输入目标名称")
+        case .failure(.goalLimit):
+            confirmLimitMessage = ProEntitlement.freeGoalLimitMessage
+        case .failure(.persistence):
+            confirmLimitMessage = L10n.s("保存失败，请重试")
+        }
+    }
+
     private func save() {
         let trimmed = title.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            titleError = mode == .goal || lockToGoalMode ? "请输入目标名称" : "请输入任务名称"
+            titleError = mode == .goal || lockToGoalMode ? L10n.s("请输入目标名称") : L10n.s("请输入任务名称")
             return
         }
         titleError = nil
@@ -349,7 +627,7 @@ struct CreateSheet: View {
             if let error = store.createGoal(
                 name: trimmed,
                 emoji: emoji.isEmpty ? "🎯" : emoji,
-                category: category.isEmpty ? "综合" : category,
+                category: category.isEmpty ? L10n.s("综合") : category,
                 days: days,
                 context: context
             ) {
@@ -392,9 +670,9 @@ struct TomorrowPreviewSheet: View {
                 if tomorrowTasks.isEmpty {
                     EmptyStateCard(
                         icon: .star,
-                        title: "明天还没有安排",
-                        message: "今晚可以先规划明天的三件事",
-                        actionTitle: "添加任务"
+                        title: L10n.s("明天还没有安排"),
+                        message: L10n.s("今晚可以先规划明天的三件事"),
+                        actionTitle: L10n.s("添加任务")
                     ) {
                         let cal = Calendar.current
                         let tomorrow = cal.date(byAdding: .day, value: 1, to: cal.startOfDay(for: Date())) ?? Date()
@@ -405,7 +683,7 @@ struct TomorrowPreviewSheet: View {
                 } else {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 12) {
-                            SectionHeader(title: "明日任务")
+                            SectionHeader(title: L10n.s("明日任务"))
                             ForEach(tomorrowTasks, id: \.id) { task in
                                 HStack(spacing: 12) {
                                     Circle()
@@ -415,7 +693,7 @@ struct TomorrowPreviewSheet: View {
                                         Text(task.title)
                                             .font(GSFont.semibold(GSFont.lg))
                                             .foregroundStyle(GSColor.textPrimary)
-                                        Text("\(task.durationMinutes) 分钟")
+                                        Text(L10n.f("%d 分钟", task.durationMinutes))
                                             .font(GSFont.semibold(GSFont.sm))
                                             .foregroundStyle(GSColor.textSecondary)
                                     }
@@ -430,11 +708,11 @@ struct TomorrowPreviewSheet: View {
             .padding(.horizontal, GSSpacing.page)
             .padding(.vertical, 16)
             .background(PageBackground())
-            .navigationTitle("明日预览")
+            .navigationTitle(L10n.s("明日预览"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("关闭") { dismiss() }
+                    Button(L10n.s("关闭")) { dismiss() }
                 }
             }
         }

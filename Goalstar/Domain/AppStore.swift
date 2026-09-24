@@ -11,6 +11,7 @@ final class AppStore: ObservableObject {
     @Published var selectedTab: AppTab = .today
     @Published var showCreateSheet = false
     @Published var createSheetMode: CreateFormMode = .task
+    @Published var createSheetEntry: CreateSheetEntry = .standard
     @Published var createSheetScheduledDate: Date = Calendar.current.startOfDay(for: Date())
     @Published var createSheetPreferredGoalID: UUID?
     @Published var pendingCreateAfterDismiss = false
@@ -61,8 +62,10 @@ final class AppStore: ObservableObject {
     private var liveActivityWatchTask: Task<Void, Never>?
     private var isApplyingLiveActivityState = false
     private var pendingCreateMode: CreateFormMode = .task
+    private var pendingCreateEntry: CreateSheetEntry = .standard
     private var pendingCreateScheduledDate: Date = Calendar.current.startOfDay(for: Date())
     private var pendingCreatePreferredGoalID: UUID?
+    private var pendingGoalDetailID: UUID?
 
     func loadProfile(context: ModelContext) {
         if let profile = try? context.fetch(FetchDescriptor<UserProfile>()).first {
@@ -201,8 +204,14 @@ final class AppStore: ObservableObject {
         saveContext(context)
     }
 
-    func openCreateSheet(mode: CreateFormMode = .task, scheduledDate: Date? = nil, preferredGoalID: UUID? = nil) {
+    func openCreateSheet(
+        mode: CreateFormMode = .task,
+        scheduledDate: Date? = nil,
+        preferredGoalID: UUID? = nil,
+        entry: CreateSheetEntry = .standard
+    ) {
         createSheetMode = mode
+        createSheetEntry = entry
         createSheetScheduledDate = Calendar.current.startOfDay(for: scheduledDate ?? Date())
         createSheetPreferredGoalID = preferredGoalID
         showCreateSheet = true
@@ -212,9 +221,11 @@ final class AppStore: ObservableObject {
     func openCreateSheetAfterDismiss(
         mode: CreateFormMode = .task,
         scheduledDate: Date? = nil,
-        preferredGoalID: UUID? = nil
+        preferredGoalID: UUID? = nil,
+        entry: CreateSheetEntry = .standard
     ) {
         pendingCreateMode = mode
+        pendingCreateEntry = entry
         pendingCreateScheduledDate = Calendar.current.startOfDay(for: scheduledDate ?? Date())
         pendingCreatePreferredGoalID = preferredGoalID
         pendingCreateAfterDismiss = true
@@ -226,12 +237,24 @@ final class AppStore: ObservableObject {
         openCreateSheet(
             mode: pendingCreateMode,
             scheduledDate: pendingCreateScheduledDate,
-            preferredGoalID: pendingCreatePreferredGoalID
+            preferredGoalID: pendingCreatePreferredGoalID,
+            entry: pendingCreateEntry
         )
     }
 
     func clearCreateSheetPreferences() {
         createSheetPreferredGoalID = nil
+        createSheetEntry = .standard
+    }
+
+    func scheduleGoalDetail(_ id: UUID) {
+        pendingGoalDetailID = id
+    }
+
+    func consumePendingGoalDetail() -> UUID? {
+        let id = pendingGoalDetailID
+        pendingGoalDetailID = nil
+        return id
     }
 
     func openGoalDetail(_ goal: Goal) {
@@ -244,11 +267,11 @@ final class AppStore: ObservableObject {
         var id: Int { rawValue }
         var title: String {
             switch self {
-            case .today: return "今日"
-            case .goals: return "目标"
-            case .focus: return "专注"
-            case .data: return "数据"
-            case .profile: return "我的"
+            case .today: return L10n.s("今日")
+            case .goals: return L10n.s("目标")
+            case .focus: return L10n.s("专注")
+            case .data: return L10n.s("数据")
+            case .profile: return L10n.s("我的")
             }
         }
         var icon: GSIconName {
@@ -994,6 +1017,81 @@ final class AppStore: ObservableObject {
         context.insert(goal)
         saveContext(context)
         return nil
+    }
+
+    /// Writes the goal shell, milestones, and starter tasks in one save.
+    /// Manual create stays on `createGoal` and does not insert tasks.
+    func createGoalFromDraft(_ draft: GoalDraftDTO, context: ModelContext) -> Result<UUID, GoalDraftSaveFailure> {
+        let name = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else { return .failure(.emptyName) }
+
+        let activeCount = (try? context.fetch(FetchDescriptor<Goal>()))?.filter { !$0.isCompleted }.count ?? 0
+        if !ProEntitlement.isUnlocked(.unlimitedGoals, isPro: isPro),
+           activeCount >= ProEntitlement.freeActiveGoalLimit {
+            return .failure(.goalLimit)
+        }
+
+        let kept = draft.milestones.enumerated().filter {
+            !$0.element.title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+        var indexMap: [Int: Int] = [:]
+        for (newIndex, item) in kept.enumerated() {
+            indexMap[item.offset] = newIndex
+        }
+
+        let hasPrimary = (try? context.fetch(FetchDescriptor<Goal>()))?.contains(where: { !$0.isCompleted && $0.isPrimary }) ?? false
+        let goal = Goal(
+            name: name,
+            emoji: "🎯",
+            category: L10n.s("综合"),
+            totalDays: 30,
+            currentDay: 1,
+            weeklyRate: 0,
+            isPrimary: !hasPrimary
+        )
+        context.insert(goal)
+
+        var milestoneModels: [GoalMilestone] = []
+        for (newIndex, item) in kept.enumerated() {
+            let milestone = GoalMilestone(
+                title: item.element.title.trimmingCharacters(in: .whitespacesAndNewlines),
+                order: newIndex,
+                summary: item.element.summary.trimmingCharacters(in: .whitespacesAndNewlines),
+                goal: goal
+            )
+            context.insert(milestone)
+            milestoneModels.append(milestone)
+        }
+
+        let today = Calendar.current.startOfDay(for: Date())
+        var sortOrder = 0
+        for task in draft.tasks {
+            let taskTitle = task.title.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !taskTitle.isEmpty else { continue }
+            let milestone = task.milestoneIndex.flatMap { index in
+                indexMap[index].flatMap { milestoneModels.indices.contains($0) ? milestoneModels[$0] : nil }
+            }
+            let item = TaskItem(
+                title: taskTitle,
+                durationMinutes: 25,
+                isPriority: false,
+                sortOrder: sortOrder,
+                scheduledDate: today,
+                endDate: today,
+                goal: goal,
+                milestone: milestone
+            )
+            context.insert(item)
+            sortOrder += 1
+        }
+
+        guard saveContext(context) else {
+            context.rollback()
+            return .failure(.persistence)
+        }
+        NotificationScheduler.reloadWidgets()
+        refreshReminderBodies(context: context)
+        return .success(goal.id)
     }
 
     func createTask(

@@ -1,5 +1,15 @@
 # Goalstar 上线发布清单
 
+## 1.1 草稿（未提审，不要打 tag）
+
+- 营销版本 `1.1`，构建号 `3`
+- 本机一句话草稿 + 确认卡；任务分段仍是 1.0 表单
+- 再生成配额与「免费 3 个进行中目标」是两道墙
+- 中 / English / 日本語：首次跟系统映射一次，我的 → 语言 可改
+- 云端 VM 没有 Xcode。JOJO 需要在 Xcode 26 模拟器 / 真机上编译，并确认 `FoundationModels` 调用、String Catalog 的 en/ja lproj、以及 Apple Intelligence 不可用时的模板降级
+
+## v1.0 已上架清单
+
 ## v2.0 产品闭环
 
 - [x] 五 Tab 导航：今日 / 目标 / 专注 / 数据 / 我的

@@ -130,12 +130,17 @@ struct TodayView: View {
     private var emptyNoGoals: some View {
         EmptyStateCard(
             icon: .star,
-            title: "还没有目标",
-            message: "创建第一个目标，开始绘制你的星图",
-            actionTitle: "创建我的第一个目标"
-        ) {
-            store.openCreateSheet(mode: .goal)
-        }
+            title: L10n.s("还没有目标"),
+            message: L10n.s("创建第一个目标，开始绘制你的星图"),
+            actionTitle: L10n.s("一句话创建目标"),
+            secondaryActionTitle: L10n.s("创建我的第一个目标"),
+            action: {
+                store.openCreateSheet(mode: .goal, entry: .oneLiner)
+            },
+            secondaryAction: {
+                store.openCreateSheet(mode: .goal, entry: .standard)
+            }
+        )
         .padding(.top, 80)
     }
 
