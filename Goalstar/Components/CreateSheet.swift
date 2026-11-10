@@ -7,6 +7,11 @@ private enum GoalCreatePhase {
     case confirm
 }
 
+private struct DiscardRequest {
+    var dismissSheet = false
+    var nextMode: CreateFormMode?
+}
+
 struct CreateSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
@@ -38,6 +43,7 @@ struct CreateSheet: View {
     @State private var confirmLimitMessage: String?
     @State private var isRegenerating = false
     @State private var showDiscard = false
+    @State private var discardRequest = DiscardRequest()
     @State private var pendingDismiss = false
     @State private var pendingMode: CreateFormMode?
     @State private var generateTask: Task<Void, Never>?
@@ -102,11 +108,19 @@ struct CreateSheet: View {
             }
             .onAppear(perform: configureIfNeeded)
             .overlay {
-                if showDiscard {
-                    discardOverlay
-                } else if showRegenWall {
+                if showRegenWall {
                     regenWallOverlay
                 }
+            }
+            .confirmationDialog(L10n.s("放弃草稿？"), isPresented: $showDiscard, titleVisibility: .visible) {
+                Button(L10n.s("放弃草稿"), role: .destructive) {
+                    confirmDiscard()
+                }
+                Button(L10n.s("继续编辑"), role: .cancel) {
+                    keepEditingDraft()
+                }
+            } message: {
+                Text(L10n.s("您已修改内容。关闭确认卡将不写入目标 / 阶段 / 任务。"))
             }
         }
         .sheet(item: $activePaywall) { context in
@@ -530,7 +544,7 @@ struct CreateSheet: View {
             pendingMode = newMode
             pendingDismiss = false
             if draftIsDirty {
-                showDiscard = true
+                presentDiscardDialog()
             } else {
                 confirmDiscard()
             }
@@ -547,7 +561,7 @@ struct CreateSheet: View {
             pendingMode = nil
             if draftIsDirty {
                 pendingDismiss = true
-                showDiscard = true
+                presentDiscardDialog()
             } else {
                 GoalstarAnalytics.track("goal_ai_discard", ["edited": "false"])
                 store.clearCreateSheetPreferences()
@@ -562,16 +576,26 @@ struct CreateSheet: View {
         dismiss()
     }
 
+    private func presentDiscardDialog() {
+        discardRequest = DiscardRequest(dismissSheet: pendingDismiss, nextMode: pendingMode)
+        showDiscard = true
+    }
+
     private func confirmDiscard() {
+        let armed = discardRequest.dismissSheet || discardRequest.nextMode != nil
+        let request = armed
+            ? discardRequest
+            : DiscardRequest(dismissSheet: pendingDismiss, nextMode: pendingMode)
         showDiscard = false
+        discardRequest = DiscardRequest()
         showRegenWall = false
         GoalstarAnalytics.track("goal_ai_discard", ["edited": draftIsDirty ? "true" : "false"])
         generateTask?.cancel()
         generateTask = nil
         isRegenerating = false
         phase = .editing
-        let shouldDismiss = pendingDismiss
-        let nextMode = pendingMode
+        let shouldDismiss = request.dismissSheet
+        let nextMode = request.nextMode
         pendingDismiss = false
         pendingMode = nil
         if shouldDismiss {
@@ -670,6 +694,7 @@ struct CreateSheet: View {
 
     private func keepEditingDraft() {
         showDiscard = false
+        discardRequest = DiscardRequest()
         pendingDismiss = false
         pendingMode = nil
     }
@@ -738,46 +763,8 @@ struct CreateSheet: View {
         dismiss()
     }
 
-    private var discardOverlay: some View {
-        ZStack {
-            Color.black.opacity(0.35)
-                .ignoresSafeArea()
-            VStack(alignment: .leading, spacing: 12) {
-                Text(L10n.s("放弃草稿？"))
-                    .font(GSFont.semibold(GSFont.title))
-                    .foregroundStyle(GSColor.textPrimary)
-                    .frame(maxWidth: .infinity, alignment: .center)
-                Text(L10n.s("您已修改内容。关闭确认卡将不写入目标 / 阶段 / 任务。"))
-                    .font(GSFont.semibold(GSFont.md))
-                    .foregroundStyle(GSColor.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                Button(action: keepEditingDraft) {
-                    Text(L10n.s("继续编辑"))
-                        .font(GSFont.semibold(GSFont.xl))
-                        .foregroundStyle(Color.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 46)
-                        .background(GSColor.brand)
-                        .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
-                }
-                .buttonStyle(.plain)
-                Button(action: confirmDiscard) {
-                    Text(L10n.s("放弃草稿"))
-                        .font(GSFont.semibold(GSFont.xl))
-                        .foregroundStyle(Color.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 46)
-                        .background(GSColor.danger)
-                        .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
-                }
-                .buttonStyle(.plain)
-            }
-            .padding(20)
-            .background(GSColor.surfaceCard)
-            .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
-            .padding(.horizontal, 28)
-        }
+    private var canSaveDraftNow: Bool {
+        !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !isRegenerating
     }
 
     private var regenWallOverlay: some View {
@@ -794,10 +781,22 @@ struct CreateSheet: View {
                     .foregroundStyle(GSColor.textSecondary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity)
-                Text(L10n.s("无限再生成（与目标数量上限分开计量）"))
-                    .font(GSFont.semibold(GSFont.md))
-                    .foregroundStyle(GSColor.textPrimary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                Button {
+                    saveDraft()
+                    if confirmLimitMessage != nil {
+                        showRegenWall = false
+                    }
+                } label: {
+                    Text(L10n.s("保存"))
+                        .font(GSFont.semibold(GSFont.xl))
+                        .foregroundStyle(Color.white)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 46)
+                        .background(canSaveDraftNow ? GSColor.brand : GSColor.brand.opacity(0.45))
+                        .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
+                }
+                .buttonStyle(.plain)
+                .disabled(!canSaveDraftNow)
                 Button {
                     showRegenWall = false
                     activePaywall = .regen

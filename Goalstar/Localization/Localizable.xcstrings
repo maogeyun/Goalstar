@@ -4003,29 +4003,6 @@
         }
       }
     },
-    "无限再生成（与目标数量上限分开计量）": {
-      "extractionState": "manual",
-      "localizations": {
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "无限再生成（与目标数量上限分开计量）"
-          }
-        },
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Unlimited regeneration (counted separately from the active-goal limit)"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "無制限の再生成（進行中の目標数とは別に数えます）"
-          }
-        }
-      }
-    },
     "未归入阶段": {
       "extractionState": "manual",
       "localizations": {
