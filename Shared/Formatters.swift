@@ -77,7 +77,7 @@ enum GSFormat {
     }
 
     static func focusChip(_ minutes: Int) -> String {
-        "专注 \(minutes) 分钟"
+        L10n.f("专注 %d 分钟", minutes)
     }
 
     static func hoursLabel(_ minutes: Int) -> String {

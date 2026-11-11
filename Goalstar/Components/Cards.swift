@@ -611,7 +611,7 @@ struct FABButton: View {
             .contentShape(Circle())
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("新建")
+        .accessibilityLabel(L10n.s("新建"))
     }
 }
 
