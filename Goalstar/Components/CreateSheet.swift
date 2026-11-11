@@ -107,7 +107,9 @@ struct CreateSheet: View {
                 }
             }
             .onAppear(perform: configureIfNeeded)
+            #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
             .modifier(TemplateDraftEntryMarker())
+            #endif
             .overlay {
                 if showRegenWall {
                     regenWallOverlay
@@ -533,7 +535,7 @@ struct CreateSheet: View {
         syncMilestoneSelection(for: selectedGoalID)
         clampTaskDatesToSelectedMilestone()
         aiAvailable = OnDeviceModelAvailability.isReady
-        #if DEBUG
+        #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
         if GoalstarTemplateDraftHook.isEnabled {
             aiAvailable = true
         }
@@ -637,7 +639,7 @@ struct CreateSheet: View {
         let language = AppLanguagePreference.current
         generateTask?.cancel()
         generateTask = Task {
-            #if DEBUG
+            #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
             if GoalstarTemplateDraftHook.isEnabled {
                 await applyTemplateDraftForUITest(
                     sentence: sentence,
@@ -658,7 +660,7 @@ struct CreateSheet: View {
         }
     }
 
-    #if DEBUG
+    #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
     /// Replaces only the draft source. Quota, cancel, and apply stay on the product path.
     private func applyTemplateDraftForUITest(
         sentence: String,
@@ -688,7 +690,7 @@ struct CreateSheet: View {
     #endif
 
     private func canRegenerateNow() -> Bool {
-        #if DEBUG
+        #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
         if GoalstarTemplateDraftHook.isEnabled {
             return RegenQuotaStore.canRegenerate(
                 isPro: store.isPro,
@@ -700,7 +702,7 @@ struct CreateSheet: View {
     }
 
     private func remainingRegenCount() -> Int? {
-        #if DEBUG
+        #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
         if GoalstarTemplateDraftHook.isEnabled {
             return RegenQuotaStore.remaining(
                 isPro: store.isPro,
@@ -712,7 +714,7 @@ struct CreateSheet: View {
     }
 
     private func recordRegen() {
-        #if DEBUG
+        #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
         if GoalstarTemplateDraftHook.isEnabled {
             RegenQuotaStore.record(isPro: store.isPro, defaults: GoalstarTemplateDraftHook.regenDefaults)
             return
@@ -921,20 +923,18 @@ struct CreateSheet: View {
     }
 }
 
+#if GOALSTAR_TEMPLATE_DRAFT_ENTRY
 private struct TemplateDraftEntryMarker: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
-        #if DEBUG
         if GoalstarTemplateDraftHook.isEnabled {
             content.accessibilityIdentifier(GoalstarTemplateDraftHook.entryIdentifier)
         } else {
             content
         }
-        #else
-        content
-        #endif
     }
 }
+#endif
 
 struct GSTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<_Label>) -> some View {

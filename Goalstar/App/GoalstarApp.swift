@@ -84,14 +84,16 @@ struct GoalstarApp: App {
         if args.contains("-seedDemo") {
             Persistence.seedDemoData(context: context)
         }
+        #endif
+        #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
         GoalstarTemplateDraftHook.arm(args)
         #endif
     }
 }
 
-#if DEBUG
-/// Debug-only template confirm entry. Release builds omit this type.
-/// Absent the launch argument, Debug stays on the product path.
+#if GOALSTAR_TEMPLATE_DRAFT_ENTRY
+/// Compiled only for the Debug configuration via GOALSTAR_TEMPLATE_DRAFT_ENTRY.
+/// Release does not define that condition. Without the launch argument, Debug stays on the product path.
 enum GoalstarTemplateDraftHook {
     static let argument = "-goalstar-uitest-template-drafts"
     static let regenSuiteName = "goalstar.uitest.regen"

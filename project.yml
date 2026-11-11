@@ -62,6 +62,12 @@ settings:
     GCC_WARN_UNUSED_VARIABLE: YES
     MTL_FAST_MATH: YES
     COPY_PHASE_STRIP: NO
+  configs:
+    # A configuration named Debug does not define Swift's DEBUG condition.
+    # This flag compiles only the template-draft harness. It does not define DEBUG,
+    # so the existing Pro debug switch and -seedDemo stay compiled out.
+    Debug:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: GOALSTAR_TEMPLATE_DRAFT_ENTRY
 targets:
   Goalstar:
     type: application
