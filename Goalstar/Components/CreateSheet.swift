@@ -85,7 +85,7 @@ struct CreateSheet: View {
                     ConfirmDraftView(
                         draft: $draft,
                         isRegenerating: isRegenerating,
-                        remainingRegen: RegenQuotaStore.remaining(isPro: store.isPro),
+                        remainingRegen: remainingRegenCount(),
                         notice: confirmNotice,
                         limitMessage: confirmLimitMessage,
                         onRegen: { startGenerate(regenerating: true) },
@@ -107,6 +107,7 @@ struct CreateSheet: View {
                 }
             }
             .onAppear(perform: configureIfNeeded)
+            .modifier(TemplateDraftEntryMarker())
             .overlay {
                 if showRegenWall {
                     regenWallOverlay
@@ -532,6 +533,11 @@ struct CreateSheet: View {
         syncMilestoneSelection(for: selectedGoalID)
         clampTaskDatesToSelectedMilestone()
         aiAvailable = OnDeviceModelAvailability.isReady
+        #if DEBUG
+        if GoalstarTemplateDraftHook.isEnabled {
+            aiAvailable = true
+        }
+        #endif
         if mode == .goal && store.createSheetEntry == .oneLiner && aiAvailable {
             oneLinerFocused = true
         }
@@ -611,7 +617,7 @@ struct CreateSheet: View {
     private func startGenerate(regenerating: Bool) {
         let sentence = prompt.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !sentence.isEmpty else { return }
-        if regenerating && !RegenQuotaStore.canRegenerate(isPro: store.isPro) {
+        if regenerating && !canRegenerateNow() {
             GoalstarAnalytics.track("goal_ai_regen_blocked", [
                 "language": AppLanguagePreference.current.analyticsCode
             ])
@@ -631,6 +637,17 @@ struct CreateSheet: View {
         let language = AppLanguagePreference.current
         generateTask?.cancel()
         generateTask = Task {
+            #if DEBUG
+            if GoalstarTemplateDraftHook.isEnabled {
+                await applyTemplateDraftForUITest(
+                    sentence: sentence,
+                    chips: selectedChips,
+                    language: language,
+                    regenerating: regenerating
+                )
+                return
+            }
+            #endif
             let outcome = await OnDeviceGoalDraftGenerator.make(
                 sentence: sentence,
                 chips: selectedChips,
@@ -639,6 +656,69 @@ struct CreateSheet: View {
             if Task.isCancelled { return }
             apply(outcome, regenerating: regenerating)
         }
+    }
+
+    #if DEBUG
+    /// Replaces only the draft source. Quota, cancel, and apply stay on the product path.
+    private func applyTemplateDraftForUITest(
+        sentence: String,
+        chips: Set<GoalContextChip>,
+        language: AppLanguage,
+        regenerating: Bool
+    ) async {
+        let started = Date()
+        do {
+            try await Task.sleep(nanoseconds: GoalstarTemplateDraftHook.cancelWindowNanoseconds)
+        } catch {
+            return
+        }
+        if Task.isCancelled { return }
+        let template = GoalDraftTemplates.make(sentence: sentence, chips: chips, language: language)
+        let milliseconds = max(0, Int(Date().timeIntervalSince(started) * 1000))
+        apply(
+            .ready(
+                template,
+                source: .template,
+                failureReason: "uitest-template",
+                generateMilliseconds: milliseconds
+            ),
+            regenerating: regenerating
+        )
+    }
+    #endif
+
+    private func canRegenerateNow() -> Bool {
+        #if DEBUG
+        if GoalstarTemplateDraftHook.isEnabled {
+            return RegenQuotaStore.canRegenerate(
+                isPro: store.isPro,
+                defaults: GoalstarTemplateDraftHook.regenDefaults
+            )
+        }
+        #endif
+        return RegenQuotaStore.canRegenerate(isPro: store.isPro)
+    }
+
+    private func remainingRegenCount() -> Int? {
+        #if DEBUG
+        if GoalstarTemplateDraftHook.isEnabled {
+            return RegenQuotaStore.remaining(
+                isPro: store.isPro,
+                defaults: GoalstarTemplateDraftHook.regenDefaults
+            )
+        }
+        #endif
+        return RegenQuotaStore.remaining(isPro: store.isPro)
+    }
+
+    private func recordRegen() {
+        #if DEBUG
+        if GoalstarTemplateDraftHook.isEnabled {
+            RegenQuotaStore.record(isPro: store.isPro, defaults: GoalstarTemplateDraftHook.regenDefaults)
+            return
+        }
+        #endif
+        RegenQuotaStore.record(isPro: store.isPro)
     }
 
     private func cancelGenerate() {
@@ -671,7 +751,7 @@ struct CreateSheet: View {
                 GoalstarAnalytics.track("goal_ai_generate_ok", properties)
             }
             if regenerating {
-                RegenQuotaStore.record(isPro: store.isPro)
+                recordRegen()
             }
             draft = next
             draftBaseline = next
@@ -838,6 +918,21 @@ struct CreateSheet: View {
             .clipShape(RoundedRectangle(cornerRadius: GSRadius.panel, style: .continuous))
             .padding(.horizontal, 28)
         }
+    }
+}
+
+private struct TemplateDraftEntryMarker: ViewModifier {
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        #if DEBUG
+        if GoalstarTemplateDraftHook.isEnabled {
+            content.accessibilityIdentifier(GoalstarTemplateDraftHook.entryIdentifier)
+        } else {
+            content
+        }
+        #else
+        content
+        #endif
     }
 }
 

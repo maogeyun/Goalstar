@@ -84,9 +84,35 @@ struct GoalstarApp: App {
         if args.contains("-seedDemo") {
             Persistence.seedDemoData(context: context)
         }
+        GoalstarTemplateDraftHook.arm(args)
         #endif
     }
 }
+
+#if DEBUG
+/// Debug-only template confirm entry. Release builds omit this type.
+/// Absent the launch argument, Debug stays on the product path.
+enum GoalstarTemplateDraftHook {
+    static let argument = "-goalstar-uitest-template-drafts"
+    static let regenSuiteName = "goalstar.uitest.regen"
+    static let entryIdentifier = "goalstar.uitest.template-drafts"
+    /// Long enough for a UI test to tap Cancel while 「正在生成草稿…」 is up.
+    static let cancelWindowNanoseconds: UInt64 = 750_000_000
+
+    private(set) static var isEnabled = false
+
+    static func arm(_ arguments: [String]) {
+        isEnabled = arguments.contains(argument)
+    }
+
+    static let regenDefaults: UserDefaults = {
+        guard let defaults = UserDefaults(suiteName: regenSuiteName) else {
+            preconditionFailure("uitest regen suite unavailable")
+        }
+        return defaults
+    }()
+}
+#endif
 
 struct RootTabView: View {
     @EnvironmentObject private var store: AppStore
