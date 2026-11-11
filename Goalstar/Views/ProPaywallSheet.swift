@@ -1,6 +1,14 @@
 import SwiftUI
 
+enum ProPaywallContext: String, Identifiable {
+    case goals
+    case regen
+    var id: String { rawValue }
+}
+
 struct ProPaywallSheet: View {
+    var context: ProPaywallContext = .goals
+
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var store: AppStore
 
@@ -29,11 +37,11 @@ struct ProPaywallSheet: View {
                 .padding(.bottom, 32)
             }
             .background(PageBackground())
-            .navigationTitle("Goalstar Pro")
+            .navigationTitle(L10n.s("Goalstar Pro"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("关闭") { dismiss() }
+                    Button(L10n.s("关闭")) { dismiss() }
                 }
             }
             .task {
@@ -48,11 +56,11 @@ struct ProPaywallSheet: View {
     private var headerCard: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 8) {
-                Text("Goalstar Pro")
+                Text(L10n.s("Goalstar Pro"))
                     .font(GSFont.semibold(GSFont.hero))
                     .foregroundStyle(GSColor.textPrimary)
                 CategoryTag(
-                    text: store.isPro ? "已开通" : "免费版",
+                    text: store.isPro ? L10n.s("已开通") : L10n.s("免费版"),
                     color: store.isPro ? GSColor.brand : GSColor.textSecondary,
                     background: store.isPro ? GSColor.brandLight : GSColor.bgTertiary
                 )
@@ -67,15 +75,23 @@ struct ProPaywallSheet: View {
     }
 
     private var headerSubtitle: String {
-        if store.isPro {
-            return "你已永久解锁无限进行中目标。"
+        switch context {
+        case .goals:
+            if store.isPro {
+                return L10n.s("你已永久解锁无限进行中目标。")
+            }
+            return L10n.s("一次买断，永久解锁无限进行中目标。")
+        case .regen:
+            if store.isPro {
+                return L10n.s("你已永久解锁无限再生成草稿。")
+            }
+            return L10n.s("今日再生成次数已用完。升级 Pro 后可无限再生成草稿。")
         }
-        return "一次买断，永久解锁无限进行中目标。"
     }
 
     private var benefitsCard: some View {
         VStack(alignment: .leading, spacing: 12) {
-            SectionHeader(title: "本次购买包含")
+            SectionHeader(title: L10n.s("本次购买包含"))
             ForEach(paywallBenefits) { benefit in
                 HStack(alignment: .top, spacing: 12) {
                     ZStack {
@@ -102,18 +118,29 @@ struct ProPaywallSheet: View {
     }
 
     private var paywallBenefits: [PaywallBenefit] {
-        let feature = ProFeature.unlimitedGoals
+        let lead: PaywallBenefit
+        switch context {
+        case .goals:
+            let feature = ProFeature.unlimitedGoals
+            lead = PaywallBenefit(id: feature.id, title: feature.title, subtitle: feature.subtitle)
+        case .regen:
+            lead = PaywallBenefit(
+                id: "regen",
+                title: L10n.s("无限再生成草稿"),
+                subtitle: L10n.s("免费版每天可再生成 3 次。升级后不再按次数限制。")
+            )
+        }
         return [
-            PaywallBenefit(id: feature.id, title: feature.title, subtitle: feature.subtitle),
-            PaywallBenefit(id: "lifetime", title: "一次买断", subtitle: "永久有效，不会自动续费。"),
-            PaywallBenefit(id: "restore", title: "换机可恢复", subtitle: "同一 Apple ID 在新设备上点「恢复购买」即可。")
+            lead,
+            PaywallBenefit(id: "lifetime", title: L10n.s("一次买断"), subtitle: L10n.s("永久有效，不会自动续费。")),
+            PaywallBenefit(id: "restore", title: L10n.s("换机可恢复"), subtitle: L10n.s("同一 Apple ID 在新设备上点「恢复购买」即可。"))
         ]
     }
 
     private var pricingCard: some View {
         VStack(alignment: .leading, spacing: 8) {
-            SectionHeader(title: "买断说明")
-            Text("一次购买，终身解锁")
+            SectionHeader(title: L10n.s("买断说明"))
+            Text(L10n.s("一次购买，终身解锁"))
                 .font(GSFont.semibold(GSFont.lg))
                 .foregroundStyle(GSColor.textPrimary)
             Text(pricingSubtitle)
@@ -127,28 +154,28 @@ struct ProPaywallSheet: View {
 
     private var pricingSubtitle: String {
         if let price = store.proProductPrice {
-            return "价格 \(price)，由 Apple 处理付款，不会自动续费。换机后可恢复购买。"
+            return L10n.f("价格 %@，由 Apple 处理付款，不会自动续费。换机后可恢复购买。", price)
         }
         if store.isProProductLoading {
-            return "正在从 App Store 获取价格…"
+            return L10n.s("正在从 App Store 获取价格…")
         }
-        return "价格由 App Store 显示。无法获取商品时请检查网络后重试。"
+        return L10n.s("价格由 App Store 显示。无法获取商品时请检查网络后重试。")
     }
 
     private var purchaseTitle: String {
         if store.isPro {
-            return "已是 Pro 会员"
+            return L10n.s("已是 Pro 会员")
         }
         if store.isProPurchaseInFlight {
-            return "购买中…"
+            return L10n.s("购买中…")
         }
         if store.isProProductLoading {
-            return "正在获取价格…"
+            return L10n.s("正在获取价格…")
         }
         if let price = store.proProductPrice {
-            return "购买终身 Pro · \(price)"
+            return L10n.f("购买终身 Pro · %@", price)
         }
-        return "暂时无法购买"
+        return L10n.s("暂时无法购买")
     }
 
     private var canPurchase: Bool {
@@ -171,7 +198,7 @@ struct ProPaywallSheet: View {
             .disabled(store.isProPurchaseInFlight)
             .opacity(store.isPro || canPurchase || store.isProPurchaseInFlight || store.proProductPrice == nil ? 1 : 0.55)
 
-            OutlineActionButton(title: store.isProPurchaseInFlight ? "处理中…" : "恢复购买") {
+            OutlineActionButton(title: store.isProPurchaseInFlight ? L10n.s("处理中…") : L10n.s("恢复购买")) {
                 Task { await restore() }
             }
             .disabled(store.isProPurchaseInFlight)
@@ -182,11 +209,11 @@ struct ProPaywallSheet: View {
 
     private var footerNote: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("一次买断，不会自动续费。购买由 Apple 处理，本 App 不收集支付信息。")
+            Text(L10n.s("一次买断，不会自动续费。购买由 Apple 处理，本 App 不收集支付信息。"))
                 .font(GSFont.semibold(GSFont.sm))
                 .foregroundStyle(GSColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
-            Button("查看隐私政策") {
+            Button(L10n.s("查看隐私政策")) {
                 showPrivacy = true
             }
             .font(GSFont.semibold(GSFont.sm))
@@ -204,9 +231,9 @@ struct ProPaywallSheet: View {
         case .cancelled:
             break
         case .pending:
-            statusMessage = "购买待确认，请完成批准后点「恢复购买」。"
+            statusMessage = L10n.s("购买待确认，请完成批准后点「恢复购买」。")
         case .notFound:
-            statusMessage = "未找到可恢复的购买"
+            statusMessage = L10n.s("未找到可恢复的购买")
         case .failed(let message):
             statusMessage = message
         }
@@ -217,13 +244,13 @@ struct ProPaywallSheet: View {
         let outcome = await store.restorePurchases()
         switch outcome {
         case .success:
-            statusMessage = "已恢复 Pro"
+            statusMessage = L10n.s("已恢复 Pro")
         case .cancelled:
             break
         case .pending:
-            statusMessage = "购买待确认，请稍后再试。"
+            statusMessage = L10n.s("购买待确认，请稍后再试。")
         case .notFound:
-            statusMessage = "未找到可恢复的购买"
+            statusMessage = L10n.s("未找到可恢复的购买")
         case .failed(let message):
             statusMessage = message
         }

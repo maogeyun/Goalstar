@@ -18,6 +18,7 @@ final class AppNotificationDelegate: NSObject, UNUserNotificationCenterDelegate 
 @main
 struct GoalstarApp: App {
     @StateObject private var store = AppStore()
+    @StateObject private var languageStore = AppLanguageStore()
     @State private var showSplash = true
     private let container = Persistence.makeContainer()
     private let notificationDelegate = AppNotificationDelegate()
@@ -35,6 +36,8 @@ struct GoalstarApp: App {
             ZStack {
                 RootTabView()
                     .environmentObject(store)
+                    .environmentObject(languageStore)
+                    .id(languageStore.language)
                     .modelContainer(container)
                     .preferredColorScheme(.light)
                     .opacity(showSplash ? 0 : 1)
@@ -82,8 +85,36 @@ struct GoalstarApp: App {
             Persistence.seedDemoData(context: context)
         }
         #endif
+        #if GOALSTAR_TEMPLATE_DRAFT_ENTRY
+        GoalstarTemplateDraftHook.arm(args)
+        #endif
     }
 }
+
+#if GOALSTAR_TEMPLATE_DRAFT_ENTRY
+/// Compiled only for the Debug configuration via GOALSTAR_TEMPLATE_DRAFT_ENTRY.
+/// Release does not define that condition. Without the launch argument, Debug stays on the product path.
+enum GoalstarTemplateDraftHook {
+    static let argument = "-goalstar-uitest-template-drafts"
+    static let regenSuiteName = "goalstar.uitest.regen"
+    static let entryIdentifier = "goalstar.uitest.template-drafts"
+    /// Long enough for a UI test to tap Cancel while 「正在生成草稿…」 is up.
+    static let cancelWindowNanoseconds: UInt64 = 750_000_000
+
+    private(set) static var isEnabled = false
+
+    static func arm(_ arguments: [String]) {
+        isEnabled = arguments.contains(argument)
+    }
+
+    static let regenDefaults: UserDefaults = {
+        guard let defaults = UserDefaults(suiteName: regenSuiteName) else {
+            preconditionFailure("uitest regen suite unavailable")
+        }
+        return defaults
+    }()
+}
+#endif
 
 struct RootTabView: View {
     @EnvironmentObject private var store: AppStore
@@ -112,8 +143,16 @@ struct RootTabView: View {
             store.consumePendingEndFocusFromLiveActivity(goals: goals)
         }
         .sheet(isPresented: $store.showCreateSheet, onDismiss: {
+            let goalID = store.consumePendingGoalDetail()
             store.clearCreateSheetPreferences()
             DispatchQueue.main.async {
+                if let goalID {
+                    store.selectedTab = .goals
+                    store.selectedGoalID = goalID
+                    DispatchQueue.main.async {
+                        store.showGoalDetail = true
+                    }
+                }
                 store.presentPendingProPaywallIfNeeded()
                 store.presentPendingCreateSheetIfNeeded()
             }

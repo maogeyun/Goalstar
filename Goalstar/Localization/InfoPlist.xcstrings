@@ -1,0 +1,29 @@
+{
+  "sourceLanguage": "zh-Hans",
+  "strings": {
+    "NSUserNotificationsUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goalstar 需要发送本地提醒，帮助你按时完成今日任务。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goalstar sends local reminders so you can finish today's tasks on time."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goalstar は、今日のタスクを時間どおりに終えるためのローカル通知を送ります。"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

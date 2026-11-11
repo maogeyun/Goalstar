@@ -130,12 +130,17 @@ struct TodayView: View {
     private var emptyNoGoals: some View {
         EmptyStateCard(
             icon: .star,
-            title: "还没有目标",
-            message: "创建第一个目标，开始绘制你的星图",
-            actionTitle: "创建我的第一个目标"
-        ) {
-            store.openCreateSheet(mode: .goal)
-        }
+            title: L10n.s("还没有目标"),
+            message: L10n.s("创建第一个目标，开始绘制你的星图"),
+            actionTitle: L10n.s("一句话创建目标"),
+            secondaryActionTitle: L10n.s("创建我的第一个目标"),
+            secondaryAction: {
+                store.openCreateSheet(mode: .goal, entry: .standard)
+            },
+            action: {
+                store.openCreateSheet(mode: .goal, entry: .oneLiner)
+            }
+        )
         .padding(.top, 80)
     }
 
@@ -147,9 +152,9 @@ struct TodayView: View {
             progressCard
             EmptyStateCard(
                 icon: .checkCircle,
-                title: "今天还没有任务",
-                message: "为目标添加今日任务，开始推进",
-                actionTitle: "添加今日任务"
+                title: L10n.s("今天还没有任务"),
+                message: L10n.s("为目标添加今日任务，开始推进"),
+                actionTitle: L10n.s("添加今日任务")
             ) {
                 store.openCreateSheet(mode: .task)
             }
@@ -196,7 +201,7 @@ struct TodayView: View {
                 centerText: "\(completedCount) / \(actionable.count)"
             )
             VStack(alignment: .leading, spacing: 8) {
-                Text(allComplete ? "今天的星图已点亮完成" : "星图绘制进度已达 \(Int(rate * 100))%")
+                Text(allComplete ? L10n.s("今天的星图已点亮完成") : L10n.f("星图绘制进度已达 %d%%", Int(rate * 100)))
                     .font(GSFont.semibold(GSFont.xl))
                     .foregroundStyle(GSColor.textPrimary)
                     .fixedSize(horizontal: false, vertical: true)
@@ -312,18 +317,18 @@ struct TodayView: View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 10) {
                 GSIcon(name: .lock, size: 20, color: GSColor.brand)
-                Text("把今日三件事放到锁屏")
+                Text(L10n.s("把今日三件事放到锁屏"))
                     .font(GSFont.semibold(GSFont.xl))
                     .foregroundStyle(GSColor.textPrimary)
             }
-            Text("长按锁屏 → 自定义 → 添加小组件 → 选择 Goalstar「今日三件事」，即可查看并勾选任务。")
+            Text(L10n.f("长按锁屏 → 自定义 → 添加小组件 → 选择 Goalstar「%@」，即可查看并勾选任务。", L10n.s("今日三件事")))
                 .font(GSFont.semibold(GSFont.base))
                 .foregroundStyle(GSColor.textSecondary)
             HStack(spacing: GSSpacing.sm) {
                 Button {
                     widgetBannerHiddenThisSession = true
                 } label: {
-                    Text("我知道了")
+                    Text(L10n.s("我知道了"))
                         .font(GSFont.semibold(GSFont.base))
                         .foregroundStyle(GSColor.textOnPrimary)
                         .frame(maxWidth: .infinity)
@@ -334,7 +339,7 @@ struct TodayView: View {
                 }
                 .buttonStyle(.plain)
 
-                OutlineActionButton(title: "不再提示", height: 36) {
+                OutlineActionButton(title: L10n.s("不再提示"), height: 36) {
                     store.setWidgetGuideDismissed(true)
                 }
             }

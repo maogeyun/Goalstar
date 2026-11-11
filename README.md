@@ -5,7 +5,7 @@
 ## 要求
 
 - Xcode 16+
-- iOS 17+
+- iOS 17+（一句话草稿的端侧模型需要 iOS 26 且 Apple Intelligence 可用；否则使用本机模板，不上传）
 - 可选：`xcodegen`（`brew install xcodegen`，或本仓库 `tools/xcodegen`）用于从 `project.yml` 重新生成工程
 
 ## 运行
@@ -22,7 +22,7 @@ Bundle ID：`com.goalstar.native`（Widget：`com.goalstar.native.widgets`）
 
 ## 上线发布
 
-详见 [RELEASE.md](./RELEASE.md)（v2.0：Widget、Live Activity、本地通知、昵称编辑、Pro 终身买断）。
+详见 [RELEASE.md](./RELEASE.md)。当前营销版本 **1.1**（草稿：一句话创建目标、本机生成、中/英/日）。1.0 上架清单仍在该文件中。
 
 ## 结构
 

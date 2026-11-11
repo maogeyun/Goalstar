@@ -9,13 +9,13 @@ enum ProFeature: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .unlimitedGoals: return "无限进行中目标"
+        case .unlimitedGoals: return L10n.s("无限进行中目标")
         }
     }
 
     var subtitle: String {
         switch self {
-        case .unlimitedGoals: return "免费版最多 3 个。升级后不再限制数量。"
+        case .unlimitedGoals: return L10n.s("免费版最多 3 个。升级后不再限制数量。")
         }
     }
 }
@@ -24,7 +24,7 @@ enum ProEntitlement {
     static let freeActiveGoalLimit = 3
 
     static var freeGoalLimitMessage: String {
-        "免费版最多 \(freeActiveGoalLimit) 个进行中目标，升级 Pro 后可创建更多"
+        L10n.s("免费版最多 3 个进行中目标，升级 Pro 后可创建更多")
     }
 
     static func isUnlocked(_ feature: ProFeature, isPro: Bool) -> Bool {

@@ -234,6 +234,12 @@ struct GoalDetailView: View {
                                 .font(GSFont.semibold(GSFont.lg))
                                 .foregroundStyle(milestone.isCompleted ? GSColor.textSecondary : GSColor.textPrimary)
                                 .strikethrough(milestone.isCompleted, color: GSColor.textSecondary)
+                            if !milestone.summary.isEmpty {
+                                Text(milestone.summary)
+                                    .font(GSFont.semibold(GSFont.md))
+                                    .foregroundStyle(GSColor.textSecondary)
+                                    .lineLimit(2)
+                            }
                             if let rangeText = GSFormat.milestoneRangeLabel(milestone) {
                                 Text(rangeText)
                                     .font(GSFont.semibold(GSFont.md))

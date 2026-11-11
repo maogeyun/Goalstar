@@ -4,6 +4,11 @@ options:
   deploymentTarget:
     iOS: "17.0"
   developmentLanguage: zh-Hans
+  knownRegions:
+    - zh-Hans
+    - en
+    - ja
+    - Base
   xcodeVersion: "16.0"
 attributes:
   LastUpgradeCheck: "2660"
@@ -57,6 +62,12 @@ settings:
     GCC_WARN_UNUSED_VARIABLE: YES
     MTL_FAST_MATH: YES
     COPY_PHASE_STRIP: NO
+  configs:
+    # A configuration named Debug does not define Swift's DEBUG condition.
+    # This flag compiles only the template-draft harness. It does not define DEBUG,
+    # so the existing Pro debug switch and -seedDemo stay compiled out.
+    Debug:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: GOALSTAR_TEMPLATE_DRAFT_ENTRY
 targets:
   Goalstar:
     type: application
@@ -91,8 +102,8 @@ targets:
         ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS: YES
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
         CODE_SIGN_STYLE: Automatic
-        CURRENT_PROJECT_VERSION: 2
-        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: 3
+        MARKETING_VERSION: "1.1"
         ENABLE_PREVIEWS: YES
       configs:
         Debug:
@@ -112,6 +123,10 @@ targets:
         NSSupportsLiveActivities: true
         NSUserNotificationsUsageDescription: Goalstar 需要发送本地提醒，帮助你按时完成今日任务。
         ITSAppUsesNonExemptEncryption: false
+        CFBundleLocalizations:
+          - zh-Hans
+          - en
+          - ja
     dependencies:
       - target: GoalstarWidgets
         embed: true
@@ -136,8 +151,8 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.goalstar.native.widgets
         PRODUCT_NAME: GoalstarWidgets
         CODE_SIGN_STYLE: Automatic
-        CURRENT_PROJECT_VERSION: 2
-        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: 3
+        MARKETING_VERSION: "1.1"
         SKIP_INSTALL: YES
         LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"
         INFOPLIST_KEY_CFBundleDisplayName: Goalstar
@@ -158,6 +173,10 @@ targets:
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
         NSSupportsLiveActivities: true
+        CFBundleLocalizations:
+          - zh-Hans
+          - en
+          - ja
     entitlements:
       path: GoalstarWidgets/GoalstarWidgets.entitlements
       properties:

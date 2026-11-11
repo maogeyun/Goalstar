@@ -55,7 +55,7 @@ struct SplashView: View {
                     .opacity(titleRevealed ? 1 : 0)
                     .offset(y: titleRevealed ? 0 : 14)
 
-                Text("目标星图")
+                Text(L10n.s("目标星图"))
                     .font(GSFont.medium(12))
                     .foregroundStyle(Color(hex: 0x9AA5B6))
                     .frame(height: 18)

@@ -4,6 +4,7 @@ import UserNotifications
 
 struct ProfileView: View {
     @EnvironmentObject private var store: AppStore
+    @EnvironmentObject private var languages: AppLanguageStore
     @Environment(\.modelContext) private var context
     @Query private var goals: [Goal]
     @Query private var tasks: [TaskItem]
@@ -11,6 +12,7 @@ struct ProfileView: View {
 
     @State private var activeSheet: ProfileSheet?
     @State private var showLockSettings = false
+    @State private var showLanguageSettings = false
 
     private enum ProfileSheet: Identifiable {
         case editName, reminders, theme, storage, about, privacy
@@ -26,7 +28,7 @@ struct ProfileView: View {
             PageBackground()
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: GSSpacing.lg) {
-                    GreetingBar(title: "我的", subtitle: "账户与偏好设置", reverse: true)
+                    GreetingBar(title: L10n.s("我的"), subtitle: L10n.s("账户与偏好设置"), reverse: true)
                     userCard
                     achievementCard
                     menuList
@@ -69,6 +71,11 @@ struct ProfileView: View {
             LockScreenSettingsView()
                 .environmentObject(store)
         }
+        .sheet(isPresented: $showLanguageSettings) {
+            LanguageSettingsView()
+                .environmentObject(store)
+                .environmentObject(languages)
+        }
     }
 
     private var appVersion: String {
@@ -110,16 +117,16 @@ struct ProfileView: View {
                             .font(GSFont.semibold(GSFont.hero))
                             .foregroundStyle(GSColor.textPrimary)
                         CategoryTag(
-                            text: store.isPro ? "Pro" : "免费版",
+                            text: store.isPro ? "Pro" : L10n.s("免费版"),
                             color: store.isPro ? GSColor.brand : GSColor.textSecondary,
                             background: store.isPro ? GSColor.brandLight : GSColor.bgTertiary,
                             compact: true
                         )
-                        Text("编辑")
+                        Text(L10n.s("编辑"))
                             .font(GSFont.semibold(GSFont.sm))
                             .foregroundStyle(GSColor.brand)
                     }
-                    Text("把每一天画进自己的星图")
+                    Text(L10n.s("把每一天画进自己的星图"))
                         .font(GSFont.semibold(GSFont.md))
                         .foregroundStyle(GSColor.textSecondary)
                 }
@@ -133,11 +140,11 @@ struct ProfileView: View {
 
     private var achievementCard: some View {
         VStack(alignment: .leading, spacing: 16) {
-            SectionHeader(title: "我的成就")
+            SectionHeader(title: L10n.s("我的成就"))
             HStack(spacing: GSSpacing.sm) {
-                InsetStatBlock(value: "\(goals.filter(\.isCompleted).count) 个", label: "已完成目标")
-                InsetStatBlock(value: GSFormat.minutesLabel(totalFocus), label: "总专注")
-                InsetStatBlock(value: "\(tasks.filter(\.isCompleted).count) 个", label: "完成任务")
+                InsetStatBlock(value: L10n.f("%d 个", goals.filter(\.isCompleted).count), label: L10n.s("已完成目标"))
+                InsetStatBlock(value: GSFormat.minutesLabel(totalFocus), label: L10n.s("总专注"))
+                InsetStatBlock(value: L10n.f("%d 个", tasks.filter(\.isCompleted).count), label: L10n.s("完成任务"))
             }
         }
         .gsCard(radius: GSRadius.panel, padding: 16)
@@ -145,19 +152,22 @@ struct ProfileView: View {
 
     private var menuList: some View {
         VStack(spacing: 0) {
-            menuRow(icon: .star, title: "Goalstar Pro", trailing: store.isPro ? "已开通" : "升级") {
+            menuRow(icon: .star, title: L10n.s("Goalstar Pro"), trailing: store.isPro ? L10n.s("已开通") : L10n.s("升级")) {
                 store.requestProPaywall()
             }
-            menuRow(icon: .lock, title: "锁屏待办", trailing: AppConstants.lockWidgetEnabled ? "\(AppConstants.lockWidgetCount)条" : "关闭") {
+            menuRow(icon: .lock, title: L10n.s("锁屏待办"), trailing: AppConstants.lockWidgetEnabled ? L10n.f("%d条", AppConstants.lockWidgetCount) : L10n.s("关闭")) {
                 showLockSettings = true
             }
-            menuRow(icon: .bell, title: "提醒设置", trailing: "本地通知") {
+            menuRow(icon: .bell, title: L10n.s("提醒设置"), trailing: L10n.s("本地通知")) {
                 activeSheet = .reminders
             }
-            menuRow(icon: .sun, title: "主题切换", trailing: "浅色模式") {
+            menuRow(icon: .bookOpen, title: L10n.s("语言"), trailing: languages.language.nativeName) {
+                showLanguageSettings = true
+            }
+            menuRow(icon: .sun, title: L10n.s("主题切换"), trailing: L10n.s("浅色模式")) {
                 activeSheet = .theme
             }
-            menuRow(icon: .cloud, title: "数据存储", trailing: "仅本机") {
+            menuRow(icon: .cloud, title: L10n.s("数据存储"), trailing: L10n.s("仅本机")) {
                 activeSheet = .storage
             }
             #if DEBUG
@@ -165,7 +175,7 @@ struct ProfileView: View {
                 store.setProMock(!store.isPro)
             }
             #endif
-            menuRow(icon: .info, title: "关于 Goalstar", trailing: appVersion, showDivider: false) {
+            menuRow(icon: .info, title: L10n.s("关于 Goalstar"), trailing: appVersion, showDivider: false) {
                 activeSheet = .about
             }
         }
@@ -480,7 +490,8 @@ struct ProfilePrivacySheet: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 14) {
-                    privacySection("数据存储", "目标、任务、专注记录与昵称仅保存在本机（SwiftData）。我们不通过 iCloud / CloudKit 同步内容，也不运营自有服务器存储你的数据。卸载后本机数据可能丢失。")
+                    privacySection(L10n.s("数据存储"), L10n.s("目标、任务、专注记录与昵称仅保存在本机（SwiftData）。我们不通过 iCloud / CloudKit 同步内容，也不运营自有服务器存储你的数据。卸载后本机数据可能丢失。"))
+                    privacySection(L10n.s("本机草稿"), L10n.s("一句话生成草稿在设备上完成（Apple 端侧模型或本地模板），不会上传到云端，也不会为此建立账号。"))
                     privacySection("网络与追踪", "本 App 不收集个人身份信息用于广告，不使用第三方追踪 SDK。")
                     privacySection("App 内购买", "Goalstar Pro 为一次买断，当前权益为无限进行中目标。付款由 Apple 处理，本 App 不收集银行卡或 Apple ID 支付信息。购买记录由 Apple 账户保存，可在本机恢复。")
                     privacySection("通知", "本地通知仅在设备上调度，用于任务提醒，不会上传到我们的服务器。")
